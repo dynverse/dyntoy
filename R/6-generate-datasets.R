@@ -5,8 +5,6 @@
 #' @param num_cells The number of cells in each dataset
 #' @param num_genes The number of genes in each dataset
 #'
-#' @importFrom dynutils extract_row_to_list list_as_tibble
-#'
 #' @export
 generate_toy_datasets <- function(ti_types = c("linear", "bifurcating", "cycle"), num_replicates = 3, num_cells = 99, num_genes = 101) {
   settings <- expand.grid(ti_type = ti_types, replicate = seq_len(num_replicates), stringsAsFactors = FALSE)
@@ -14,6 +12,6 @@ generate_toy_datasets <- function(ti_types = c("linear", "bifurcating", "cycle")
   dynutils::list_as_tibble(lapply(seq_len(nrow(settings)), function(rowi) {
     list2env(dynutils::extract_row_to_list(settings, rowi), environment())
 
-    generate_dataset(ti_type, num_cells, num_genes)
+    generate_dataset(paste0("toy_", ti_type, "_", rowi), ti_type, num_cells, num_genes)
   }))
 }

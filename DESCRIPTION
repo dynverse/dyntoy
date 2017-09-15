@@ -2,18 +2,24 @@ Package: dyntoy
 Type: Package
 Title: Generating simple toy data of cellular differentiation
 Version: 0.1.0
-Author: Wouter Saelens
-Maintainer: Wouter Saelens <wouter.saelens@ugent.be>
+Authors@R: c(
+  person("Robrecht", "Cannoodt", email = "robrecht.cannoodt@gmail.com", role = c("aut")),
+  person("Wouter", "Saelens", email = "wouter.saelens@ugent.be", role = c("aut", "cre")))
 Description: Generating simple toy data of cellular differentiation
-License: MIT
+License: GPL-3
 Encoding: UTF-8
 LazyData: true
+Depends:
+  R (>= 3.0)
 Imports:
   dplyr,
-  tibble,
-  purrr,
   dynutils,
-  devtools
+  magrittr,
+  purrr,
+  stats,
+  testthat,
+  tibble,
+  tidyr
 Remotes:
   rcannood/dynutils
 RoxygenNote: 6.0.1

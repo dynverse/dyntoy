@@ -1,5 +1,4 @@
-#' Generate toy expression based on a milestone_network and cell progression information
-#' @importFrom dynutils extract_row_to_list
+#' @importFrom stats approxfun rnorm runif
 generate_expression <- function(milestone_network, progressions, ngenes=100, noise_std=0.05) {
   nedges <- nrow(milestone_network)
   milestone_expressions <- list()
@@ -9,17 +8,17 @@ generate_expression <- function(milestone_network, progressions, ngenes=100, noi
     edge <- extract_row_to_list(milestone_network, edge_id)
 
     # check whether the starting and ending milestones have already been visited, otherwise the start and end are random
-    start <- if (edge$from %in% names(milestone_expressions)) milestone_expressions[[edge$from]] else runif(ngenes)
-    end <- if (edge$to %in% names(milestone_expressions)) milestone_expressions[[edge$to]] else runif(ngenes)
+    start <- if (edge$from %in% names(milestone_expressions)) milestone_expressions[[edge$from]] else stats::runif(ngenes)
+    end <- if (edge$to %in% names(milestone_expressions)) milestone_expressions[[edge$to]] else stats::runif(ngenes)
 
     milestone_expressions[[edge$from]] <- start
     milestone_expressions[[edge$to]] <- end
 
-    xs <- map(seq_len(ngenes), ~c(0, sort(runif(3)), 1))
-    ys <- pmap(list(x=xs, start=start, end=end), function(x, start, end) c(start, start, runif(length(x) - 4), end, end))
+    xs <- map(seq_len(ngenes), ~c(0, sort(stats::runif(3)), 1))
+    ys <- pmap(list(x=xs, start=start, end=end), function(x, start, end) c(start, start, stats::runif(length(x) - 4), end, end))
 
     milestone_network$splinefuns[edge_id] <- map2(xs, ys, function(x, y) {
-      approxfun(x, y)
+      stats::approxfun(x, y)
     }) %>% list()
   }
 
@@ -42,7 +41,7 @@ generate_expression <- function(milestone_network, progressions, ngenes=100, noi
       magrittr::set_colnames(invoke(cbind, .$expression), unlist(.$cell_id))
     } %>% t
 
-  expression <- expression + rnorm(length(expression), 0, noise_std)
+  expression <- expression + stats::rnorm(length(expression), 0, noise_std)
 
   expression <- expression[unique(progressions$cell_id), ]
 
