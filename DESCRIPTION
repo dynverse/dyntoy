@@ -12,7 +12,8 @@ Imports:
   dplyr,
   tibble,
   purrr,
-  dynutils
+  dynutils,
+  devtools
 Remotes:
   rcannood/dynutils
 RoxygenNote: 6.0.1
