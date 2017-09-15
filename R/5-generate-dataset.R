@@ -22,5 +22,9 @@ generate_dataset <- function(ti_type="linear", num_cells=99, num_genes=101) {
 
   dataset$geodesic_dist <- dynutils::compute_emlike_dist(dataset)
 
+  dataset$id <- "toy"
+
+  class(dataset) <- c("dyneval::ti_wrapper", "list")
+
   dataset
 }

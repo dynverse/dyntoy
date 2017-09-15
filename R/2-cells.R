@@ -17,8 +17,9 @@ random_progressions_tented <- function(milestone_network, ncells=100) {
     left_join(milestone_network, by="from") %>%
     group_by(cell_id) %>%
     mutate(
+      # from_percentage = runif(n())^(1/5), # first calculate the from percentage
       percentage = runif(n())
-      # from_percentage = runif(n()), # first calculate the from percentage
+      # percentage = from_percentage * (percentages/sum(percentages))
       # percentage_relative = runif(n()), # use this from percentage to extract the to percentages
       # percentage = (1-from_percentage)*(percentage_relative/sum(percentage_relative))
     ) %>%
