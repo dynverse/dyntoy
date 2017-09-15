@@ -23,7 +23,7 @@ test_that("Creating toy datasets", {
   num_replicates <- 2
   num_cells <- 99
   num_genes <- 101
-  data(toy_tasks)
+  tasks <- generate_toy_datasets(ti_types = ti_types, num_replicates = num_replicates, num_cells = num_cells, num_genes = num_genes)
 
   expect_that( is_tibble(toy_tasks), is_true() )
 
@@ -37,8 +37,6 @@ test_that("Creating toy datasets", {
   expect_equal( nrow(toy_tasks), length(ti_types) * num_replicates )
   expect_true( all(toy_tasks$cell_ids %>% map_lgl(~ length(.) == num_cells )) )
 })
-
-data(toy_tasks)
 
 for (taski in seq_len(nrow(toy_tasks))) {
   task <- extract_row_to_list(toy_tasks, taski)
