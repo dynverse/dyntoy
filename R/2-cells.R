@@ -17,15 +17,11 @@ random_progressions_tented <- function(milestone_network, ncells=100) {
     left_join(milestone_network, by="from") %>%
     group_by(cell_id) %>%
     mutate(
-      from_percentage = runif(n()), # first calculate the from percentage
-      percentage_relative = runif(n()), # use this from percentage to extract the to percentages
-      percentage = (1-from_percentage)*(percentage_relative/sum(percentage_relative))
+      percentage = runif(n())
+      # from_percentage = runif(n()), # first calculate the from percentage
+      # percentage_relative = runif(n()), # use this from percentage to extract the to percentages
+      # percentage = (1-from_percentage)*(percentage_relative/sum(percentage_relative))
     ) %>%
     ungroup() %>%
     select(cell_id, from, to, percentage)
 }
-
-# progressions <- random_progressions_tented(milestone_network, 1000)
-# task <- dyneval::wrap_ti_prediction("lol", "lol", unique(progressions$cell_id), unique(c(milestone_network$from, milestone_network$to)), milestone_network, progressions=progressions)
-# dynplot::plot_strip_connections(task, task)
-# dyneval::plot_default(task)
