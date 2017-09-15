@@ -2,6 +2,7 @@
 
 export(generate_toy_datasets)
 import(dplyr)
+import(purrr)
 import(tibble)
 importFrom(dynutils,extract_row_to_list)
 importFrom(dynutils,list_as_tibble)
