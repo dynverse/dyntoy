@@ -38,7 +38,7 @@ generate_expression <- function(milestone_network, progressions, ngenes=100, noi
       expression=map(.$splinefuns, function(f) f(.$percentage)) %>% invoke(rbind, .),
       cell_id=.$cell_id
     ) %>% {
-      magrittr::set_colnames(invoke(cbind, .$expression), unlist(.$cell_id))
+      set_colnames(invoke(cbind, .$expression), unlist(.$cell_id))
     } %>% t
 
   expression <- expression + stats::rnorm(length(expression), 0, noise_std)
