@@ -1,0 +1,18 @@
+Package: dyntoy
+Type: Package
+Title: Generating simple toy data of cellular differentiation
+Version: 0.1.0
+Author: Wouter Saelens
+Maintainer: Wouter Saelens <wouter.saelens@ugent.be>
+Description: Generating simple toy data of cellular differentiation
+License: MIT
+Encoding: UTF-8
+LazyData: true
+Imports:
+  dplyr,
+  tibble,
+  purrr,
+  dynutils
+Remotes:
+  rcannood/dynutils,
+RoxygenNote: 6.0.1
