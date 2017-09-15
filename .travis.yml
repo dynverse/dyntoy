@@ -3,3 +3,5 @@ sudo: required
 dist: trusty
 bioc_required: true
 cache: packages
+install:
+ - R -e 'devtools::install(dependencies = TRUE, upgrade_dependencies = TRUE)'

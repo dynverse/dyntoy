@@ -14,5 +14,5 @@ Imports:
   purrr,
   dynutils
 Remotes:
-  rcannood/dynutils,
+  rcannood/dynutils
 RoxygenNote: 6.0.1
