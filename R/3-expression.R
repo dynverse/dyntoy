@@ -1,4 +1,4 @@
-#' Generate toy expression based on a milestone_network and cell progression information
+# Generate toy expression based on a milestone_network and cell progression information
 #' @importFrom dynutils extract_row_to_list
 generate_expression <- function(milestone_network, progressions, ngenes=100, noise_std=0.05) {
   nedges <- nrow(milestone_network)
@@ -39,7 +39,7 @@ generate_expression <- function(milestone_network, progressions, ngenes=100, noi
       expression=map(.$splinefuns, function(f) f(.$percentage)) %>% invoke(rbind, .),
       cell_id=.$cell_id
     ) %>% {
-      magrittr::set_colnames(invoke(cbind, .$expression), unlist(.$cell_id))
+      set_colnames(invoke(cbind, .$expression), unlist(.$cell_id))
     } %>% t
 
   expression <- expression + rnorm(length(expression), 0, noise_std)

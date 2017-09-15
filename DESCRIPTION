@@ -8,12 +8,16 @@ Description: Generating simple toy data of cellular differentiation
 License: MIT
 Encoding: UTF-8
 LazyData: true
+Depends:
+    R (>= 3.1)
 Imports:
   dplyr,
   tibble,
   purrr,
   dynutils,
-  devtools
+  devtools,
+  magrittr,
+  testthat
 Remotes:
   rcannood/dynutils
 RoxygenNote: 6.0.1
