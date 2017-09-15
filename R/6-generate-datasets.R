@@ -12,6 +12,6 @@ generate_toy_datasets <- function(ti_types = c("linear", "bifurcating", "cycle")
   dynutils::list_as_tibble(lapply(seq_len(nrow(settings)), function(rowi) {
     list2env(dynutils::extract_row_to_list(settings, rowi), environment())
 
-    generate_dataset(paste0("toy_", ti_type, "_", rowi), ti_type, num_cells, num_genes)
+    generate_dataset(paste0("toy_", ti_type, "_", replicate), ti_type, num_cells, num_genes)
   }))
 }
