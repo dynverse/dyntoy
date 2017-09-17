@@ -76,6 +76,8 @@ for (taski in seq_len(nrow(toy_tasks))) {
     expect_true( is.matrix(counts) )
     expect_equal( rownames(counts), cell_ids )
     expect_false( is.null(colnames(counts)) )
+    expect_false( any(duplicated(rownames(counts))) )
+    expect_false( any(duplicated(colnames(counts))) )
 
     geodesic_dist <- task$geodesic_dist
     expect_true( is.matrix(geodesic_dist) )
