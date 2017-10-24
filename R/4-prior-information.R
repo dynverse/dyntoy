@@ -30,5 +30,5 @@ generate_prior_information <- function(milestone_ids, milestone_network, progres
   grouping_assignment <- dynutils::get_cell_grouping(milestone_percentages)
   grouping_network <- milestone_network %>% select(from, to)
 
-  tibble::lst(start_milestones, start_cells, end_milstones, end_cells, grouping_assignment, grouping_network)
+  tibble::lst(start_milestones, start_cells, end_milestones, end_cells, grouping_assignment, grouping_network)
 }
