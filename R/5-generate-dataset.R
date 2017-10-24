@@ -5,7 +5,7 @@ generate_dataset <- function(unique_id, ti_type = "linear", num_cells = 99, num_
   # get milestone ids
   milestone_ids <- sort(unique(c(milestone_network$from, milestone_network$to)))
 
-  # generate tented progressions
+  # generate (tented) progressions
   if (use_tented_progressions) {
     progressions <- random_progressions_tented(milestone_network, ncells = num_cells)
   } else {
@@ -24,14 +24,8 @@ generate_dataset <- function(unique_id, ti_type = "linear", num_cells = 99, num_
   # simulate counts
   counts <- generate_counts(expression)
 
-  # collect prior informationn
-  end_milestones <- milestone_ids[!(milestone_ids %in% milestone_network$from)]
-  special_cells <- list(
-    start_cell_id = progressions %>% arrange(from, to, percentage) %>% pull(cell_id) %>% first,
-    end_cell_ids = progressions %>% filter(to %in% end_milestones) %>% group_by(to) %>% arrange(percentage) %>% summarise(cell_id=cell_id[which.max(percentage)]) %>% pull(cell_id)
-  )
-
-  cell_grouping <- dynutils::get_cell_grouping(milestone_percentages)
+  # add prior information
+  prior_information <- generate_prior_information(milestone_ids, milestone_network, progressions, milestone_percentages)
 
   # make a simple sample info
   sample_info <- data_frame(id = rownames(counts))
@@ -48,8 +42,7 @@ generate_dataset <- function(unique_id, ti_type = "linear", num_cells = 99, num_
     progressions = progressions,
     sample_info = sample_info,
     feature_info = feature_info,
-    special_cells = special_cells,
-    cell_grouping = cell_grouping
+    prior_information = prior_information
   )
   dataset$type <- "ti_toy"
 
