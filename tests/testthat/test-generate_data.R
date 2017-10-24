@@ -9,7 +9,7 @@ test_that("Creating toy datasets", {
 
   expect_that( is_tibble(tasks), is_true() )
 
-  required_cols <- c("id", "cell_ids", "milestone_ids", "milestone_network", "milestone_percentages", "progressions", "counts", "geodesic_dist", "special_cells")
+  required_cols <- c("id", "cell_ids", "milestone_ids", "milestone_network", "milestone_percentages", "progressions", "counts", "geodesic_dist", "prior_information")
   expect_that( all(required_cols %in% colnames(tasks)), is_true() )
 
   expect_equal( unique(tasks$type), "ti_toy" )
@@ -19,15 +19,15 @@ test_that("Creating toy datasets", {
   expect_equal( nrow(tasks), length(ti_types) * num_replicates )
   expect_true( all(tasks$cell_ids %>% map_lgl(~ length(.) == num_cells )) )
 
-  ti_types <- c("linear", "bifurcating", "cycle")
+  ti_types <- eval(formals(generate_toy_datasets)$ti_types)
   num_replicates <- 2
   num_cells <- 99
   num_genes <- 101
-  tasks <- generate_toy_datasets(ti_types = ti_types, num_replicates = num_replicates, num_cells = num_cells, num_genes = num_genes)
+  tasks <- suppressWarnings({generate_toy_datasets(ti_types = ti_types, num_replicates = num_replicates, num_cells = num_cells, num_genes = num_genes)})
 
   expect_that( is_tibble(toy_tasks), is_true() )
 
-  required_cols <- c("id", "cell_ids", "milestone_ids", "milestone_network", "milestone_percentages", "progressions", "counts", "geodesic_dist", "special_cells")
+  required_cols <- c("id", "cell_ids", "milestone_ids", "milestone_network", "milestone_percentages", "progressions", "counts", "geodesic_dist", "prior_information")
   expect_that( all(required_cols %in% colnames(toy_tasks)), is_true() )
 
   expect_equal( unique(toy_tasks$type), "ti_toy" )
