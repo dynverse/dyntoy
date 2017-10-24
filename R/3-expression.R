@@ -14,7 +14,7 @@ generate_expression <- function(milestone_network, progressions, ngenes=100, noi
     milestone_expressions[[edge$from]] <- start
     milestone_expressions[[edge$to]] <- end
 
-    xs <- map(seq_len(ngenes), ~c(0, sort(stats::runif(3)), 1))
+    xs <- map(seq_len(ngenes), ~c(0, sort(stats::runif(round(3*edge$length))), 1))
     ys <- pmap(list(x=xs, start=start, end=end), function(x, start, end) c(start, start, stats::runif(length(x) - 4), end, end))
 
     milestone_network$splinefuns[edge_id] <- map2(xs, ys, function(x, y) {
