@@ -12,16 +12,16 @@ random_progressions_tented <- function(milestone_network, ncells=100) {
   from_probabilities <- milestone_network %>% group_by(from) %>% summarise(prob=sqrt(sum(length^2)))
   cell_ids <- paste0("C", seq_len(ncells))
 
-  tibble(cell_id = cell_ids) %>%
-    mutate(from=sample(from_probabilities$from, length(cell_ids), replace=TRUE, prob=from_probabilities$prob)) %>%
-    left_join(milestone_network, by="from") %>%
+  data_frame(
+    cell_id = cell_ids,
+    from = sample(from_probabilities$from, length(cell_ids), replace = TRUE, prob = from_probabilities$prob)
+  ) %>%
+    left_join(milestone_network, by = "from") %>%
     group_by(cell_id) %>%
     mutate(
-      # from_percentage = stats::runif(n())^(1/5), # first calculate the from percentage
-      percentage = stats::runif(n())
-      # percentage = from_percentage * (percentages/sum(percentages))
-      # percentage_relative = stats::runif(n()), # use this from percentage to extract the to percentages
-      # percentage = (1-from_percentage)*(percentage_relative/sum(percentage_relative))
+      progression_pct = stats::runif(1),
+      to_percentage = stats::runif(n()),
+      percentage = to_percentage / sum(to_percentage) * (1-progression_pct)
     ) %>%
     ungroup() %>%
     select(cell_id, from, to, percentage)
