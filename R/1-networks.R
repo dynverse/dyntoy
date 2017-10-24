@@ -71,5 +71,7 @@ generate_toy_milestone_network <- function(ti_type = c("linear", "bifurcating", 
     milnet <- milnet %>% mutate(length = 1)
   }
 
-  milnet %>% mutate(directed = TRUE)
+  milnet %>%
+    mutate(directed = TRUE) %>%
+    as_data_frame()
 }
