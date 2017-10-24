@@ -1,6 +1,6 @@
 generate_dataset <- function(unique_id, ti_type = "linear", num_cells = 99, num_genes = 101) {
   milestone_network <- generate_toy_milestone_network(ti_type)
-  milestone_ids <- unique(c(milestone_network$from, milestone_network$to))
+  milestone_ids <- sort(unique(c(milestone_network$from, milestone_network$to)))
   progressions <- random_progressions_tented(milestone_network, ncells = num_cells)
   cell_ids <- unique(progressions$cell_id)
   milestone_percentages <- dynutils::convert_progressions_to_milestone_percentages(cell_ids, milestone_ids, milestone_network, progressions)

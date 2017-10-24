@@ -24,7 +24,7 @@ generate_toy_milestone_network <- function(ti_type = c("linear", "bifurcating", 
     },
     trifurcating = {
       tribble(
-        ~from, ~to,
+        ~from, ~to, ~length,
         "M1", "M2", 3,
         "M2", "M3", 2,
         "M2", "M4", 2,

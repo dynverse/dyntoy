@@ -7,7 +7,7 @@
 #'
 #' @export
 generate_toy_datasets <- function(ti_types, num_replicates = 3, num_cells = 99, num_genes = 101) {
-  settings <- expand.grid(ti_type = ti_types, replicate = seq_len(num_replicates), stringsAsFactors = FALSE)
+  settings <- crossing(ti_type = ti_types, replicate = seq_len(num_replicates))
 
   dynutils::list_as_tibble(lapply(seq_len(nrow(settings)), function(rowi) {
     list2env(dynutils::extract_row_to_list(settings, rowi), environment())
@@ -16,4 +16,4 @@ generate_toy_datasets <- function(ti_types, num_replicates = 3, num_cells = 99, 
   }))
 }
 
-formals(generate_toy_datasets)$ti_types = formals(generate_toy_milestone_network)$ti_type
+formals(generate_toy_datasets)$ti_types <- formals(generate_toy_milestone_network)$ti_type
