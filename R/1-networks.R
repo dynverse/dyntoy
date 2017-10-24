@@ -2,7 +2,7 @@
 #' @importFrom stats runif
 generate_toy_milestone_network <- function(ti_type = c("linear", "bifurcating", "cycle", "consecutive_bifurcating", "trifurcating", "converging", "BA")) {
   requireNamespace("igraph")
-  ti_type <- arg.match(ti_type)
+  ti_type <- match.arg(ti_type)
 
   milnet <- switch(
     ti_type,
@@ -70,5 +70,6 @@ generate_toy_milestone_network <- function(ti_type = c("linear", "bifurcating", 
   if (!"length" %in% colnames(milnet)) {
     milnet <- milnet %>% mutate(length = 1)
   }
-  milnet %>% mutate(directed = T)
+
+  milnet %>% mutate(directed = TRUE)
 }
