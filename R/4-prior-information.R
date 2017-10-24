@@ -4,7 +4,7 @@ generate_prior_information <- function(milestone_ids, milestone_network, progres
   start_milestones <- setdiff(milestone_ids, milestone_network$to)
   if (length(start_milestones) > 0) {
     start_cells <- progressions %>%
-      filter(from == start_milestones) %>%
+      filter(from %in% start_milestones) %>%
       group_by(from) %>%
       arrange(percentage) %>%
       filter(row_number() == 1) %>%
