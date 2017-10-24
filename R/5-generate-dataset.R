@@ -1,10 +1,10 @@
-generate_dataset <- function(unique_id, ti_type = "linear", num_cells = 99, num_genes = 101) {
+generate_dataset <- function(unique_id, ti_type = "linear", num_cells = 99, num_genes = 101, noise_std=0.05) {
   milestone_network <- generate_toy_milestone_network(ti_type)
   milestone_ids <- unique(c(milestone_network$from, milestone_network$to))
   progressions <- random_progressions_tented(milestone_network, ncells = num_cells)
   cell_ids <- unique(progressions$cell_id)
   milestone_percentages <- dynutils::convert_progressions_to_milestone_percentages(cell_ids, milestone_ids, milestone_network, progressions)
-  expression <- generate_expression(milestone_network, progressions, ngenes = num_genes)
+  expression <- generate_expression(milestone_network, progressions, ngenes = num_genes, noise_std=noise_std)
   counts <- generate_counts(expression)
 
   # Prior information
