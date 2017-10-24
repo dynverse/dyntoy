@@ -1,13 +1,30 @@
-generate_dataset <- function(unique_id, ti_type = "linear", num_cells = 99, num_genes = 101, noise_std=0.05) {
+generate_dataset <- function(unique_id, ti_type = "linear", num_cells = 99, num_genes = 101, noise_std = 0.05, use_tented_progressions = TRUE) {
+  # generate milestone network
   milestone_network <- generate_toy_milestone_network(ti_type)
+
+  # get milestone ids
   milestone_ids <- sort(unique(c(milestone_network$from, milestone_network$to)))
-  progressions <- random_progressions_tented(milestone_network, ncells = num_cells)
+
+  # generate tented progressions
+  if (use_tented_progressions) {
+    progressions <- random_progressions_tented(milestone_network, ncells = num_cells)
+  } else {
+    progressions <- random_progressions(milestone_network, ncells = num_cells)
+  }
+
+  # get cell ids
   cell_ids <- unique(progressions$cell_id)
+
+  # convert to percentages
   milestone_percentages <- dynutils::convert_progressions_to_milestone_percentages(cell_ids, milestone_ids, milestone_network, progressions)
-  expression <- generate_expression(milestone_network, progressions, ngenes = num_genes, noise_std=noise_std)
+
+  # generate expression
+  expression <- generate_expression(milestone_network, progressions, ngenes = num_genes, noise_std = noise_std)
+
+  # simulate counts
   counts <- generate_counts(expression)
 
-  # Prior information
+  # collect prior informationn
   end_milestones <- milestone_ids[!(milestone_ids %in% milestone_network$from)]
   special_cells <- list(
     start_cell_id = progressions %>% arrange(from, to, percentage) %>% pull(cell_id) %>% first,
@@ -16,9 +33,11 @@ generate_dataset <- function(unique_id, ti_type = "linear", num_cells = 99, num_
 
   cell_grouping <- dynutils::get_cell_grouping(milestone_percentages)
 
+  # make a simple sample info
   sample_info <- data_frame(id = rownames(counts))
   feature_info <- data_frame(id = colnames(counts))
 
+  # wrap dataset
   dataset <- dynutils::wrap_ti_task_data(
     ti_type = ti_type,
     id = unique_id,
@@ -32,9 +51,11 @@ generate_dataset <- function(unique_id, ti_type = "linear", num_cells = 99, num_
     special_cells = special_cells,
     cell_grouping = cell_grouping
   )
-
   dataset$type <- "ti_toy"
+
+  # add geodesic dist
   dataset$geodesic_dist <- dynutils::compute_emlike_dist(dataset)
 
+  # return dataset
   dataset
 }
