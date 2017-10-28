@@ -7,15 +7,15 @@
 #'
 #' @export
 generate_toy_datasets <- function(ti_types, num_replicates = 3, num_cells = 99, num_genes = 101) {
-  settings <- crossing(ti_type = ti_types, replicate = seq_len(num_replicates))
-
-  dynutils::list_as_tibble(lapply(seq_len(nrow(settings)), function(rowi) {
-    list2env(dynutils::extract_row_to_list(settings, rowi), environment())
-
-    dataset <- generate_dataset(paste0("toy_", ti_type, "_", replicate), ti_type, num_cells, num_genes)
-    dataset$replicate <- replicate
-    dataset
-  }))
+  crossing(ti_type = ti_types, replicate = seq_len(num_replicates)) %>%
+    rowwise() %>%
+    do(with(., {
+      generate_dataset(paste0("toy_", ti_type, "_", replicate), ti_type, num_cells, num_genes) %>%
+        list() %>%
+        dynutils::list_as_tibble() %>%
+        mutate(replicate = replicate)
+    })) %>%
+    ungroup()
 }
 
 formals(generate_toy_datasets)$ti_types <- formals(generate_toy_milestone_network)$ti_type
