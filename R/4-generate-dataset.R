@@ -15,17 +15,11 @@ generate_dataset <- function(unique_id, ti_type = "linear", num_cells = 99, num_
   # get cell ids
   cell_ids <- unique(progressions$cell_id)
 
-  # convert to percentages
-  milestone_percentages <- dynutils::convert_progressions_to_milestone_percentages(cell_ids, milestone_ids, milestone_network, progressions)
-
   # generate expression
   expression <- generate_expression(milestone_network, progressions, ngenes = num_genes, noise_std = noise_std)
 
   # simulate counts
   counts <- generate_counts(expression)
-
-  # add prior information
-  prior_information <- generate_prior_information(milestone_ids, milestone_network, progressions, milestone_percentages)
 
   # make a simple sample info
   sample_info <- data_frame(id = rownames(counts))
@@ -41,10 +35,12 @@ generate_dataset <- function(unique_id, ti_type = "linear", num_cells = 99, num_
     milestone_network = milestone_network,
     progressions = progressions,
     sample_info = sample_info,
-    feature_info = feature_info,
-    prior_information = prior_information
+    feature_info = feature_info
   )
   dataset$type <- "ti_toy"
+
+  # add prior information
+  dataset$prior_information <- with(dataset, dynutils::generate_prior_information(milestone_ids, milestone_network, progressions, milestone_percentages))
 
   # add geodesic dist
   dataset$geodesic_dist <- dynutils::compute_emlike_dist(dataset)
