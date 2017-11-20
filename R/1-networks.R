@@ -1,11 +1,17 @@
 #' @importFrom igraph ba.game
 #' @importFrom stats runif
-generate_toy_milestone_network <- function(ti_type = c("linear", "bifurcating", "cycle", "consecutive_bifurcating", "trifurcating", "converging", "BA")) {
+generate_toy_milestone_network <- function(ti_type = c("simple_linear", "linear", "bifurcating", "cycle", "consecutive_bifurcating", "trifurcating", "converging", "BA")) {
   requireNamespace("igraph")
   ti_type <- match.arg(ti_type)
 
   milnet <- switch(
     ti_type,
+    simple_linear = {
+      tribble(
+        ~from, ~to,
+        "M1", "M2"
+      )
+    },
     linear = {
       tribble(
         ~from, ~to,
