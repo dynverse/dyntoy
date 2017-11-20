@@ -43,7 +43,7 @@ generate_dataset <- function(unique_id, ti_type = "linear", num_cells = 99, num_
   dataset$prior_information <- with(dataset, dynutils::generate_prior_information(milestone_ids, milestone_network, progressions, milestone_percentages))
 
   # add geodesic dist
-  #dataset$geodesic_dist <- dynutils::compute_emlike_dist(dataset)
+  dataset$geodesic_dist <- dynutils::compute_emlike_dist(dataset)
 
   # return dataset
   dataset
