@@ -4,8 +4,8 @@
 \alias{generate_toy_datasets}
 \title{Generate toy datasets with dyngen}
 \usage{
-generate_toy_datasets(ti_types = c("linear", "bifurcating", "cycle",
-  "consecutive_bifurcating", "trifurcating", "converging", "BA"),
+generate_toy_datasets(ti_types = c("simple_linear", "linear", "bifurcating",
+  "cycle", "consecutive_bifurcating", "trifurcating", "converging", "BA"),
   num_replicates = 3, num_cells = 99, num_genes = 101,
   expression_randomizer = "shift")
 }
