@@ -6,7 +6,8 @@
 \usage{
 generate_toy_datasets(ti_types = c("linear", "bifurcating", "cycle",
   "consecutive_bifurcating", "trifurcating", "converging", "BA"),
-  num_replicates = 3, num_cells = 99, num_genes = 101)
+  num_replicates = 3, num_cells = 99, num_genes = 101,
+  expression_randomizer = "shift")
 }
 \arguments{
 \item{ti_types}{The types of TI to generate}
@@ -16,6 +17,8 @@ generate_toy_datasets(ti_types = c("linear", "bifurcating", "cycle",
 \item{num_cells}{The number of cells in each dataset}
 
 \item{num_genes}{The number of genes in each dataset}
+
+\item{expression_randomizer}{How to randomize the expression}
 }
 \description{
 Generate toy datasets with dyngen

@@ -4,9 +4,10 @@
 #' @param num_replicates How many replicates of each TI type to generate
 #' @param num_cells The number of cells in each dataset
 #' @param num_genes The number of genes in each dataset
+#' @param expression_randomizer How to randomize the expression
 #'
 #' @export
-generate_toy_datasets <- function(ti_types, num_replicates = 3, num_cells = 99, num_genes = 101) {
+generate_toy_datasets <- function(ti_types, num_replicates = 3, num_cells = 99, num_genes = 101, expression_randomizer="shift") {
   crossing(ti_type = ti_types, replicate = seq_len(num_replicates)) %>%
     rowwise() %>%
     do(with(., {

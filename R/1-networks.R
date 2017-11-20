@@ -9,7 +9,8 @@ generate_toy_milestone_network <- function(ti_type = c("linear", "bifurcating", 
     linear = {
       tribble(
         ~from, ~to,
-        "M1", "M2"
+        "M1", "M2",
+        "M2", "M3"
       )
     },
     bifurcating = {

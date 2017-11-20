@@ -1,4 +1,4 @@
-generate_dataset <- function(unique_id, ti_type = "linear", num_cells = 99, num_genes = 101, noise_std = 0.05, use_tented_progressions = TRUE) {
+generate_dataset <- function(unique_id, ti_type = "linear", num_cells = 99, num_genes = 101, noise_std = 0.05, use_tented_progressions = TRUE, expression_randomizer="shift") {
   # generate milestone network
   milestone_network <- generate_toy_milestone_network(ti_type)
 
@@ -19,7 +19,7 @@ generate_dataset <- function(unique_id, ti_type = "linear", num_cells = 99, num_
   milestone_percentages <- dynutils::convert_progressions_to_milestone_percentages(cell_ids, milestone_ids, milestone_network, progressions)
 
   # generate expression
-  expression <- generate_expression(milestone_network, progressions, ngenes = num_genes, noise_std = noise_std)
+  expression <- generate_expression(milestone_network, progressions, ngenes = num_genes, noise_std = noise_std, expression_randomizer=expression_randomizer)
 
   # simulate counts
   counts <- generate_counts(expression)
@@ -47,7 +47,7 @@ generate_dataset <- function(unique_id, ti_type = "linear", num_cells = 99, num_
   dataset$type <- "ti_toy"
 
   # add geodesic dist
-  dataset$geodesic_dist <- dynutils::compute_emlike_dist(dataset)
+  #dataset$geodesic_dist <- dynutils::compute_emlike_dist(dataset)
 
   # return dataset
   dataset
