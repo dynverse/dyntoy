@@ -11,7 +11,7 @@ generate_toy_datasets <- function(trajectory_types, num_replicates = 3, num_cell
   crossing(trajectory_type = trajectory_types, replicate = seq_len(num_replicates)) %>%
     rowwise() %>%
     do(with(., {
-      generate_dataset(paste0("toy_", ti_type, "_", replicate), ti_type, num_cells, num_genes) %>%
+      generate_dataset(paste0("toy_", trajectory_type, "_", replicate), trajectory_type, num_cells, num_genes) %>%
         list() %>%
         dynutils::list_as_tibble() %>%
         mutate(replicate = replicate)

@@ -28,6 +28,7 @@ generate_dataset <- function(unique_id, trajectory_type = "linear", num_cells = 
   # wrap dataset
   dataset <- dynutils::wrap_ti_task_data(
     trajectory_type = trajectory_type,
+    ti_type = trajectory_type,
     id = unique_id,
     counts = counts,
     cell_ids = cell_ids,

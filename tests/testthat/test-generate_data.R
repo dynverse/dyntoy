@@ -1,4 +1,4 @@
-context("Generating datasets with dyngen")
+context("Generating datasets with dyntoy")
 
 test_that("Creating toy datasets", {
   trajectory_types <- c("linear", "cycle")
@@ -18,7 +18,9 @@ test_that("Creating toy datasets", {
   expect_true( all(tasks$counts %>% map_lgl(~ ncol(.) == num_genes)) )
   expect_equal( nrow(tasks), length(trajectory_types) * num_replicates )
   expect_true( all(tasks$cell_ids %>% map_lgl(~ length(.) == num_cells )) )
+})
 
+test_that("Creating more toy datasets", {
   trajectory_types <- eval(formals(generate_toy_datasets)$trajectory_types)
   num_replicates <- 2
   num_cells <- 99
@@ -38,7 +40,22 @@ test_that("Creating toy datasets", {
   expect_true( all(tasks$cell_ids %>% map_lgl(~ length(.) == num_cells )) )
 })
 
-for (taski in seq_len(nrow(tasks))) {
+toy_tasks <- dyntoy::toy_tasks
+
+test_that("Data object toy_tasks", {
+  expect_that( is_tibble(toy_tasks), is_true() )
+
+  required_cols <- c("id", "cell_ids", "milestone_ids", "milestone_network", "milestone_percentages", "progressions", "counts", "geodesic_dist", "prior_information")
+  expect_that( all(required_cols %in% colnames(toy_tasks)), is_true() )
+
+  expect_equal( unique(toy_tasks$type), "ti_toy" )
+  trajectory_types <- eval(formals(generate_toy_datasets)$trajectory_types)
+  expect_true( all(toy_tasks$trajectory_type %in% trajectory_types) )
+})
+
+
+
+for (taski in seq_len(nrow(toy_tasks))) {
   task <- extract_row_to_list(toy_tasks, taski)
 
   test_that(paste0("Evaluating with ", task$id), {
