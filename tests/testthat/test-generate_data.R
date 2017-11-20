@@ -1,11 +1,11 @@
 context("Generating datasets with dyngen")
 
 test_that("Creating toy datasets", {
-  ti_types <- c("linear", "cycle")
+  trajectory_types <- c("linear", "cycle")
   num_replicates <- 3
   num_cells <- 10
   num_genes <- 1001
-  tasks <- generate_toy_datasets(ti_types = ti_types, num_replicates = num_replicates, num_cells = num_cells, num_genes = num_genes)
+  tasks <- generate_toy_datasets(trajectory_types = trajectory_types, num_replicates = num_replicates, num_cells = num_cells, num_genes = num_genes)
 
   expect_that( is_tibble(tasks), is_true() )
 
@@ -13,32 +13,32 @@ test_that("Creating toy datasets", {
   expect_that( all(required_cols %in% colnames(tasks)), is_true() )
 
   expect_equal( unique(tasks$type), "ti_toy" )
-  expect_true( all(tasks$ti_type %in% ti_types) )
+  expect_true( all(tasks$trajectory_type %in% trajectory_types) )
   expect_true( all(tasks$counts %>% map_lgl(~ nrow(.) == num_cells)) )
   expect_true( all(tasks$counts %>% map_lgl(~ ncol(.) == num_genes)) )
-  expect_equal( nrow(tasks), length(ti_types) * num_replicates )
+  expect_equal( nrow(tasks), length(trajectory_types) * num_replicates )
   expect_true( all(tasks$cell_ids %>% map_lgl(~ length(.) == num_cells )) )
 
-  ti_types <- eval(formals(generate_toy_datasets)$ti_types)
+  trajectory_types <- eval(formals(generate_toy_datasets)$trajectory_types)
   num_replicates <- 2
   num_cells <- 99
   num_genes <- 101
-  tasks <- suppressWarnings({generate_toy_datasets(ti_types = ti_types, num_replicates = num_replicates, num_cells = num_cells, num_genes = num_genes)})
+  tasks <- suppressWarnings({generate_toy_datasets(trajectory_types = trajectory_types, num_replicates = num_replicates, num_cells = num_cells, num_genes = num_genes)})
 
-  expect_that( is_tibble(toy_tasks), is_true() )
+  expect_that( is_tibble(tasks), is_true() )
 
   required_cols <- c("id", "cell_ids", "milestone_ids", "milestone_network", "milestone_percentages", "progressions", "counts", "geodesic_dist", "prior_information")
-  expect_that( all(required_cols %in% colnames(toy_tasks)), is_true() )
+  expect_that( all(required_cols %in% colnames(tasks)), is_true() )
 
-  expect_equal( unique(toy_tasks$type), "ti_toy" )
-  expect_true( all(toy_tasks$ti_type %in% ti_types) )
-  expect_true( all(toy_tasks$counts %>% map_lgl(~ nrow(.) == num_cells)) )
-  expect_true( all(toy_tasks$counts %>% map_lgl(~ ncol(.) == num_genes)) )
-  expect_equal( nrow(toy_tasks), length(ti_types) * num_replicates )
-  expect_true( all(toy_tasks$cell_ids %>% map_lgl(~ length(.) == num_cells )) )
+  expect_equal( unique(tasks$type), "ti_toy" )
+  expect_true( all(tasks$trajectory_type %in% trajectory_types) )
+  expect_true( all(tasks$counts %>% map_lgl(~ nrow(.) == num_cells)) )
+  expect_true( all(tasks$counts %>% map_lgl(~ ncol(.) == num_genes)) )
+  expect_equal( nrow(tasks), length(trajectory_types) * num_replicates )
+  expect_true( all(tasks$cell_ids %>% map_lgl(~ length(.) == num_cells )) )
 })
 
-for (taski in seq_len(nrow(toy_tasks))) {
+for (taski in seq_len(nrow(tasks))) {
   task <- extract_row_to_list(toy_tasks, taski)
 
   test_that(paste0("Evaluating with ", task$id), {
@@ -75,7 +75,6 @@ for (taski in seq_len(nrow(toy_tasks))) {
     expect_true( is.numeric(counts) )
     expect_true( is.matrix(counts) )
     expect_equal( rownames(counts), cell_ids )
-    expect_false( is.null(colnames(counts)) )
     expect_false( any(duplicated(rownames(counts))) )
     expect_false( any(duplicated(colnames(counts))) )
 

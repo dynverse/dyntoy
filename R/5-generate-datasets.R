@@ -7,8 +7,8 @@
 #' @param expression_randomizer How to randomize the expression
 #'
 #' @export
-generate_toy_datasets <- function(ti_types, num_replicates = 3, num_cells = 99, num_genes = 101, expression_randomizer="shift") {
-  crossing(ti_type = ti_types, replicate = seq_len(num_replicates)) %>%
+generate_toy_datasets <- function(trajectory_types, num_replicates = 3, num_cells = 99, num_genes = 101, expression_randomizer="shift") {
+  crossing(trajectory_type = trajectory_types, replicate = seq_len(num_replicates)) %>%
     rowwise() %>%
     do(with(., {
       generate_dataset(paste0("toy_", ti_type, "_", replicate), ti_type, num_cells, num_genes) %>%
@@ -19,4 +19,4 @@ generate_toy_datasets <- function(ti_types, num_replicates = 3, num_cells = 99, 
     ungroup()
 }
 
-formals(generate_toy_datasets)$ti_types <- formals(generate_toy_milestone_network)$ti_type
+formals(generate_toy_datasets)$trajectory_types <- formals(generate_toy_milestone_network)$trajectory_type

@@ -1,11 +1,11 @@
 #' @importFrom igraph ba.game
 #' @importFrom stats runif
-generate_toy_milestone_network <- function(ti_type = c("simple_linear", "linear", "bifurcating", "cycle", "consecutive_bifurcating", "trifurcating", "converging", "BA")) {
+generate_toy_milestone_network <- function(trajectory_type = c("simple_linear", "linear", "bifurcating", "cycle", "consecutive_bifurcating", "trifurcating", "converging", "BA", "bifuracting_loop", "bifurcating_cycle")) {
   requireNamespace("igraph")
-  ti_type <- match.arg(ti_type)
+  trajectory_type <- match.arg(trajectory_type)
 
   milnet <- switch(
-    ti_type,
+    trajectory_type,
     simple_linear = {
       tribble(
         ~from, ~to,
@@ -17,6 +17,18 @@ generate_toy_milestone_network <- function(ti_type = c("simple_linear", "linear"
         ~from, ~to,
         "M1", "M2",
         "M2", "M3"
+      )
+    },
+    linear_long = {
+      tribble(
+        ~from, ~to,
+        "M1", "M2",
+        "M2", "M3",
+        "M3", "M4",
+        "M4", "M5",
+        "M5", "M6",
+        "M6", "M7",
+        "M7", "M8"
       )
     },
     bifurcating = {
@@ -71,6 +83,25 @@ generate_toy_milestone_network <- function(ti_type = c("simple_linear", "linear"
         igraph::as_data_frame() %>%
         mutate_at(c("from", "to"), function(x) paste0("M", x)) %>%
         select(from = to, to = from)
+    },
+    bifuracting_loop = {
+      tribble(
+        ~from, ~to,
+        "M1", "M2",
+        "M2", "M3",
+        "M3", "M4",
+        "M4", "M1"
+      )
+    },
+    bifurcating_cycle = {
+      tribble(
+        ~from, ~to,
+        "M1", "M2",
+        "M2", "M3",
+        "M2", "M4",
+        "M3", "M1",
+        "M4", "M1"
+      )
     }
   )
 
