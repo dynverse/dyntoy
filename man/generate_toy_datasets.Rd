@@ -11,6 +11,8 @@ generate_toy_datasets(trajectory_types = c("simple_linear", "linear",
   expression_randomizer = "shift")
 }
 \arguments{
+\item{trajectory_types}{The types of trajectory to generate}
+
 \item{num_replicates}{How many replicates of each TI type to generate}
 
 \item{num_cells}{The number of cells in each dataset}
@@ -18,8 +20,6 @@ generate_toy_datasets(trajectory_types = c("simple_linear", "linear",
 \item{num_genes}{The number of genes in each dataset}
 
 \item{expression_randomizer}{How to randomize the expression}
-
-\item{ti_types}{The types of TI to generate}
 }
 \description{
 Generate toy datasets with dyngen
