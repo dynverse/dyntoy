@@ -1,4 +1,4 @@
-generate_dataset <- function(unique_id, trajectory_type = "linear", num_cells = 99, num_genes = 101, noise_std = 0.05, use_tented_progressions = TRUE, expression_randomizer="shift") {
+generate_dataset <- function(unique_id, trajectory_type = "linear", num_cells = 99, num_genes = 101, noise_std = 0.05, use_tented_progressions = TRUE, expression_randomizer="modules") {
   # generate milestone network
   milestone_network <- generate_toy_milestone_network(trajectory_type)
 

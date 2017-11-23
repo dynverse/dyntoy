@@ -1,5 +1,5 @@
 #' @importFrom stats approxfun rnorm runif
-generate_expression <- function(milestone_network, progressions, ngenes=100, noise_std=0.05, expression_randomizer = c("modulo", "shift")) {
+generate_expression <- function(milestone_network, progressions, ngenes=100, noise_std=0.05, expression_randomizer = c("modules", "modulo", "shift")) {
   expression_randomizer <- match.arg(expression_randomizer)
 
   nedges <- nrow(milestone_network)
@@ -9,25 +9,46 @@ generate_expression <- function(milestone_network, progressions, ngenes=100, noi
   milestone_expressions <- list()
   milestone_network <- milestone_network %>% mutate(splinefuns=map(seq_len(n()), ~NULL))
 
+  nmodules <- max(6, nrow(milestone_network) * 4)
+
   for (edge_id in seq_len(nedges)) {
     edge <- extract_row_to_list(milestone_network, edge_id)
 
     # check whether the starting and ending milestones have already been visited, otherwise the start and end are random
     if (expression_randomizer == "shift") {
-      start <- if (edge$from %in% names(milestone_expressions)) milestone_expressions[[edge$from]] else stats::runif(ngenes)
-      end <- if (edge$to %in% names(milestone_expressions)) milestone_expressions[[edge$to]] else stats::runif(ngenes)
+      start <- if (edge$from %in% names(milestone_expressions)) milestone_expressions[[edge$from]] else stats::runif(nmodules)
+      end <- if (edge$to %in% names(milestone_expressions)) milestone_expressions[[edge$to]] else stats::runif(nmodules)
     } else if (expression_randomizer == "modulo") {
-      start <- if (edge$from %in% names(milestone_expressions)) milestone_expressions[[edge$from]] else as.numeric(((seq_len(ngenes) %% nnodes) +1) == which(milestone_ids == edge$from))
-      end <- if (edge$to %in% names(milestone_expressions)) milestone_expressions[[edge$to]] else as.numeric(((seq_len(ngenes) %% nnodes) + 1) == which(milestone_ids == edge$to))
+      start <- if (edge$from %in% names(milestone_expressions)) milestone_expressions[[edge$from]] else as.numeric(((seq_len(nmodules) %% nnodes) +1) == which(milestone_ids == edge$from))
+      end <- if (edge$to %in% names(milestone_expressions)) milestone_expressions[[edge$to]] else as.numeric(((seq_len(nmodules) %% nnodes) + 1) == which(milestone_ids == edge$to))
+    } else if (expression_randomizer == "modules") {
+      start <- if (edge$from %in% names(milestone_expressions)) milestone_expressions[[edge$from]] else sample(c(0, 1), nmodules, replace=TRUE)
+      if (edge$to %in% names(milestone_expressions)) {
+        end <- milestone_expressions[[edge$to]]
+      } else {
+        end <- start
+        n_changed_modules <- 6
+        chosen_modules <- sample(seq_along(end), n_changed_modules)
+        end[chosen_modules] <- 1 - end[chosen_modules]
+      }
+
     }
 
     milestone_expressions[[edge$from]] <- start
     milestone_expressions[[edge$to]] <- end
 
+    if (expression_randomizer == "modules") {
+      start <- rep(start, each = ceiling(ngenes/nmodules))[1:ngenes]
+      end <- rep(end, each = ceiling(ngenes/nmodules))[1:ngenes]
+    }
+
     if (expression_randomizer == "shift") {
       xs <- map(seq_len(ngenes), ~seq(0, 1, length.out=sample(c(2, 2+edge$length), 1)))
       ys <- pmap(list(x=xs, start=start, end=end), function(x, start, end) c(start, sample(c(0, 1), length(x) - 2, replace=TRUE), end))
     } else if (expression_randomizer == "modulo") {
+      xs <- map(seq_len(ngenes), ~c(0, 1))
+      ys <- pmap(list(x=xs, start=start, end=end), function(x, start, end) c(start, end))
+    } else if (expression_randomizer == "modules") {
       xs <- map(seq_len(ngenes), ~c(0, 1))
       ys <- pmap(list(x=xs, start=start, end=end), function(x, start, end) c(start, end))
     }

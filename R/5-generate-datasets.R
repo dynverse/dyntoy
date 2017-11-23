@@ -7,11 +7,11 @@
 #' @param expression_randomizer How to randomize the expression
 #'
 #' @export
-generate_toy_datasets <- function(trajectory_types, num_replicates = 3, num_cells = 99, num_genes = 101, expression_randomizer="shift") {
+generate_toy_datasets <- function(trajectory_types, num_replicates = 3, num_cells = 200, num_genes = 100, expression_randomizer="modules", noise_std=0.25) {
   crossing(trajectory_type = trajectory_types, replicate = seq_len(num_replicates)) %>%
     rowwise() %>%
     do(with(., {
-      generate_dataset(paste0("toy_", trajectory_type, "_", replicate), trajectory_type, num_cells, num_genes) %>%
+      generate_dataset(paste0("toy_", trajectory_type, "_", replicate), trajectory_type, num_cells, num_genes, expression_randomizer=expression_randomizer, noise_std = noise_std) %>%
         list() %>%
         dynutils::list_as_tibble() %>%
         mutate(replicate = replicate)
