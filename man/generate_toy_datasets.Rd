@@ -8,7 +8,7 @@ generate_toy_datasets(trajectory_types = c("simple_linear", "linear",
   "bifurcating", "cycle", "consecutive_bifurcating", "trifurcating",
   "converging", "BA", "bifuracting_loop", "bifurcating_cycle"),
   num_replicates = 3, num_cells = 200, num_genes = 100,
-  expression_randomizer = "modules", noise_std = 0.25)
+  expression_randomizer = "modules", noise_nbinom_size = 20)
 }
 \arguments{
 \item{trajectory_types}{The types of trajectory to generate}
@@ -20,6 +20,8 @@ generate_toy_datasets(trajectory_types = c("simple_linear", "linear",
 \item{num_genes}{The number of genes in each dataset}
 
 \item{expression_randomizer}{How to randomize the expression}
+
+\item{noise_nbinom_size}{The size parameter of the nbinom distribution}
 }
 \description{
 Generate toy datasets with dyngen

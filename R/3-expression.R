@@ -63,8 +63,6 @@ generate_expression <- function(milestone_network, progressions, ngenes=100, exp
     #mutate(percentage = sum(percentage)) %>%
     filter(row_number() == 1)
 
-  count_mean <- 100
-
   # extract expression for each edge
   expression <- filtered_progression %>%
     group_by(from, to) %>%
@@ -86,6 +84,7 @@ generate_expression <- function(milestone_network, progressions, ngenes=100, exp
 }
 
 generate_counts <- function(expression, noise_nbinom_size=20) {
+  count_mean <- 100
   counts <- rnbinom(length(expression), mu = expression * count_mean, size=noise_nbinom_size) %>%
     matrix(nrow=nrow(expression), dimnames=dimnames(expression))
   counts[counts < 0] <- 0
