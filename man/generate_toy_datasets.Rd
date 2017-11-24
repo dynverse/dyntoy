@@ -7,8 +7,8 @@
 generate_toy_datasets(trajectory_types = c("simple_linear", "linear",
   "bifurcating", "cycle", "consecutive_bifurcating", "trifurcating",
   "converging", "BA", "bifuracting_loop", "bifurcating_cycle"),
-  num_replicates = 3, num_cells = 99, num_genes = 101,
-  expression_randomizer = "shift")
+  num_replicates = 3, num_cells = 200, num_genes = 100,
+  expression_randomizer = "modules", noise_std = 0.25)
 }
 \arguments{
 \item{trajectory_types}{The types of trajectory to generate}

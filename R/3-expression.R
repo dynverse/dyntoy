@@ -1,5 +1,5 @@
 #' @importFrom stats approxfun rnorm runif
-generate_expression <- function(milestone_network, progressions, ngenes=100, noise_std=0.05, expression_randomizer = c("modules", "modulo", "shift")) {
+generate_expression <- function(milestone_network, progressions, ngenes=100, expression_randomizer = c("modules", "modulo", "shift")) {
   expression_randomizer <- match.arg(expression_randomizer)
 
   nedges <- nrow(milestone_network)
@@ -31,7 +31,6 @@ generate_expression <- function(milestone_network, progressions, ngenes=100, noi
         chosen_modules <- sample(seq_along(end), n_changed_modules)
         end[chosen_modules] <- 1 - end[chosen_modules]
       }
-
     }
 
     milestone_expressions[[edge$from]] <- start
@@ -64,6 +63,8 @@ generate_expression <- function(milestone_network, progressions, ngenes=100, noi
     #mutate(percentage = sum(percentage)) %>%
     filter(row_number() == 1)
 
+  count_mean <- 100
+
   # extract expression for each edge
   expression <- filtered_progression %>%
     group_by(from, to) %>%
@@ -77,8 +78,6 @@ generate_expression <- function(milestone_network, progressions, ngenes=100, noi
       set_colnames(invoke(cbind, .$expression), unlist(.$cell_id))
     } %>% t
 
-  expression <- expression + stats::rnorm(length(expression), 0, noise_std)
-
   expression <- expression[unique(progressions$cell_id), ]
 
   colnames(expression) <- paste0("G", seq_len(ncol(expression)))
@@ -86,8 +85,9 @@ generate_expression <- function(milestone_network, progressions, ngenes=100, noi
   expression
 }
 
-generate_counts <- function(expression) {
-  counts <- round(expression * 100)
+generate_counts <- function(expression, noise_nbinom_size=20) {
+  counts <- rnbinom(length(expression), mu = expression * count_mean, size=noise_nbinom_size) %>%
+    matrix(nrow=nrow(expression), dimnames=dimnames(expression))
   counts[counts < 0] <- 0
   counts
 }

@@ -1,4 +1,4 @@
-generate_dataset <- function(unique_id, trajectory_type = "linear", num_cells = 99, num_genes = 101, noise_std = 0.05, use_tented_progressions = TRUE, expression_randomizer="modules") {
+generate_dataset <- function(unique_id, trajectory_type = "linear", num_cells = 99, num_genes = 101, noise_nbinom_size = 20, use_tented_progressions = TRUE, expression_randomizer="modules") {
   # generate milestone network
   milestone_network <- generate_toy_milestone_network(trajectory_type)
 
@@ -16,10 +16,10 @@ generate_dataset <- function(unique_id, trajectory_type = "linear", num_cells = 
   cell_ids <- unique(progressions$cell_id)
 
   # generate expression
-  expression <- generate_expression(milestone_network, progressions, ngenes = num_genes, noise_std = noise_std, expression_randomizer=expression_randomizer)
+  expression <- generate_expression(milestone_network, progressions, ngenes = num_genes, expression_randomizer=expression_randomizer)
 
   # simulate counts
-  counts <- generate_counts(expression)
+  counts <- generate_counts(expression, noise_nbinom_size=noise_nbinom_size)
 
   # make a simple sample info
   sample_info <- data_frame(id = rownames(counts))
