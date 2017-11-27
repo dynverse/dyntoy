@@ -19,29 +19,39 @@ generate_dataset <- function(unique_id, trajectory_type = "linear", num_cells = 
   expression <- generate_expression(milestone_network, progressions, ngenes = num_genes, expression_randomizer=expression_randomizer)
 
   # simulate counts
-  counts <- generate_counts(expression, noise_nbinom_size=noise_nbinom_size)
+  original_counts <- generate_counts(expression, noise_nbinom_size=noise_nbinom_size)
+
+  # normalize
+  normalized <- dynutils::normalize_filter_counts(original_counts, filter_hvg=FALSE)
+  counts <- normalized$counts
+  expression <- normalized$expression
+  cell_ids <- rownames(counts)
+
+  progressions <- progressions %>% filter(cell_id %in% cell_ids)
 
   # make a simple sample info
-  sample_info <- data_frame(id = rownames(counts))
-  feature_info <- data_frame(id = colnames(counts))
+  cell_info <- tibble(cell_id = cell_ids)
+  feature_info <- tibble(feature_id = colnames(counts))
 
   # wrap dataset
   dataset <- dynutils::wrap_ti_task_data(
     trajectory_type = trajectory_type,
     ti_type = trajectory_type,
     id = unique_id,
+    original_counts = original_counts,
     counts = counts,
+    expression = expression,
     cell_ids = cell_ids,
     milestone_ids = milestone_ids,
     milestone_network = milestone_network,
     progressions = progressions,
-    sample_info = sample_info,
+    cell_info = cell_info,
     feature_info = feature_info
   )
   dataset$type <- "ti_toy"
 
   # add prior information
-  dataset$prior_information <- with(dataset, dynutils::generate_prior_information(milestone_ids, milestone_network, progressions, milestone_percentages))
+  dataset$prior_information <- with(dataset, dynutils::generate_prior_information(milestone_ids, milestone_network, progressions, milestone_percentages, counts, feature_info, cell_info))
 
   # add geodesic dist
   dataset$geodesic_dist <- dynutils::compute_emlike_dist(dataset)

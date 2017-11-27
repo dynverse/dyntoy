@@ -9,7 +9,7 @@ generate_expression <- function(milestone_network, progressions, ngenes=100, exp
   milestone_expressions <- list()
   milestone_network <- milestone_network %>% mutate(splinefuns=map(seq_len(n()), ~NULL))
 
-  nmodules <- max(6, nrow(milestone_network) * 4)
+  nmodules <- max(6, nrow(milestone_network) * 10)
 
   for (edge_id in seq_len(nedges)) {
     edge <- extract_row_to_list(milestone_network, edge_id)
