@@ -22,7 +22,7 @@ generate_dataset <- function(unique_id, trajectory_type = "linear", num_cells = 
   original_counts <- generate_counts(expression, noise_nbinom_size=noise_nbinom_size)
 
   # normalize
-  normalized <- dynutils::normalize_filter_counts(original_counts, filter_hvg=FALSE)
+  normalized <- dynutils::normalize_filter_counts(original_counts, filter_hvg=FALSE, nmads = 10)
   counts <- normalized$counts
   expression <- normalized$expression
   cell_ids <- rownames(counts)
@@ -31,14 +31,13 @@ generate_dataset <- function(unique_id, trajectory_type = "linear", num_cells = 
 
   # make a simple sample info
   cell_info <- tibble(cell_id = cell_ids)
-  feature_info <- tibble(feature_id = colnames(counts))
+  feature_info <- tibble(feature_id = colnames(counts), housekeeping=FALSE)
 
   # wrap dataset
   dataset <- dynutils::wrap_ti_task_data(
     trajectory_type = trajectory_type,
     ti_type = trajectory_type,
     id = unique_id,
-    original_counts = original_counts,
     counts = counts,
     expression = expression,
     cell_ids = cell_ids,
