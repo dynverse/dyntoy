@@ -69,7 +69,7 @@ for (taski in seq_len(nrow(toy_tasks))) {
 
     milestone_percentages <- task$milestone_percentages
     expect_equal( sort(unique(milestone_percentages$cell_id)), sort(cell_ids) )
-    expect_equal( sort(unique(milestone_percentages$milestone_id)), sort(milestone_ids) )
+    expect_true( all(milestone_percentages$milestone_id %in% milestone_ids) )
     # todo: check whether a cell is in a tent
 
     mp_summ <- milestone_percentages %>% group_by(cell_id) %>% summarise(sum = sum(percentage))
@@ -77,7 +77,7 @@ for (taski in seq_len(nrow(toy_tasks))) {
 
     progressions <- task$progressions
     expect_equal( sort(unique(progressions$cell_id)), sort(cell_ids) )
-    expect_equal( sort(unique(c(progressions$from, progressions$to))), sort(milestone_ids) )
+    expect_true( all(c(progressions$from, progressions$to) %in% milestone_ids) )
 
     pr_summ <- progressions %>% group_by(cell_id) %>% summarise(sum = sum(percentage))
     expect_true( all(mp_summ$sum <= 1) )
