@@ -22,7 +22,7 @@ generate_dataset <- function(unique_id, trajectory_type = "linear", num_cells = 
   original_counts <- generate_counts(expression, noise_nbinom_size=noise_nbinom_size)
 
   # normalize
-  normalized <- dynutils::normalize_filter_counts(original_counts, filter_hvg=FALSE, nmads = 10)
+  normalized <- dynutils::normalise_filter_counts(original_counts, filter_hvg=FALSE, nmads = 10)
   counts <- normalized$counts
   expression <- normalized$expression
   cell_ids <- rownames(counts)
