@@ -8,11 +8,25 @@
 #' @param noise_nbinom_size The size parameter of the nbinom distribution
 #'
 #' @export
-generate_toy_datasets <- function(trajectory_types, num_replicates = 3, num_cells = 200, num_genes = 100, expression_randomizer="modules", noise_nbinom_size=20) {
+generate_toy_datasets <- function(
+  trajectory_types,
+  num_replicates = 3,
+  num_cells = 200,
+  num_genes = 100,
+  expression_randomizer = "modules",
+  noise_nbinom_size = 20
+) {
   crossing(trajectory_type = trajectory_types, replicate = seq_len(num_replicates)) %>%
     rowwise() %>%
     do(with(., {
-      generate_dataset(paste0("toy_", trajectory_type, "_", replicate), trajectory_type, num_cells, num_genes, expression_randomizer=expression_randomizer, noise_nbinom_size = noise_nbinom_size) %>%
+      generate_dataset(
+        unique_id = paste0("toy_", trajectory_type, "_", replicate),
+        trajectory_type = trajectory_type,
+        num_cells = num_cells,
+        num_genes = num_genes,
+        expression_randomizer = expression_randomizer,
+        noise_nbinom_size = noise_nbinom_size
+      ) %>%
         list() %>%
         dynutils::list_as_tibble() %>%
         mutate(replicate = replicate)
