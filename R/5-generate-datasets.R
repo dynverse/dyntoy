@@ -21,7 +21,6 @@ generate_toy_datasets <- function(
     do(with(., {
       generate_dataset(
         unique_id = paste0("toy_", trajectory_type, "_", replicate),
-        trajectory_type = trajectory_type,
         num_cells = num_cells,
         num_genes = num_genes,
         expression_randomizer = expression_randomizer,
