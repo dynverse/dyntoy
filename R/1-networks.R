@@ -81,7 +81,7 @@ generate_toy_milestone_network <- function(trajectory_type = c("simple_linear", 
       num_milestones <- round(stats::runif(1, 5, 15))
       igraph::ba.game(num_milestones) %>%
         igraph::as_data_frame() %>%
-        mutate_at(c("from", "to"), function(x) paste0("M", x)) %>%
+        mutate_at(c("from", "to"), ~ paste0("M", .)) %>%
         select(from = to, to = from)
     },
     bifuracting_loop = {
