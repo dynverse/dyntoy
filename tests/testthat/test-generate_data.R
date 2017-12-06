@@ -15,6 +15,10 @@ test_that("Creating toy datasets", {
   expect_equal( unique(tasks$type), "ti_toy" )
   expect_true( all(tasks$trajectory_type %in% trajectory_types) )
   expect_equal( nrow(tasks), length(trajectory_types) * num_replicates )
+
+  for (tt in trajectory_types) {
+    expect_equal(sum(tasks$trajectory_type == tt), num_replicates)
+  }
 })
 
 test_that("Creating more toy datasets", {
@@ -32,6 +36,10 @@ test_that("Creating more toy datasets", {
   expect_equal( unique(tasks$type), "ti_toy" )
   expect_true( all(tasks$trajectory_type %in% trajectory_types) )
   expect_equal( nrow(tasks), length(trajectory_types) * num_replicates )
+
+  for (tt in trajectory_types) {
+    expect_equal(sum(tasks$trajectory_type == tt), num_replicates)
+  }
 })
 
 toy_tasks <- dyntoy::toy_tasks
