@@ -7,17 +7,19 @@ test_that("Creating toy datasets", {
   num_genes <- 1001
   tasks <- generate_toy_datasets(trajectory_types = trajectory_types, num_replicates = num_replicates, num_cells = num_cells, num_genes = num_genes)
 
+  tasks <- tasks %>% mutate(origin = gsub("toy_(.*)_[0-9]*", "\\1", id))
+
   expect_that( is_tibble(tasks), is_true() )
 
   required_cols <- c("id", "cell_ids", "milestone_ids", "milestone_network", "milestone_percentages", "progressions", "counts", "geodesic_dist", "prior_information")
   expect_that( all(required_cols %in% colnames(tasks)), is_true() )
 
   expect_equal( unique(tasks$type), "ti_toy" )
-  expect_true( all(tasks$trajectory_type %in% trajectory_types) )
+  expect_true( all(tasks$origin %in% trajectory_types) )
   expect_equal( nrow(tasks), length(trajectory_types) * num_replicates )
 
   for (tt in trajectory_types) {
-    expect_equal(sum(tasks$trajectory_type == tt), num_replicates)
+    expect_equal(sum(tasks$origin == tt), num_replicates)
   }
 })
 
@@ -28,17 +30,19 @@ test_that("Creating more toy datasets", {
   num_genes <- 101
   tasks <- suppressWarnings({generate_toy_datasets(trajectory_types = trajectory_types, num_replicates = num_replicates, num_cells = num_cells, num_genes = num_genes)})
 
+  tasks <- tasks %>% mutate(origin = gsub("toy_(.*)_[0-9]*", "\\1", id))
+
   expect_that( is_tibble(tasks), is_true() )
 
   required_cols <- c("id", "cell_ids", "milestone_ids", "milestone_network", "milestone_percentages", "progressions", "counts", "geodesic_dist", "prior_information")
   expect_that( all(required_cols %in% colnames(tasks)), is_true() )
 
   expect_equal( unique(tasks$type), "ti_toy" )
-  expect_true( all(tasks$trajectory_type %in% trajectory_types) )
+  expect_true( all(tasks$origin %in% trajectory_types) )
   expect_equal( nrow(tasks), length(trajectory_types) * num_replicates )
 
   for (tt in trajectory_types) {
-    expect_equal(sum(tasks$trajectory_type == tt), num_replicates)
+    expect_equal(sum(tasks$origin == tt), num_replicates)
   }
 })
 
@@ -51,8 +55,9 @@ test_that("Data object toy_tasks", {
   expect_that( all(required_cols %in% colnames(toy_tasks)), is_true() )
 
   expect_equal( unique(toy_tasks$type), "ti_toy" )
+  tasks <- tasks %>% mutate(origin = gsub("toy_(.*)_[0-9]*", "\\1", id))
   trajectory_types <- eval(formals(generate_toy_datasets)$trajectory_types)
-  expect_true( all(toy_tasks$trajectory_type %in% trajectory_types) )
+  expect_true( all(toy_tasks$origin %in% trajectory_types) )
 })
 
 
