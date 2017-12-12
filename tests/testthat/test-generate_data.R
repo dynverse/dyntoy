@@ -55,9 +55,8 @@ test_that("Data object toy_tasks", {
   expect_that( all(required_cols %in% colnames(toy_tasks)), is_true() )
 
   expect_equal( unique(toy_tasks$type), "ti_toy" )
-  tasks <- tasks %>% mutate(origin = gsub("toy_(.*)_[0-9]*", "\\1", id))
   trajectory_types <- eval(formals(generate_toy_datasets)$trajectory_types)
-  expect_true( all(toy_tasks$origin %in% trajectory_types) )
+  expect_true( all(gsub("toy_(.*)_[0-9]*", "\\1", toy_tasks$id) %in% trajectory_types) )
 })
 
 
