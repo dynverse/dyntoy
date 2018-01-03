@@ -4,14 +4,14 @@
 \alias{generate_toy_datasets}
 \title{Generate toy datasets with dyngen}
 \usage{
-generate_toy_datasets(trajectory_types = c("simple_linear", "linear",
-  "bifurcating", "cycle", "consecutive_bifurcating", "trifurcating",
-  "converging", "BA", "bifuracting_loop", "bifurcating_cycle"),
-  num_replicates = 3, num_cells = 200, num_genes = 100,
-  expression_randomizer = "modules", noise_nbinom_size = 20)
+generate_toy_datasets(models = c("simple_linear", "linear", "bifurcating",
+  "cycle", "consecutive_bifurcating", "trifurcating", "converging", "BA",
+  "bifuracting_loop", "bifurcating_cycle"), num_replicates = 3,
+  num_cells = 200, num_genes = 100, expression_randomizer = "modules",
+  noise_nbinom_size = 20)
 }
 \arguments{
-\item{trajectory_types}{The types of trajectory to generate}
+\item{models}{The types of trajectory to generate}
 
 \item{num_replicates}{How many replicates of each TI type to generate}
 

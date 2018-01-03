@@ -1,11 +1,11 @@
 #' @importFrom igraph ba.game
 #' @importFrom stats runif
-generate_toy_milestone_network <- function(trajectory_type = c("simple_linear", "linear", "bifurcating", "cycle", "consecutive_bifurcating", "trifurcating", "converging", "BA", "bifuracting_loop", "bifurcating_cycle")) {
+generate_toy_milestone_network <- function(model = c("simple_linear", "linear", "bifurcating", "cycle", "consecutive_bifurcating", "trifurcating", "converging", "BA", "bifuracting_loop", "bifurcating_cycle")) {
   requireNamespace("igraph")
-  trajectory_type <- match.arg(trajectory_type)
+  model <- match.arg(model)
 
   milnet <- switch(
-    trajectory_type,
+    model,
     simple_linear = {
       tribble(
         ~from, ~to,

@@ -1,6 +1,6 @@
-generate_dataset <- function(unique_id, trajectory_type = "linear", num_cells = 99, num_genes = 101, noise_nbinom_size = 20, use_tented_progressions = TRUE, expression_randomizer="modules") {
+generate_dataset <- function(unique_id, model = "linear", num_cells = 99, num_genes = 101, noise_nbinom_size = 20, use_tented_progressions = TRUE, expression_randomizer="modules") {
   # generate milestone network
-  milestone_network <- generate_toy_milestone_network(trajectory_type)
+  milestone_network <- generate_toy_milestone_network(model)
 
   # get milestone ids
   milestone_ids <- sort(unique(c(milestone_network$from, milestone_network$to)))
@@ -36,6 +36,7 @@ generate_dataset <- function(unique_id, trajectory_type = "linear", num_cells = 
   # wrap dataset
   dataset <- dynutils::wrap_ti_task_data(
     id = unique_id,
+    model = model,
     counts = counts,
     expression = expression,
     cell_ids = cell_ids,
