@@ -20,7 +20,7 @@ test_that("Creating toy datasets", {
 
   for (tt in models) {
     expect_equal(sum(tasks$origin == tt), num_replicates)
-  }§
+  }
 })
 
 test_that("Creating more toy datasets", {
