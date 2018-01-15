@@ -84,7 +84,7 @@ generate_toy_milestone_network <- function(trajectory_type = c("simple_linear", 
         mutate_at(c("from", "to"), ~ paste0("M", .)) %>%
         select(from = to, to = from)
     },
-    bifuracting_loop = {
+    bifurcating_loop = {
       tribble(
         ~from, ~to,
         "M1", "M2",
