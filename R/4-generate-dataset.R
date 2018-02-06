@@ -1,3 +1,4 @@
+#' @importFrom dynnormaliser normalise_filter_counts
 generate_dataset <- function(unique_id, model = "linear", num_cells = 99, num_genes = 101, noise_nbinom_size = 20, use_tented_progressions = TRUE, expression_randomizer="modules") {
   # generate milestone network
   milestone_network <- generate_toy_milestone_network(model)
@@ -22,7 +23,7 @@ generate_dataset <- function(unique_id, model = "linear", num_cells = 99, num_ge
   original_counts <- generate_counts(expression, noise_nbinom_size=noise_nbinom_size)
 
   # normalize
-  normalized <- dynutils::normalise_filter_counts(original_counts, filter_hvg=FALSE, nmads = 10)
+  normalized <- dynnormaliser::normalise_filter_counts(original_counts, filter_hvg = FALSE, nmads = 10)
   counts <- normalized$counts
   expression <- normalized$expression
   cell_ids <- rownames(counts)
