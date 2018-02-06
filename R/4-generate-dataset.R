@@ -1,4 +1,4 @@
-#' @importFrom dynnormaliser normalise_filter_counts
+#' @importFrom dynnormaliser normalise_filter_counts generate_prior_information
 generate_dataset <- function(unique_id, model = "linear", num_cells = 99, num_genes = 101, noise_nbinom_size = 20, use_tented_progressions = TRUE, expression_randomizer="modules") {
   # generate milestone network
   milestone_network <- generate_toy_milestone_network(model)
@@ -50,7 +50,7 @@ generate_dataset <- function(unique_id, model = "linear", num_cells = 99, num_ge
   dataset$type <- "ti_toy"
 
   # add prior information
-  dataset$prior_information <- with(dataset, dynutils::generate_prior_information(milestone_ids, milestone_network, progressions, milestone_percentages, counts, feature_info, cell_info))
+  dataset$prior_information <- with(dataset, dynnormaliser::generate_prior_information(milestone_ids, milestone_network, progressions, milestone_percentages, counts, feature_info, cell_info))
 
   # add geodesic dist
   dataset$geodesic_dist <- dynutils::compute_emlike_dist(dataset)
