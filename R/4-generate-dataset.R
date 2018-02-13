@@ -45,15 +45,15 @@ generate_dataset <- function(unique_id, model = "linear", num_cells = 99, num_ge
     milestone_network = milestone_network,
     progressions = progressions,
     cell_info = cell_info,
-    feature_info = feature_info
+    feature_info = feature_info,
+    task_source = "toy"
   )
-  dataset$type <- "ti_toy"
 
   # add prior information
   dataset$prior_information <- with(dataset, dynnormaliser::generate_prior_information(milestone_ids, milestone_network, progressions, milestone_percentages, counts, feature_info, cell_info))
 
   # add geodesic dist
-  dataset$geodesic_dist <- dynutils::compute_emlike_dist(dataset)
+  dataset$geodesic_dist <- dynutils::compute_tented_geodesic_distances(dataset)
 
   # return dataset
   dataset

@@ -20,7 +20,7 @@ generate_toy_datasets <- function(
     rowwise() %>%
     do(with(., {
       generate_dataset(
-        unique_id = paste0("toy_", model, "_", replicate),
+        unique_id = paste0("toy/", model, "_", replicate),
         model = model,
         num_cells = num_cells,
         num_genes = num_genes,
