@@ -7,14 +7,15 @@ test_that("Creating toy datasets", {
   num_genes <- 1001
   tasks <- generate_toy_datasets(models = models, num_replicates = num_replicates, num_cells = num_cells, num_genes = num_genes)
 
-  tasks <- tasks %>% mutate(origin = gsub("toy_(.*)_[0-9]*", "\\1", id))
+  tasks <- tasks %>% mutate(origin = gsub("toy/(.*)_[0-9]*", "\\1", id))
 
   expect_that( is_tibble(tasks), is_true() )
 
   required_cols <- c("id", "cell_ids", "milestone_ids", "milestone_network", "milestone_percentages", "progressions", "counts", "geodesic_dist", "prior_information")
   expect_that( all(required_cols %in% colnames(tasks)), is_true() )
 
-  expect_equal( unique(tasks$type), "ti_toy" )
+  expect_equal( unique(tasks$type), "ti_task" )
+  expect_equal( unique(tasks$task_source), "toy" )
   expect_true( all(tasks$origin %in% models) )
   expect_equal( nrow(tasks), length(models) * num_replicates )
 
@@ -30,14 +31,14 @@ test_that("Creating more toy datasets", {
   num_genes <- 101
   tasks <- suppressWarnings({generate_toy_datasets(models = models, num_replicates = num_replicates, num_cells = num_cells, num_genes = num_genes)})
 
-  tasks <- tasks %>% mutate(origin = gsub("toy_(.*)_[0-9]*", "\\1", id))
+  tasks <- tasks %>% mutate(origin = gsub("toy/(.*)_[0-9]*", "\\1", id))
 
   expect_that( is_tibble(tasks), is_true() )
 
   required_cols <- c("id", "cell_ids", "milestone_ids", "milestone_network", "milestone_percentages", "progressions", "counts", "geodesic_dist", "prior_information")
   expect_that( all(required_cols %in% colnames(tasks)), is_true() )
 
-  expect_equal( unique(tasks$type), "ti_toy" )
+  expect_equal( unique(tasks$type), "ti_task" )
   expect_true( all(tasks$origin %in% models) )
   expect_equal( nrow(tasks), length(models) * num_replicates )
 
@@ -54,9 +55,9 @@ test_that("Data object toy_tasks", {
   required_cols <- c("id", "cell_ids", "milestone_ids", "milestone_network", "milestone_percentages", "progressions", "counts", "geodesic_dist", "prior_information")
   expect_that( all(required_cols %in% colnames(toy_tasks)), is_true() )
 
-  expect_equal( unique(toy_tasks$type), "ti_toy" )
+  expect_equal( unique(toy_tasks$type), "ti_task" )
   models <- eval(formals(generate_toy_datasets)$models)
-  expect_true( all(gsub("toy_(.*)_[0-9]*", "\\1", toy_tasks$id) %in% models) )
+  expect_true( all(gsub("toy/(.*)_[0-9]*", "\\1", toy_tasks$id) %in% models) )
 })
 
 
