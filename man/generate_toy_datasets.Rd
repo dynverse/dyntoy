@@ -8,7 +8,7 @@ generate_toy_datasets(models = c("simple_linear", "linear", "linear_long",
   "bifurcating", "trifurcating", "consecutive_bifurcating", "converging",
   "cycle", "BA", "bifuracting_loop", "bifurcating_cycle"), num_replicates = 3,
   num_cells = 200, num_genes = 100, expression_randomizer = "modules",
-  noise_nbinom_size = 20)
+  noise_nbinom_size = 20, use_tented_progressions = TRUE)
 }
 \arguments{
 \item{models}{The types of trajectory to generate}
@@ -22,6 +22,9 @@ generate_toy_datasets(models = c("simple_linear", "linear", "linear_long",
 \item{expression_randomizer}{How to randomize the expression}
 
 \item{noise_nbinom_size}{The size parameter of the nbinom distribution}
+
+\item{use_tented_progressions}{Whether or not to be able to generate cells as
+part of a divergence}
 }
 \description{
 Generate toy datasets with dyngen
