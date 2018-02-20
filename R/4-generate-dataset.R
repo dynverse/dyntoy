@@ -1,4 +1,4 @@
-#' @importFrom dynnormaliser normalise_filter_counts generate_prior_information
+#' @importFrom dynnormaliser normalise_filter_counts add_prior_information_to_wrapper
 generate_dataset <- function(
   unique_id,
   model = "linear",
@@ -54,23 +54,20 @@ generate_dataset <- function(
   feature_info <- tibble(feature_id = colnames(counts), housekeeping = FALSE)
 
   # wrap dataset
-  abstract_data_wrapper(
+  wrap_data(
     id = unique_id,
     cell_ids = cell_ids,
     cell_info = cell_info,
     task_source = "toy",
     model = model
-  ) %>%
-    add_trajectory_to_wrapper(
-      milestone_ids = milestone_ids,
-      milestone_network = milestone_network,
-      divergence_regions = divergence_regions,
-      progressions = progressions
-    ) %>%
-    add_expression_to_wrapper(
-      counts = counts,
-      expression = expression,
-      feature_info = feature_info
-    ) %>%
-    dynnormaliser::add_prior_information_to_wrapper()
+  ) %>% add_trajectory_to_wrapper(
+    milestone_ids = milestone_ids,
+    milestone_network = milestone_network,
+    divergence_regions = divergence_regions,
+    progressions = progressions
+  ) %>% add_expression_to_wrapper(
+    counts = counts,
+    expression = expression,
+    feature_info = feature_info
+  ) %>% dynnormaliser::add_prior_information_to_wrapper()
 }
