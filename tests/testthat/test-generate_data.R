@@ -7,20 +7,22 @@ test_that("Creating toy datasets", {
   num_genes <- 1001
   tasks <- generate_toy_datasets(models = models, num_replicates = num_replicates, num_cells = num_cells, num_genes = num_genes)
 
-  tasks <- tasks %>% mutate(origin = gsub("toy/(.*)_[0-9]*", "\\1", id))
+  expect_true( is_tibble(tasks) )
 
-  expect_that( is_tibble(tasks), is_true() )
+  required_cols <- c(
+    "id", "cell_ids", "task_source", "model", "milestone_ids", "milestone_network", "divergence_regions", "milestone_percentages",
+    "progressions", "counts", "expression", "prior_information"
+  )
+  for (rc in required_cols) {
+    expect_true(rc %in% colnames(tasks), label = paste0(rc, " %in% colnames(tasks)"))
+  }
 
-  required_cols <- c("id", "cell_ids", "milestone_ids", "milestone_network", "milestone_percentages", "progressions", "counts", "geodesic_dist", "prior_information")
-  expect_that( all(required_cols %in% colnames(tasks)), is_true() )
-
-  expect_equal( unique(tasks$type), "ti_task" )
   expect_equal( unique(tasks$task_source), "toy" )
-  expect_true( all(tasks$origin %in% models) )
+  expect_true( all(tasks$model %in% models) )
   expect_equal( nrow(tasks), length(models) * num_replicates )
 
   for (tt in models) {
-    expect_equal(sum(tasks$origin == tt), num_replicates)
+    expect_equal(sum(tasks$model == tt), num_replicates)
   }
 })
 
@@ -31,19 +33,22 @@ test_that("Creating more toy datasets", {
   num_genes <- 101
   tasks <- suppressWarnings({generate_toy_datasets(models = models, num_replicates = num_replicates, num_cells = num_cells, num_genes = num_genes)})
 
-  tasks <- tasks %>% mutate(origin = gsub("toy/(.*)_[0-9]*", "\\1", id))
+  expect_true( is_tibble(tasks) )
 
-  expect_that( is_tibble(tasks), is_true() )
+  required_cols <- c(
+    "id", "cell_ids", "task_source", "model", "milestone_ids", "milestone_network", "divergence_regions", "milestone_percentages",
+    "progressions", "counts", "expression", "prior_information"
+  )
+  for (rc in required_cols) {
+    expect_true(rc %in% colnames(tasks), label = paste0(rc, " %in% colnames(tasks)"))
+  }
 
-  required_cols <- c("id", "cell_ids", "milestone_ids", "milestone_network", "milestone_percentages", "progressions", "counts", "geodesic_dist", "prior_information")
-  expect_that( all(required_cols %in% colnames(tasks)), is_true() )
-
-  expect_equal( unique(tasks$type), "ti_task" )
-  expect_true( all(tasks$origin %in% models) )
+  expect_equal( unique(tasks$task_source), "toy" )
+  expect_true( all(tasks$model %in% models) )
   expect_equal( nrow(tasks), length(models) * num_replicates )
 
   for (tt in models) {
-    expect_equal(sum(tasks$origin == tt), num_replicates)
+    expect_equal(sum(tasks$model == tt), num_replicates)
   }
 })
 
@@ -52,12 +57,16 @@ toy_tasks <- dyntoy::toy_tasks
 test_that("Data object toy_tasks", {
   expect_that( is_tibble(toy_tasks), is_true() )
 
-  required_cols <- c("id", "cell_ids", "milestone_ids", "milestone_network", "milestone_percentages", "progressions", "counts", "geodesic_dist", "prior_information")
-  expect_that( all(required_cols %in% colnames(toy_tasks)), is_true() )
+  required_cols <- c(
+    "id", "cell_ids", "task_source", "model", "milestone_ids", "milestone_network", "divergence_regions", "milestone_percentages",
+    "progressions", "counts", "expression", "prior_information"
+  )
+  for (rc in required_cols) {
+    expect_true(rc %in% colnames(toy_tasks), label = paste0(rc, " %in% colnames(toy_tasks)"))
+  }
 
-  expect_equal( unique(toy_tasks$type), "ti_task" )
   models <- eval(formals(generate_toy_datasets)$models)
-  expect_true( all(gsub("toy/(.*)_[0-9]*", "\\1", toy_tasks$id) %in% models) )
+  expect_true( all(toy_tasks$models %in% models) )
 })
 
 
@@ -102,15 +111,6 @@ for (taski in seq_len(nrow(toy_tasks))) {
     expect_false( any(duplicated(rownames(counts))) )
     expect_false( any(duplicated(colnames(counts))) )
 
-    geodesic_dist <- task$geodesic_dist
-    expect_true( is.matrix(geodesic_dist) )
-    expect_true( is.numeric(geodesic_dist) )
-    expect_equal( rownames(geodesic_dist), cell_ids )
-    expect_equal( colnames(geodesic_dist), cell_ids )
-    expect_true( all(is.finite(geodesic_dist)) )
-    expect_true( all(geodesic_dist >= 0) )
-
-    special_cells <- task$special_cells
-    expect_true( all(sapply(special_cells, function(x) all(x %in% cell_ids))) )
+    # TODO: add check for divergence regions and prior_information
   })
 }
