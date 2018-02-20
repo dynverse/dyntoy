@@ -66,7 +66,7 @@ test_that("Data object toy_tasks", {
   }
 
   models <- eval(formals(generate_toy_datasets)$models)
-  expect_true( all(toy_tasks$models %in% models) )
+  expect_true( all(toy_tasks$model %in% models) )
 })
 
 
