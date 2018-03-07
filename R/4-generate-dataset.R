@@ -65,9 +65,12 @@ generate_dataset <- function(
     milestone_network = milestone_network,
     divergence_regions = divergence_regions,
     progressions = progressions
+  ) %>% add_cell_waypoints_to_wrapper(
+    num_cells_selected = 25
   ) %>% add_expression_to_wrapper(
     counts = counts,
     expression = expression,
     feature_info = feature_info
-  ) %>% dynnormaliser::add_prior_information_to_wrapper()
+  ) %>% dynnormaliser::add_prior_information_to_wrapper(
+  )
 }
