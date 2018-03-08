@@ -4,6 +4,7 @@
 #' @import tidyr
 #' @import tibble
 #' @import dynutils
+#' @import dynwrap
 #' @import purrr
 #' @importFrom magrittr %<>% %$% set_colnames
 #'

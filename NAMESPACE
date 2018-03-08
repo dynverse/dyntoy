@@ -3,6 +3,7 @@
 export(generate_toy_datasets)
 import(dplyr)
 import(dynutils)
+import(dynwrap)
 import(purrr)
 import(tibble)
 import(tidyr)

@@ -15,6 +15,7 @@ Imports:
   dplyr,
   dynnormaliser,
   dynutils,
+  dynwrap,
   igraph,
   magrittr,
   purrr,
@@ -23,6 +24,7 @@ Imports:
   tibble,
   tidyr
 Remotes:
-  rcannood/dynutils,
-  rcannood/dynnormaliser
+  dynverse/dynwrap,
+  dynverse/dynutils,
+  dynverse/dynnormaliser
 RoxygenNote: 6.0.1
