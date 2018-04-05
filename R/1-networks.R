@@ -95,6 +95,15 @@ network_models <- list(
       "M3", "M1",
       "M4", "M1"
     )
+  },
+  disconnected_linear = {
+    tribble(
+      ~from, ~to,
+      "M1", "M2",
+      "M2", "M3",
+      "M4", "M5",
+      "M5", "M6"
+    )
   }
 )
 
