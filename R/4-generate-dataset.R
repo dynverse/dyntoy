@@ -71,6 +71,5 @@ generate_dataset <- function(
     counts = counts,
     expression = expression,
     feature_info = feature_info
-  ) %>% dynnormaliser::add_prior_information_to_wrapper(
-  )
+  ) %>% dynnormaliser::add_prior_information_to_wrapper()
 }

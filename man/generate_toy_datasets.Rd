@@ -6,8 +6,9 @@
 \usage{
 generate_toy_datasets(models = c("simple_linear", "linear", "linear_long",
   "bifurcating", "trifurcating", "consecutive_bifurcating", "converging",
-  "cycle", "BA", "bifuracting_loop", "bifurcating_cycle"), num_replicates = 3,
-  num_cells = 200, num_genes = 100, expression_randomizer = "modules",
+  "cycle", "BA", "bifuracting_loop", "bifurcating_cycle",
+  "disconnected_linear"), num_replicates = 3, num_cells = 200,
+  num_genes = 100, expression_randomizer = "modules",
   noise_nbinom_size = 20, use_tented_progressions = TRUE)
 }
 \arguments{
