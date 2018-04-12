@@ -3,7 +3,7 @@ Type: Package
 Title: Generating simple toy data of cellular differentiation
 Version: 0.1.0
 Authors@R: c(
-  person("Robrecht", "Cannoodt", email = "robrecht.cannoodt@gmail.com", role = c("aut")),
+  person("Robrecht", "Cannoodt", email = "rcannood@gmail.com", role = c("aut")),
   person("Wouter", "Saelens", email = "wouter.saelens@ugent.be", role = c("aut", "cre")))
 Description: Generating simple toy data of cellular differentiation
 License: GPL-3
