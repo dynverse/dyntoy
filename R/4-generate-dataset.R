@@ -1,12 +1,12 @@
-#' @importFrom dynnormaliser normalise_filter_counts add_prior_information_to_wrapper
+#' @importFrom dynwrap add_prior_information_to_wrapper
+#' @importFrom dynnormaliser normalise_filter_counts
 generate_dataset <- function(
   unique_id,
   model = "linear",
   num_cells = 99,
   num_genes = 101,
   noise_nbinom_size = 20,
-  use_tented_progressions = TRUE,
-  expression_randomizer = "modules"
+  use_tented_progressions = TRUE
 ) {
   # generate milestone network
   milestone_network <- generate_toy_milestone_network(model)
@@ -36,13 +36,24 @@ generate_dataset <- function(
   cell_ids <- unique(progressions$cell_id)
 
   # generate expression
-  expression <- generate_expression(milestone_network, progressions, ngenes = num_genes, expression_randomizer = expression_randomizer)
+  expression <- generate_expression(
+    milestone_network = milestone_network,
+    progressions = progressions,
+    ngenes = num_genes
+  )
 
   # simulate counts
-  original_counts <- generate_counts(expression, noise_nbinom_size=noise_nbinom_size)
+  original_counts <- generate_counts(
+    expression = expression,
+    noise_nbinom_size = noise_nbinom_size
+  )
 
   # normalize
-  normalized <- dynnormaliser::normalise_filter_counts(original_counts, filter_hvg = FALSE, nmads = 10)
+  normalized <- dynnormaliser::normalise_filter_counts(
+    original_counts,
+    filter_hvg = FALSE,
+    nmads = 10
+  )
   counts <- normalized$counts
   expression <- normalized$expression
   cell_ids <- rownames(counts)
@@ -71,5 +82,5 @@ generate_dataset <- function(
     counts = counts,
     expression = expression,
     feature_info = feature_info
-  ) %>% dynnormaliser::add_prior_information_to_wrapper()
+  ) %>% dynwrap::add_prior_information_to_wrapper()
 }

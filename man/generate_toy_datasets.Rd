@@ -8,8 +8,7 @@ generate_toy_datasets(models = c("simple_linear", "linear", "linear_long",
   "bifurcating", "trifurcating", "consecutive_bifurcating", "converging",
   "cycle", "BA", "bifuracting_loop", "bifurcating_cycle",
   "disconnected_linear"), num_replicates = 3, num_cells = 200,
-  num_genes = 100, expression_randomizer = "modules",
-  noise_nbinom_size = 20, use_tented_progressions = TRUE)
+  num_genes = 100, noise_nbinom_size = 20, use_tented_progressions = TRUE)
 }
 \arguments{
 \item{models}{The types of trajectory to generate}
@@ -19,8 +18,6 @@ generate_toy_datasets(models = c("simple_linear", "linear", "linear_long",
 \item{num_cells}{The number of cells in each dataset}
 
 \item{num_genes}{The number of genes in each dataset}
-
-\item{expression_randomizer}{How to randomize the expression}
 
 \item{noise_nbinom_size}{The size parameter of the nbinom distribution}
 
