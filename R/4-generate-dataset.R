@@ -1,5 +1,4 @@
 #' @importFrom dynwrap add_prior_information_to_wrapper
-#' @importFrom dynnormaliser normalise_filter_counts
 generate_dataset <- function(
   unique_id,
   model = "linear",
@@ -49,13 +48,18 @@ generate_dataset <- function(
   )
 
   # normalize
-  normalized <- dynnormaliser::normalise_filter_counts(
-    original_counts,
-    filter_hvg = FALSE,
-    nmads = 10
-  )
-  counts <- normalized$counts
-  expression <- normalized$expression
+  if ("dynnormaliser" %in% rownames(installed.packages())) {
+    normalised <- dynnormaliser::normalise_filter_counts(
+      original_counts,
+      filter_hvg = FALSE,
+      nmads = 10
+    )
+    counts <- normalised$counts
+    expression <- normalised$expression
+  } else {
+    counts <- original_counts
+    expression = expression
+  }
   cell_ids <- rownames(counts)
 
   progressions <- progressions %>% filter(cell_id %in% cell_ids)
