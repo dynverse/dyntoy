@@ -1,4 +1,4 @@
-#' @importFrom dynwrap add_prior_information_to_wrapper
+#' @importFrom dynwrap add_prior_information
 generate_dataset <- function(
   unique_id,
   model = "linear",
@@ -54,15 +54,12 @@ generate_dataset <- function(
       filter_hvg = FALSE,
       nmads = 10
     )
-    counts <- normalized$counts
-    expression <- normalized$expression
-    cell_ids <- rownames(counts)
-
+    counts <- normalised$counts
+    expression <- normalised$expression
     progressions <- progressions %>% filter(cell_id %in% cell_ids)
   } else {
     counts <- original_counts
-    expression <- expression
-    cell_ids <- rownames(counts)
+    expression = expression
   }
 
   # make a simple sample info
@@ -76,16 +73,16 @@ generate_dataset <- function(
     cell_info = cell_info,
     task_source = "toy",
     model = model
-  ) %>% add_trajectory_to_wrapper(
+  ) %>% add_trajectory(
     milestone_ids = milestone_ids,
     milestone_network = milestone_network,
     divergence_regions = divergence_regions,
     progressions = progressions
-  ) %>% add_cell_waypoints_to_wrapper(
+  ) %>% add_cell_waypoints(
     num_cells_selected = 25
-  ) %>% add_expression_to_wrapper(
+  ) %>% add_expression(
     counts = counts,
     expression = expression,
     feature_info = feature_info
-  ) %>% dynwrap::add_prior_information_to_wrapper()
+  ) %>% dynwrap::add_prior_information()
 }
