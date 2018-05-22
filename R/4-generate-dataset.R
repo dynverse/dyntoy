@@ -5,7 +5,8 @@ generate_dataset <- function(
   num_cells = 99,
   num_genes = 101,
   noise_nbinom_size = 20,
-  use_tented_progressions = TRUE
+  use_tented_progressions = TRUE,
+  normalise = dynutils::check_packages("dynnormaliser")
 ) {
   # generate milestone network
   milestone_network <- generate_toy_milestone_network(model)
@@ -48,14 +49,15 @@ generate_dataset <- function(
   )
 
   # normalize
-  if (dynutils::check_packages("dynnormaliser")) {
-    normalized <- dynnormaliser::normalise_filter_counts(
+  if (normalise) {
+    normalised <- dynnormaliser::normalise_filter_counts(
       original_counts,
       filter_hvg = FALSE,
       nmads = 10
     )
     counts <- normalised$counts
     expression <- normalised$expression
+    cell_ids <- intersect(rownames(counts), cell_ids)
     progressions <- progressions %>% filter(cell_id %in% cell_ids)
   } else {
     counts <- original_counts

@@ -107,7 +107,7 @@ for (taski in seq_len(nrow(toy_tasks))) {
     counts <- task$counts
     expect_true( is.numeric(counts) )
     expect_true( is.matrix(counts) )
-    expect_equal( rownames(counts), cell_ids )
+    expect_true( all(rownames(counts) %in% cell_ids ))
     expect_false( any(duplicated(rownames(counts))) )
     expect_false( any(duplicated(colnames(counts))) )
 
