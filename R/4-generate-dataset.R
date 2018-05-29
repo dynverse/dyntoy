@@ -1,11 +1,12 @@
-#' @importFrom dynwrap add_prior_information_to_wrapper
+#' @importFrom dynwrap add_prior_information
 generate_dataset <- function(
   unique_id,
   model = "linear",
   num_cells = 99,
   num_genes = 101,
   noise_nbinom_size = 20,
-  use_tented_progressions = TRUE
+  use_tented_progressions = TRUE,
+  normalise = dynutils::check_packages("dynnormaliser")
 ) {
   # generate milestone network
   milestone_network <- generate_toy_milestone_network(model)
@@ -48,7 +49,7 @@ generate_dataset <- function(
   )
 
   # normalize
-  if ("dynnormaliser" %in% rownames(installed.packages())) {
+  if (normalise) {
     normalised <- dynnormaliser::normalise_filter_counts(
       original_counts,
       filter_hvg = FALSE,
@@ -56,13 +57,12 @@ generate_dataset <- function(
     )
     counts <- normalised$counts
     expression <- normalised$expression
+    cell_ids <- intersect(rownames(counts), cell_ids)
+    progressions <- progressions %>% filter(cell_id %in% cell_ids)
   } else {
     counts <- original_counts
     expression = expression
   }
-  cell_ids <- rownames(counts)
-
-  progressions <- progressions %>% filter(cell_id %in% cell_ids)
 
   # make a simple sample info
   cell_info <- tibble(cell_id = cell_ids)
@@ -75,16 +75,16 @@ generate_dataset <- function(
     cell_info = cell_info,
     task_source = "toy",
     model = model
-  ) %>% add_trajectory_to_wrapper(
+  ) %>% add_trajectory(
     milestone_ids = milestone_ids,
     milestone_network = milestone_network,
     divergence_regions = divergence_regions,
     progressions = progressions
-  ) %>% add_cell_waypoints_to_wrapper(
+  ) %>% add_cell_waypoints(
     num_cells_selected = 25
-  ) %>% add_expression_to_wrapper(
+  ) %>% add_expression(
     counts = counts,
     expression = expression,
     feature_info = feature_info
-  ) %>% dynwrap::add_prior_information_to_wrapper()
+  ) %>% dynwrap::add_prior_information()
 }
