@@ -1,4 +1,4 @@
-#' Generate toy datasets with dyngen
+#' Generate toy datasets with dyntoy
 #'
 #' @param models The types of trajectory to generate
 #' @param num_replicates How many replicates of each TI type to generate

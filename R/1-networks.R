@@ -77,7 +77,7 @@ network_models <- list(
       mutate_at(c("from", "to"), ~ paste0("M", .)) %>%
       select(from = to, to = from)
   },
-  bifuracting_loop = {
+  bifurcating_loop = {
     tribble(
       ~from, ~to,
       "M1", "M2",

@@ -2,11 +2,11 @@
 % Please edit documentation in R/5-generate-datasets.R
 \name{generate_toy_datasets}
 \alias{generate_toy_datasets}
-\title{Generate toy datasets with dyngen}
+\title{Generate toy datasets with dyntoy}
 \usage{
 generate_toy_datasets(models = c("simple_linear", "linear", "linear_long",
   "bifurcating", "trifurcating", "consecutive_bifurcating", "converging",
-  "cycle", "BA", "bifuracting_loop", "bifurcating_cycle",
+  "cycle", "BA", "bifurcating_loop", "bifurcating_cycle",
   "disconnected_linear"), num_replicates = 3, num_cells = 200,
   num_genes = 100, noise_nbinom_size = 20, use_tented_progressions = TRUE)
 }
@@ -25,5 +25,5 @@ generate_toy_datasets(models = c("simple_linear", "linear", "linear_long",
 part of a divergence}
 }
 \description{
-Generate toy datasets with dyngen
+Generate toy datasets with dyntoy
 }
