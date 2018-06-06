@@ -4,7 +4,7 @@ library(dynwrap)
 
 set.seed(1)
 
-toy_tasks <- generate_toy_datasets(num_replicates = 3)
+toy_tasks <- generate_toy_datasets(num_replicates = 10)
 
 # fix toys
 # toy_tasks <- map(seq_len(nrow(toy_tasks)), function(i) {

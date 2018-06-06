@@ -4,11 +4,10 @@
 \alias{generate_toy_datasets}
 \title{Generate toy datasets with dyntoy}
 \usage{
-generate_toy_datasets(models = c("simple_linear", "linear", "linear_long",
-  "bifurcating", "trifurcating", "consecutive_bifurcating", "converging",
-  "cycle", "BA", "bifurcating_loop", "bifurcating_cycle",
-  "disconnected_linear"), num_replicates = 3, num_cells = 200,
-  num_genes = 100, noise_nbinom_size = 20, use_tented_progressions = TRUE)
+generate_toy_datasets(models = c("linear", "cyclic", "multifurcating",
+  "converging", "multifurcating_with_loops", "disconnected"),
+  num_replicates = 3, num_cells = 200, num_genes = 100,
+  noise_nbinom_size = 20, allow_tented_progressions = TRUE)
 }
 \arguments{
 \item{models}{The types of trajectory to generate}
@@ -21,8 +20,8 @@ generate_toy_datasets(models = c("simple_linear", "linear", "linear_long",
 
 \item{noise_nbinom_size}{The size parameter of the nbinom distribution}
 
-\item{use_tented_progressions}{Whether or not to be able to generate cells as
-part of a divergence}
+\item{allow_tented_progressions}{Whether or not to be able to generate cells as
+part of a divergence.}
 }
 \description{
 Generate toy datasets with dyntoy

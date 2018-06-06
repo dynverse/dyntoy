@@ -5,7 +5,7 @@ generate_dataset <- function(
   num_cells = 99,
   num_genes = 101,
   noise_nbinom_size = 20,
-  use_tented_progressions = TRUE,
+  allow_tented_progressions = TRUE,
   normalise = dynutils::check_packages("dynnormaliser")
 ) {
   # generate milestone network
@@ -15,10 +15,10 @@ generate_dataset <- function(
   milestone_ids <- sort(unique(c(milestone_network$from, milestone_network$to)))
 
   # generate (tented) progressions
-  progressions <- random_progressions(milestone_network, ncells = num_cells, use_tented = use_tented_progressions)
+  progressions <- random_progressions(milestone_network, ncells = num_cells, allow_tented = allow_tented_progressions)
 
   # were any divergences created?
-  divreg <- progressions %>% group_by(cell_id) %>% filter(n() > 1)
+  divreg <- progressions %>% group_by(cell_id) %>% filter(n() > 1) %>% ungroup()
   if (nrow(divreg) > 0) {
     froms <- unique(divreg$from)
     divergence_regions <- froms %>% map_df(function(fr) {

@@ -76,8 +76,8 @@ generate_expression <- function(
 #' @importFrom stats rnbinom
 generate_counts <- function(expression, noise_nbinom_size=20) {
   count_mean <- 100
-  counts <- stats::rnbinom(length(expression), mu = expression * count_mean, size=noise_nbinom_size) %>%
-    matrix(nrow=nrow(expression), dimnames=dimnames(expression))
+  counts <- stats::rnbinom(length(expression), mu = expression * count_mean, size = noise_nbinom_size) %>%
+    matrix(nrow = nrow(expression), dimnames=dimnames(expression))
   counts[counts < 0] <- 0
   counts
 }

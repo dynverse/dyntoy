@@ -5,8 +5,8 @@
 #' @param num_cells The number of cells in each dataset
 #' @param num_genes The number of genes in each dataset
 #' @param noise_nbinom_size The size parameter of the nbinom distribution
-#' @param use_tented_progressions Whether or not to be able to generate cells as
-#'   part of a divergence
+#' @param allow_tented_progressions Whether or not to be able to generate cells as
+#'   part of a divergence.
 #'
 #' @export
 generate_toy_datasets <- function(
@@ -15,18 +15,21 @@ generate_toy_datasets <- function(
   num_cells = 200,
   num_genes = 100,
   noise_nbinom_size = 20,
-  use_tented_progressions = TRUE
+  allow_tented_progressions = TRUE
 ) {
   crossing(model = models, replicate = seq_len(num_replicates)) %>%
     rowwise() %>%
     do(with(., {
+
+      cat("Generating ", model, " - ", replicate, "\n", sep = "")
+
       generate_dataset(
         unique_id = paste0("toy/", model, "_", replicate),
         model = model,
         num_cells = num_cells,
         num_genes = num_genes,
         noise_nbinom_size = noise_nbinom_size,
-        use_tented_progressions = use_tented_progressions
+        allow_tented_progressions = allow_tented_progressions
       ) %>%
         list() %>%
         dynutils::list_as_tibble() %>%
