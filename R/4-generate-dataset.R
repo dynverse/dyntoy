@@ -8,14 +8,23 @@ generate_dataset <- function(
   allow_tented_progressions = TRUE,
   normalise = dynutils::check_packages("dynnormaliser")
 ) {
+  # add timestamp
+  timecp <- dynwrap::add_timing_checkpoint(NULL, "init")
+
   # generate milestone network
   milestone_network <- generate_toy_milestone_network(model)
+
+  # add timestamp
+  timecp <- timecp %>% dynwrap::add_timing_checkpoint("milestone_network")
 
   # get milestone ids
   milestone_ids <- sort(unique(c(milestone_network$from, milestone_network$to)))
 
   # generate (tented) progressions
   progressions <- random_progressions(milestone_network, ncells = num_cells, allow_tented = allow_tented_progressions)
+
+  # add timestamp
+  timecp <- timecp %>% dynwrap::add_timing_checkpoint("progressions")
 
   # were any divergences created?
   divreg <- progressions %>% group_by(cell_id) %>% filter(n() > 1) %>% ungroup()
@@ -32,6 +41,10 @@ generate_dataset <- function(
     divergence_regions <- NULL
   }
 
+  # add timestamp
+  timecp <- timecp %>% dynwrap::add_timing_checkpoint("divergences")
+
+
   # get cell ids
   cell_ids <- unique(progressions$cell_id)
 
@@ -42,11 +55,17 @@ generate_dataset <- function(
     ngenes = num_genes
   )
 
+  # add timestamp
+  timecp <- timecp %>% dynwrap::add_timing_checkpoint("expression")
+
   # simulate counts
   original_counts <- generate_counts(
     expression = expression,
     noise_nbinom_size = noise_nbinom_size
   )
+
+  # add timestamp
+  timecp <- timecp %>% dynwrap::add_timing_checkpoint("counts")
 
   # normalize
   if (normalise) {
@@ -63,6 +82,9 @@ generate_dataset <- function(
     counts <- original_counts
     expression = expression
   }
+
+  # add timestamp
+  timecp <- timecp %>% dynwrap::add_timing_checkpoint("normalisation")
 
   # make a simple sample info
   cell_info <- tibble(cell_id = cell_ids)
@@ -86,5 +108,9 @@ generate_dataset <- function(
     counts = counts,
     expression = expression,
     feature_info = feature_info
-  ) %>% dynwrap::add_prior_information()
+  ) %>% dynwrap::add_prior_information(
+    verbose = FALSE
+  ) %>% dynwrap::add_timings(
+    timecp %>% dynwrap::add_timing_checkpoint("wrapping")
+  )
 }
