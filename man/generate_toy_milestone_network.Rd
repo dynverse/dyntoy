@@ -5,7 +5,8 @@
 \title{Generate a toy milestone network}
 \usage{
 generate_toy_milestone_network(model = c("linear", "cyclic", "multifurcating",
-  "converging", "multifurcating_with_loops", "disconnected"), ...)
+  "converging", "diverging_converging", "multifurcating_with_loops",
+  "anything_goes", "disconnected"), ...)
 }
 \arguments{
 \item{model}{Which model to use.}

@@ -18,10 +18,13 @@ network_models <- list(
   },
 
   multifurcating = function(
-    num_multifurcations = rbinom(1, size = 10, .25) + 1,
-    max_degree = sample_discrete_uniform(1, 3, 6)
+    num_modifications = rbinom(1, size = 10, .25) + 1,
+    max_degree = sample_discrete_uniform(1, 3, 6),
+    allow_divergences = TRUE,
+    allow_loops = FALSE,
+    allow_convergences = FALSE
   ) {
-    testthat::expect_gte(num_multifurcations, 1)
+    testthat::expect_gte(num_modifications, 1)
     testthat::expect_gte(max_degree, 3)
 
     milnet <- tribble(
@@ -31,60 +34,122 @@ network_models <- list(
 
     num_nodes <- 2
 
-    for (i in seq_len(num_multifurcations)) {
+    for (i in seq_len(num_modifications)) {
       j <- sample.int(nrow(milnet), 1)
 
       fr <- milnet$from[[j]]
       to <- milnet$to[[j]]
 
-      num_new_nodes <- rbinom(1, size = max_degree - 3, .25) + 2
+      available_types <- c()
 
+      if (allow_divergences) available_types <- available_types %>% c("divergence")
+      if (allow_loops) available_types <- available_types %>% c("loop")
+      if (allow_convergences) available_types <- available_types %>% c("convergence")
+      if (allow_divergences && allow_convergences) available_types <- available_types %>% c("divergence_convergence")
+
+      type <- sample(available_types, 1)
+
+      num_new_nodes <- rbinom(1, size = max_degree - 3, .25) + 2
       new_nodes <- paste0("M", num_nodes + seq_len(num_new_nodes))
-      branchpoint <- new_nodes[[1]]
       num_nodes <- num_nodes + num_new_nodes
+
+      if (type == "divergence") {
+        new_edges <- bind_rows(
+          data_frame(
+            from = new_nodes[[1]],
+            to = new_nodes[-1]
+          ),
+          tribble(
+            ~from, ~to,
+            fr, new_nodes[[1]],
+            new_nodes[[1]], to
+          )
+        )
+      } else if (type == "convergence") {
+        new_edges <- bind_rows(
+          data_frame(
+            from = new_nodes[-1],
+            to = new_nodes[[1]]
+          ),
+          tribble(
+            ~from, ~to,
+            fr, new_nodes[[1]],
+            new_nodes[[1]], to
+          )
+        )
+      } else if (type == "loop") {
+        new_edges <- data_frame(
+          from = c(fr, to, new_nodes),
+          to = c(to, new_nodes, fr)
+        )
+      } else if (type == "divergence_convergence") {
+        ix <- seq_len(length(new_nodes) / 2)
+        nn1 <- new_nodes[ix]
+        nn2 <- new_nodes[-ix]
+        new_edges <- data_frame(
+          from = c(fr, nn1, fr, nn2),
+          to = c(nn1, to, nn2, to)
+        )
+      } else {
+        stop("Invalid modification type")
+      }
 
       milnet <- milnet %>%
         slice(-j) %>%
-        bind_rows(tribble(
-          ~from, ~to,
-          fr, new_nodes[[1]],
-          new_nodes[[1]], to
-        )) %>%
-        bind_rows(data_frame(
-          from = new_nodes[[1]],
-          to = new_nodes[-1]
-        ))
+        bind_rows(new_edges)
     }
 
     milnet
   },
 
   converging = function(
-    num_convergences = rbinom(1, size = 10, .25) + 1,
+    num_modifications = rbinom(1, size = 10, .25) + 1,
     max_degree = sample_discrete_uniform(1, 3, 6)
   ) {
-    network_models$multifurcating(num_convergences, max_degree) %>%
-      rename(from = to, to = from)
+    network_models$multifurcating(
+      num_modifications,
+      max_degree,
+      allow_divergences = FALSE,
+      allow_convergences = TRUE
+    )
+  },
+
+  diverging_converging = function(
+    num_modifications = rbinom(1, size = 10, .25) + 1,
+    max_degree = sample_discrete_uniform(1, 3, 6)
+  ) {
+    network_models$multifurcating(
+      num_modifications,
+      max_degree,
+      allow_divergences = TRUE,
+      allow_convergences = TRUE
+    )
   },
 
   multifurcating_with_loops = function(
-    num_multifurcations = rbinom(1, size = 10, .25) + 2,
-    max_degree = sample_discrete_uniform(1, 3, 6),
-    num_loops = rbinom(1, size = num_multifurcations, .25) + 1
+    num_modifications = rbinom(1, size = 10, .25) + 2,
+    max_degree = sample_discrete_uniform(1, 3, 6)
   ) {
-    testthat::expect_lte(num_loops, num_multifurcations + 1)
+    network_models$multifurcating(
+      num_modifications,
+      max_degree,
+      allow_divergences = TRUE,
+      allow_loops = TRUE,
+      allow_convergences = FALSE
+    )
+  },
 
-    milnet <- network_models$multifurcating(num_multifurcations, max_degree)
-
-    mils <- unique(c(milnet$from, milnet$to))
-
-    looped_mils <- sample(mils, num_loops * 2)
-
-    milnet %>%
-      bind_rows(data_frame(
-        from = looped_mils %>% head(num_loops),
-        to = looped_mils %>% tail(num_loops)
-      ))
+  anything_goes = function(
+    num_modifications = rbinom(1, size = 10, .25) + 2,
+    max_degree = sample_discrete_uniform(1, 3, 6)
+  ) {
+    network_models$multifurcating(
+      num_modifications,
+      max_degree,
+      allow_divergences = TRUE,
+      allow_loops = TRUE,
+      allow_convergences = TRUE
+    )
   },
 
   disconnected = function(
