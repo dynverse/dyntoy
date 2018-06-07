@@ -20,9 +20,6 @@ generate_toy_datasets <- function(
   crossing(model = models, replicate = seq_len(num_replicates)) %>%
     rowwise() %>%
     do(with(., {
-
-      cat("Generating ", model, " - ", replicate, "\n", sep = "")
-
       generate_dataset(
         unique_id = paste0("toy/", model, "_", replicate),
         model = model,
