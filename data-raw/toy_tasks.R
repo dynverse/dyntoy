@@ -2,7 +2,7 @@ library(dyntoy)
 library(dynutils)
 library(dynwrap)
 
-set.seed(1)
+set.seed(3)
 
 toy_tasks <- generate_toy_datasets(num_replicates = 10)
 
