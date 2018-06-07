@@ -4,9 +4,9 @@
 \alias{generate_toy_milestone_network}
 \title{Generate a toy milestone network}
 \usage{
-generate_toy_milestone_network(model = c("linear", "cyclic", "multifurcating",
-  "converging", "diverging_converging", "multifurcating_with_loops",
-  "anything_goes", "disconnected"), ...)
+generate_toy_milestone_network(model = c("linear", "cyclic", "bifurcating",
+  "diverging", "converging", "diverging_converging", "diverging_with_loops",
+  "looping", "general_graph", "disconnected"), ...)
 }
 \arguments{
 \item{model}{Which model to use.}

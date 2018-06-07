@@ -4,10 +4,10 @@
 \alias{generate_toy_datasets}
 \title{Generate toy datasets with dyntoy}
 \usage{
-generate_toy_datasets(models = c("linear", "cyclic", "multifurcating",
-  "converging", "diverging_converging", "multifurcating_with_loops",
-  "anything_goes", "disconnected"), num_replicates = 3, num_cells = 200,
-  num_genes = 100, noise_nbinom_size = 20,
+generate_toy_datasets(models = c("linear", "cyclic", "bifurcating",
+  "diverging", "converging", "diverging_converging", "diverging_with_loops",
+  "looping", "general_graph", "disconnected"), num_replicates = 3,
+  num_cells = 200, num_genes = 100, noise_nbinom_size = 20,
   allow_tented_progressions = TRUE)
 }
 \arguments{

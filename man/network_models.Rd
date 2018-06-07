@@ -4,7 +4,7 @@
 \name{network_models}
 \alias{network_models}
 \title{Milestone network models}
-\format{An object of class \code{list} of length 8.}
+\format{An object of class \code{list} of length 10.}
 \usage{
 network_models
 }
