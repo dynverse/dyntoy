@@ -6,17 +6,25 @@ random_progressions <- function(milestone_network, ncells = 100, allow_tented_pr
     mutate(use_tent = allow_tented_progressions & sample(c(T, F), n(), replace = TRUE))
   cell_ids <- paste0("C", seq_len(ncells))
 
-  cell_ids %>% map_df(function(cell_id) {
-    i <- sample(seq_len(nrow(from_probabilities)), 1, prob = from_probabilities$prob)
-    from_mid <- from_probabilities$from[[i]]
-    use_tent <- from_probabilities$use_tent[[i]]
+  from_ixs <- sample(
+    seq_len(nrow(from_probabilities)),
+    ncells,
+    prob = from_probabilities$prob,
+    replace = TRUE
+  )
+
+  seq_len(ncells) %>% map_df(function(i) {
+    cell_id <- cell_ids[[i]]
+
+    from_mid <- from_probabilities$from[[from_ixs[[i]]]]
+    use_tent <- from_probabilities$use_tent[[from_ixs[[i]]]]
 
     poss_tos <- milestone_network %>% filter(from == from_mid) %>% .$to
 
     type <- sample(
       c("start", "end", "edge", "tent"),
       size = 1,
-      prob = c(.1, .1, .4, ifelse(use_tent, .4, 0))
+      prob = c(1, 1, 4, ifelse(use_tent, 4, 0))
     )
 
     switch(
