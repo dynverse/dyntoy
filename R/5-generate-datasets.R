@@ -7,6 +7,7 @@
 #'   \item{a list of data frames (e.g. \code{list(model_linear(), model_bifurcating())})}
 #' }
 #' @inheritParams generate_dataset
+#' @param num_replicates How many replicates of each TI type to generate
 #'
 #' @export
 generate_toy_datasets <- function(
@@ -15,7 +16,8 @@ generate_toy_datasets <- function(
   num_cells = 200,
   num_genes = 100,
   noise_nbinom_size = 20,
-  allow_tented_progressions = TRUE
+  allow_tented_progressions = TRUE,
+  normalise = dynutils::check_packages("dynnormaliser")
 ) {
   crossing(model = models, replicate = seq_len(num_replicates)) %>%
     rowwise() %>%
@@ -26,7 +28,8 @@ generate_toy_datasets <- function(
         num_cells = num_cells,
         num_genes = num_genes,
         noise_nbinom_size = noise_nbinom_size,
-        allow_tented_progressions = allow_tented_progressions
+        allow_tented_progressions = allow_tented_progressions,
+        normalise = normalise
       ) %>%
         list() %>%
         dynutils::list_as_tibble() %>%

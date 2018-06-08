@@ -8,12 +8,13 @@
 #' }
 #' @importFrom dynwrap add_prior_information
 #'
-#' @param num_replicates How many replicates of each TI type to generate
+#' @param unique_id An id for the dataset
 #' @param num_cells The number of cells in each dataset
 #' @param num_genes The number of genes in each dataset
 #' @param noise_nbinom_size The size parameter of the nbinom distribution
 #' @param allow_tented_progressions Whether or not to be able to generate cells as
 #'   part of a divergence.
+#' @param normalise Whether or not to normalise the dataset
 #'
 #' @export
 generate_dataset <- function(

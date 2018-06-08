@@ -8,7 +8,8 @@ generate_toy_datasets(models = c("linear", "cyclic", "bifurcating",
   "diverging", "converging", "diverging_converging", "diverging_with_loops",
   "looping", "connected", "disconnected"), num_replicates = 3,
   num_cells = 200, num_genes = 100, noise_nbinom_size = 20,
-  allow_tented_progressions = TRUE)
+  allow_tented_progressions = TRUE,
+  normalise = dynutils::check_packages("dynnormaliser"))
 }
 \arguments{
 \item{models}{A list of network models to use to generate the milestone networks.
@@ -28,6 +29,8 @@ generate_toy_datasets(models = c("linear", "cyclic", "bifurcating",
 
 \item{allow_tented_progressions}{Whether or not to be able to generate cells as
 part of a divergence.}
+
+\item{normalise}{Whether or not to normalise the dataset}
 }
 \description{
 Generate toy datasets with dyntoy

@@ -10,6 +10,8 @@ generate_dataset(unique_id, model = "linear", num_cells = 99,
   normalise = dynutils::check_packages("dynnormaliser"))
 }
 \arguments{
+\item{unique_id}{An id for the dataset}
+
 \item{model}{A model for generating the milestone network. Must be one of:
 \itemize{
   \item{a character vector (e.g. \code{"linear"}),}
@@ -26,7 +28,7 @@ generate_dataset(unique_id, model = "linear", num_cells = 99,
 \item{allow_tented_progressions}{Whether or not to be able to generate cells as
 part of a divergence.}
 
-\item{num_replicates}{How many replicates of each TI type to generate}
+\item{normalise}{Whether or not to normalise the dataset}
 }
 \description{
 Generate a toy dataset
