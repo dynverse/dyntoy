@@ -269,7 +269,7 @@ generate_milestone_network <- function(
 
   # check params
   params <- list(...)
-  network_model <- network_models[model]
+  network_model <- network_models[[model]]
 
   relevant_params <- params
   specific_params <- params[[model]]
