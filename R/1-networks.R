@@ -133,8 +133,8 @@ model_bifurcating <- function(
 #' @rdname network_models
 #' @export
 model_diverging <- function(
-  num_branchpoints = function() sample_discrete_uniform(1, 3, 6),
-  max_degree = function() rbinom(1, size = 10, .25) + 1
+  num_branchpoints = function() rbinom(1, size = 10, .25) + 1,
+  max_degree = function() sample_discrete_uniform(1, 3, 6)
 ) {
   general_graph_model_fun(
     num_modifications = num_branchpoints,
@@ -146,8 +146,8 @@ model_diverging <- function(
 #' @rdname network_models
 #' @export
 model_converging <- function(
-  num_branchpoints = function() sample_discrete_uniform(1, 3, 6),
-  max_degree = function() rbinom(1, size = 10, .25) + 1
+  num_branchpoints = function() rbinom(1, size = 10, .25) + 1,
+  max_degree = function() sample_discrete_uniform(1, 3, 6)
 ) {
   general_graph_model_fun(
     num_modifications = num_branchpoints,
@@ -161,8 +161,8 @@ model_converging <- function(
 #' @rdname network_models
 #' @export
 model_diverging_converging <- function(
-  num_modifications = function() sample_discrete_uniform(1, 3, 6),
-  nodes_per_modification = function() rbinom(1, size = 10, .25) + 1
+  num_modifications = function() rbinom(1, size = 10, .25) + 1,
+  nodes_per_modification = function() sample_discrete_uniform(1, 3, 6)
 ) {
   general_graph_model_fun(
     num_modifications = num_modifications,
@@ -175,8 +175,8 @@ model_diverging_converging <- function(
 #' @rdname network_models
 #' @export
 model_diverging_with_loops <- function(
-  num_modifications = function() sample_discrete_uniform(1, 3, 6),
-  nodes_per_modification = function() rbinom(1, size = 10, .25) + 1
+  num_modifications = function() rbinom(1, size = 10, .25) + 1,
+  nodes_per_modification = function() sample_discrete_uniform(1, 3, 6)
 ) {
   general_graph_model_fun(
     num_modifications = num_modifications,
@@ -189,8 +189,8 @@ model_diverging_with_loops <- function(
 #' @rdname network_models
 #' @export
 model_multiple_looping <- function(
-  num_modifications = function() sample_discrete_uniform(1, 3, 6),
-  nodes_per_modification = function() rbinom(1, size = 10, .25) + 1
+  num_modifications = function() rbinom(1, size = 10, .25) + 1,
+  nodes_per_modification = function() sample_discrete_uniform(1, 3, 6)
 ) {
   general_graph_model_fun(
     num_modifications = num_modifications,
@@ -202,8 +202,8 @@ model_multiple_looping <- function(
 #' @rdname network_models
 #' @export
 model_connected <- function(
-  num_modifications = function() sample_discrete_uniform(1, 3, 6),
-  nodes_per_modification = function() rbinom(1, size = 10, .25) + 1
+  num_modifications = function() rbinom(1, size = 10, .25) + 1,
+  nodes_per_modification = function() sample_discrete_uniform(1, 3, 6)
 ) {
   general_graph_model_fun(
     num_modifications = num_modifications,
