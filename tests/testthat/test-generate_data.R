@@ -1,7 +1,7 @@
 context("Generating datasets with dyntoy")
 
 test_that("Creating toy datasets", {
-  models <- c("linear", "cycle")
+  models <- c("linear", "cyclic")
   num_replicates <- 3
   num_cells <- 10
   num_genes <- 1001

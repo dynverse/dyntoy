@@ -10,7 +10,7 @@ generate_expression <- function(
   nnodes <- length(milestone_ids)
 
   milestone_expressions <- list()
-  milestone_network <- milestone_network %>% mutate(splinefuns=map(seq_len(n()), ~NULL))
+  milestone_network <- milestone_network %>% mutate(splinefuns = map(seq_len(n()), ~NULL))
 
   nmodules <- max(6, nrow(milestone_network) * 10)
 
@@ -40,7 +40,7 @@ generate_expression <- function(
     end <- rep(end, each = ceiling(ngenes/nmodules))[seq_len(ngenes)]
 
     xs <- map(seq_len(ngenes), ~c(0, 1))
-    ys <- pmap(list(x=xs, start=start, end=end), function(x, start, end) c(start, end))
+    ys <- pmap(list(x = xs, start = start, end = end), function(x, start, end) c(start, end))
 
     milestone_network$splinefuns[edge_id] <- map2(xs, ys, function(x, y) {
       stats::approxfun(x, y)
@@ -56,12 +56,12 @@ generate_expression <- function(
   # extract expression for each edge
   expression <- filtered_progression %>%
     group_by(from, to) %>%
-    summarise(percentages = list(percentage), cell_ids=list(cell_id)) %>%
-    left_join(milestone_network, by=c("from", "to")) %>%
+    summarise(percentages = list(percentage), cell_ids = list(cell_id)) %>%
+    left_join(milestone_network, by = c("from", "to")) %>%
     rowwise() %>%
     do(
-      expression=map(.$splinefuns, function(f) f(.$percentage)) %>% invoke(rbind, .),
-      cell_id=.$cell_id
+      expression = map(.$splinefuns, function(f) f(.$percentage)) %>% invoke(rbind, .),
+      cell_id = .$cell_id
     ) %>% {
       set_colnames(invoke(cbind, .$expression), unlist(.$cell_id))
     } %>% t
@@ -74,10 +74,10 @@ generate_expression <- function(
 }
 
 #' @importFrom stats rnbinom
-generate_counts <- function(expression, noise_nbinom_size=20) {
+generate_counts <- function(expression, noise_nbinom_size = 20) {
   count_mean <- 100
-  counts <- stats::rnbinom(length(expression), mu = expression * count_mean, size=noise_nbinom_size) %>%
-    matrix(nrow=nrow(expression), dimnames=dimnames(expression))
+  counts <- stats::rnbinom(length(expression), mu = expression * count_mean, size = noise_nbinom_size) %>%
+    matrix(nrow = nrow(expression), dimnames = dimnames(expression))
   counts[counts < 0] <- 0
   counts
 }
