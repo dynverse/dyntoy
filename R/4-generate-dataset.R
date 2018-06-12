@@ -1,4 +1,22 @@
+#' Generate a toy dataset
+#'
+#' @param model A model for generating the milestone network. Must be one of:
+#' \itemize{
+#'   \item{a character vector (e.g. \code{"linear"}),}
+#'   \item{a function (e.g. \code{model_linear}),}
+#'   \item{a data frame (e.g. \code{model_linear()})}
+#' }
 #' @importFrom dynwrap add_prior_information
+#'
+#' @param unique_id An id for the dataset
+#' @param num_cells The number of cells in each dataset
+#' @param num_genes The number of genes in each dataset
+#' @param noise_nbinom_size The size parameter of the nbinom distribution
+#' @param allow_tented_progressions Whether or not to be able to generate cells as
+#'   part of a divergence.
+#' @param normalise Whether or not to normalise the dataset
+#'
+#' @export
 generate_dataset <- function(
   unique_id,
   model = "linear",
@@ -12,7 +30,15 @@ generate_dataset <- function(
   timecp <- dynwrap::add_timing_checkpoint(NULL, "init")
 
   # generate milestone network
-  milestone_network <- generate_toy_milestone_network(model)
+  if (is.character(model)) {
+    milestone_network <- generate_milestone_network(model = model)
+  } else if (is.function(model)) {
+    milestone_network <- model()
+  } else if (is.data.frame(model)) {
+    # do nothing
+  } else {
+    stop("Unrecognised format for 'model'.")
+  }
 
   # add timestamp
   timecp <- timecp %>% dynwrap::add_timing_checkpoint("milestone_network")

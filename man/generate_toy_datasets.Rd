@@ -6,12 +6,18 @@
 \usage{
 generate_toy_datasets(models = c("linear", "cyclic", "bifurcating",
   "diverging", "converging", "diverging_converging", "diverging_with_loops",
-  "looping", "general_graph", "disconnected"), num_replicates = 3,
+  "looping", "connected", "disconnected"), num_replicates = 3,
   num_cells = 200, num_genes = 100, noise_nbinom_size = 20,
-  allow_tented_progressions = TRUE)
+  allow_tented_progressions = TRUE,
+  normalise = dynutils::check_packages("dynnormaliser"))
 }
 \arguments{
-\item{models}{The types of trajectory to generate}
+\item{models}{A list of network models to use to generate the milestone networks.
+\itemize{
+  \item{a character vector (e.g. \code{c("linear", "bifurcating")}),}
+  \item{a list of functions (e.g. \code{list(model_linear, model_bifurcating)}),}
+  \item{a list of data frames (e.g. \code{list(model_linear(), model_bifurcating())})}
+}}
 
 \item{num_replicates}{How many replicates of each TI type to generate}
 
@@ -23,6 +29,8 @@ generate_toy_datasets(models = c("linear", "cyclic", "bifurcating",
 
 \item{allow_tented_progressions}{Whether or not to be able to generate cells as
 part of a divergence.}
+
+\item{normalise}{Whether or not to normalise the dataset}
 }
 \description{
 Generate toy datasets with dyntoy
