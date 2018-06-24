@@ -36,6 +36,7 @@ generate_dataset <- function(
     milestone_network <- model()
   } else if (is.data.frame(model)) {
     # do nothing
+    milestone_network <- model
   } else {
     stop("Unrecognised format for 'model'.")
   }
