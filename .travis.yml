@@ -3,6 +3,10 @@ sudo: required
 dist: trusty
 bioc_required: true
 cache: packages
+addons:
+  apt:
+    packages:
+      - libssh-dev  # PRISM > ssh > libssh-dev
 env:
   - R_MAX_NUM_DLLS=250
 install:
