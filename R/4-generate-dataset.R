@@ -18,7 +18,7 @@
 #'
 #' @export
 generate_dataset <- function(
-  unique_id,
+  unique_id = "",
   model = "linear",
   num_cells = 99,
   num_genes = 101,
@@ -35,10 +35,17 @@ generate_dataset <- function(
   } else if (is.function(model)) {
     milestone_network <- model()
   } else if (is.data.frame(model)) {
-    # do nothing
     milestone_network <- model
   } else {
     stop("Unrecognised format for 'model'.")
+  }
+
+  # add columns if necessary
+  if (!"length" %in% colnames(milestone_network)) {
+    milestone_network$length <- runif(nrow(milestone_network))
+  }
+  if (!"directed" %in% colnames(milestone_network)) {
+    milestone_network$directed <- TRUE
   }
 
   # add timestamp
