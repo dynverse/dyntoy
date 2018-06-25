@@ -114,3 +114,10 @@ for (taski in seq_len(nrow(toy_tasks))) {
     # TODO: add check for divergence regions and prior_information
   })
 }
+
+test_that("Creating toy datasets with different models", {
+  toy <- generate_dataset(model = "bifurcating")
+  toy <- generate_dataset(model = model_bifurcating())
+  toy <- generate_dataset(model = model_bifurcating)
+
+})
