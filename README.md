@@ -42,15 +42,15 @@ task$milestone_network
 #> # A tibble: 5 x 4
 #>   from  to    length directed
 #>   <chr> <chr>  <dbl> <lgl>   
-#> 1 M3    M4     0.235 TRUE    
-#> 2 M1    M3     0.477 TRUE    
-#> 3 M5    M6     0.732 TRUE    
-#> 4 M3    M5     0.669 TRUE    
-#> 5 M5    M2     0.754 TRUE
+#> 1 M3    M4     0.709 TRUE    
+#> 2 M1    M3     0.314 TRUE    
+#> 3 M5    M6     0.155 TRUE    
+#> 4 M3    M5     0.856 TRUE    
+#> 5 M5    M2     0.138 TRUE
 ```
 
-Related tools
--------------
+Related work
+------------
 
 -   PROSSTT: <https://github.com/soedinglab/prosstt>
 -   Splatter: <https://github.com/Oshlack/splatter>
