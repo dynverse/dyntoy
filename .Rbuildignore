@@ -4,3 +4,4 @@
 ^data-raw$
 ^\.git$
 ^tmp
+^README\.Rmd$
