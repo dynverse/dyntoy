@@ -50,7 +50,6 @@ generate_expression <- function(
   filtered_progression <- progressions %>% # a cell can only be in one edge (maximum in tents)
     group_by(cell_id) %>%
     arrange(-percentage) %>%
-    #mutate(percentage = sum(percentage)) %>%
     filter(row_number() == 1)
 
   # extract expression for each edge
