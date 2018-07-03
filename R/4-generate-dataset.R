@@ -129,7 +129,7 @@ generate_dataset <- function(
     id = unique_id,
     cell_ids = cell_ids,
     cell_info = cell_info,
-    task_source = "toy",
+    dataset_source = "toy",
     model = model
   ) %>% add_trajectory(
     milestone_ids = milestone_ids,

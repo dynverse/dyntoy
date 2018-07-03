@@ -20,17 +20,17 @@ devtools::install_github("dynverse/dyntoy")
 Example
 -------
 
-dyntoy contains some pre-generated toy data within the `toy_tasks` data object:
+dyntoy contains some pre-generated toy data within the `toy_datasets` data object:
 
 ``` r
-data("toy_tasks", package = "dyntoy")
+data("toy_datasets", package = "dyntoy")
 ```
 
 Data can be generated using `generate_dataset`:
 
 ``` r
 library(dyntoy)
-task <- generate_dataset(
+dataset <- generate_dataset(
   model = model_bifurcating(num_branchpoints = 2),
   num_cells = 1000,
   num_genes = 1000
@@ -38,7 +38,7 @@ task <- generate_dataset(
 #> Note that the names of some metrics have changed, see 'Renamed metrics' in ?calculateQCMetrics.
 #> Old names are currently maintained for back-compatibility, but may be removed in future releases.
 
-task$milestone_network
+dataset$milestone_network
 #> # A tibble: 5 x 4
 #>   from  to    length directed
 #>   <chr> <chr>  <dbl> <lgl>   
