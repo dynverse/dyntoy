@@ -75,10 +75,6 @@ generate_milestone_network(model = c("linear", "cyclic", "bifurcating",
 \item{...}{Parameters to pass to other models. Can be in the form of `linear = list(num_milestones = function() sample(2:8, 1)` or just `num_milestones = 10`.}
 
 \item{model}{Which model to use.}
-
-\item{max_degree}{The maximum degree of a branch node, must be at least 3 (diverging, converging)}
-
-\item{num_branchpoints}{The number of branchpoints in the trajectory (bifurcating, diverging, converging)}
 }
 \description{
 Milestone network models for generating toy examples

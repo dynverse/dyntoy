@@ -129,7 +129,6 @@ model_bifurcating <- function(
   )
 }
 
-#' @param max_degree The maximum degree of a branch node, must be at least 3 (diverging, converging)
 #' @rdname network_models
 #' @export
 model_multifurcating <- function(
@@ -156,7 +155,6 @@ model_binary_tree <- function(
   )
 }
 
-#' @param num_branchpoints The number of branchpoints in the trajectory (bifurcating, diverging, converging)
 #' @rdname network_models
 #' @export
 model_tree <- function(
