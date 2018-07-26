@@ -116,10 +116,37 @@ model_cyclic <- function(
     add_row(from = paste0("M", num_milestones), to = "M1")
 }
 
-#' @param num_branchpoints The number of branchpoints in the trajectory (bifurcating, diverging, converging)
+#' @param max_degree The maximum degree of a branch node, must be at least 3 (diverging, converging)
 #' @rdname network_models
 #' @export
 model_bifurcating <- function(
+  max_degree = function() sample_discrete_uniform(1, 3, 6)
+) {
+  general_graph_model_fun(
+    num_modifications = 1,
+    max_degree = 3,
+    allow_divergences = TRUE
+  )
+}
+
+#' @param max_degree The maximum degree of a branch node, must be at least 3 (diverging, converging)
+#' @rdname network_models
+#' @export
+model_multifurcating <- function(
+  num_branchpoints = function() rbinom(1, size = 10, .25) + 1,
+  max_degree = function() sample_discrete_uniform(1, 3, 6)
+) {
+  general_graph_model_fun(
+    num_modifications = num_branchpoints,
+    max_degree = max_degree,
+    allow_divergences = TRUE
+  )
+}
+
+#' @param num_branchpoints The number of branchpoints in the trajectory (bifurcating, diverging, converging)
+#' @rdname network_models
+#' @export
+model_binary_tree <- function(
   num_branchpoints = function() sample_discrete_uniform(1, 3, 6)
 ) {
   general_graph_model_fun(
@@ -129,11 +156,11 @@ model_bifurcating <- function(
   )
 }
 
-#' @param max_degree The maximum degree of a branch node, must be at least 3 (diverging, converging)
+#' @param num_branchpoints The number of branchpoints in the trajectory (bifurcating, diverging, converging)
 #' @rdname network_models
 #' @export
-model_diverging <- function(
-  num_branchpoints = function() rbinom(1, size = 10, .25) + 1,
+model_tree <- function(
+  num_branchpoints = function() sample_discrete_uniform(1, 3, 6),
   max_degree = function() sample_discrete_uniform(1, 3, 6)
 ) {
   general_graph_model_fun(
@@ -145,13 +172,10 @@ model_diverging <- function(
 
 #' @rdname network_models
 #' @export
-model_converging <- function(
-  num_branchpoints = function() rbinom(1, size = 10, .25) + 1,
-  max_degree = function() sample_discrete_uniform(1, 3, 6)
-) {
+model_converging <- function() {
   general_graph_model_fun(
-    num_modifications = num_branchpoints,
-    max_degree = max_degree,
+    num_modifications = 1,
+    max_degree = 3,
     allow_convergences = TRUE
   )
 }
@@ -243,7 +267,9 @@ network_models <- list(
   linear = model_linear,
   cyclic = model_cyclic,
   bifurcating = model_bifurcating,
-  diverging = model_diverging,
+  multifurcating = model_multifurcating,
+  binary_tree = model_binary_tree,
+  tree = model_tree,
   converging = model_converging,
   diverging_converging = model_diverging_converging,
   diverging_with_loops = model_diverging_with_loops,

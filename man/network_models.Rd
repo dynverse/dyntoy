@@ -5,7 +5,9 @@
 \alias{model_linear}
 \alias{model_cyclic}
 \alias{model_bifurcating}
-\alias{model_diverging}
+\alias{model_multifurcating}
+\alias{model_binary_tree}
+\alias{model_tree}
 \alias{model_converging}
 \alias{model_diverging_converging}
 \alias{model_diverging_with_loops}
@@ -15,20 +17,24 @@
 \alias{network_models}
 \alias{generate_milestone_network}
 \title{Milestone network models for generating toy examples}
-\format{An object of class \code{list} of length 10.}
+\format{An object of class \code{list} of length 12.}
 \usage{
 model_linear(num_milestones = function() rbinom(1, size = 10, 0.25) + 2)
 
 model_cyclic(num_milestones = function() rbinom(1, size = 10, 0.25) + 3)
 
-model_bifurcating(num_branchpoints = function() sample_discrete_uniform(1, 3,
+model_bifurcating(max_degree = function() sample_discrete_uniform(1, 3, 6))
+
+model_multifurcating(num_branchpoints = function() rbinom(1, size = 10, 0.25)
+  + 1, max_degree = function() sample_discrete_uniform(1, 3, 6))
+
+model_binary_tree(num_branchpoints = function() sample_discrete_uniform(1, 3,
   6))
 
-model_diverging(num_branchpoints = function() rbinom(1, size = 10, 0.25) + 1,
+model_tree(num_branchpoints = function() sample_discrete_uniform(1, 3, 6),
   max_degree = function() sample_discrete_uniform(1, 3, 6))
 
-model_converging(num_branchpoints = function() rbinom(1, size = 10, 0.25) + 1,
-  max_degree = function() sample_discrete_uniform(1, 3, 6))
+model_converging()
 
 model_diverging_converging(num_modifications = function() rbinom(1, size = 10,
   0.25) + 1, nodes_per_modification = function() sample_discrete_uniform(1, 3,
@@ -50,15 +56,15 @@ model_disconnected(num_trajectories = rbinom(1, size = 5, 0.25) + 2, ...)
 network_models
 
 generate_milestone_network(model = c("linear", "cyclic", "bifurcating",
-  "diverging", "converging", "diverging_converging", "diverging_with_loops",
-  "looping", "connected", "disconnected"), ...)
+  "multifurcating", "binary_tree", "tree", "converging", "diverging_converging",
+  "diverging_with_loops", "looping", "connected", "disconnected"), ...)
 }
 \arguments{
 \item{num_milestones}{The number of milestones in the trajectory (linear, cyclic)}
 
-\item{num_branchpoints}{The number of branchpoints in the trajectory (bifurcating, diverging, converging)}
-
 \item{max_degree}{The maximum degree of a branch node, must be at least 3 (diverging, converging)}
+
+\item{num_branchpoints}{The number of branchpoints in the trajectory (bifurcating, diverging, converging)}
 
 \item{num_modifications}{Number of modifications made to the original trajectory (diverging_converging, diverging_with_loops, multiple_looping, connected)}
 
@@ -69,6 +75,10 @@ generate_milestone_network(model = c("linear", "cyclic", "bifurcating",
 \item{...}{Parameters to pass to other models. Can be in the form of `linear = list(num_milestones = function() sample(2:8, 1)` or just `num_milestones = 10`.}
 
 \item{model}{Which model to use.}
+
+\item{max_degree}{The maximum degree of a branch node, must be at least 3 (diverging, converging)}
+
+\item{num_branchpoints}{The number of branchpoints in the trajectory (bifurcating, diverging, converging)}
 }
 \description{
 Milestone network models for generating toy examples

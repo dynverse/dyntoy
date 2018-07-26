@@ -4,7 +4,7 @@
 \alias{generate_dataset}
 \title{Generate a toy dataset}
 \usage{
-generate_dataset(unique_id, model = "linear", num_cells = 99,
+generate_dataset(unique_id = "", model = "linear", num_cells = 99,
   num_genes = 101, noise_nbinom_size = 20,
   allow_tented_progressions = TRUE,
   normalise = dynutils::check_packages("dynnormaliser"))
