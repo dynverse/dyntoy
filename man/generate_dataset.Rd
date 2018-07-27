@@ -5,8 +5,9 @@
 \title{Generate a toy dataset}
 \usage{
 generate_dataset(unique_id = "", model = "linear", num_cells = 99,
-  num_genes = 101, noise_nbinom_size = 20,
-  allow_tented_progressions = TRUE,
+  num_features = 101, sample_mean_count = function() runif(1, 100, 1000),
+  sample_dispersion_count = function(mean) map_dbl(mean, ~runif(1, ./10,
+  ./4)), dropout_probability_factor = 100, allow_tented_progressions = TRUE,
   normalise = dynutils::check_packages("dynnormaliser"))
 }
 \arguments{
@@ -21,9 +22,13 @@ generate_dataset(unique_id = "", model = "linear", num_cells = 99,
 
 \item{num_cells}{The number of cells in each dataset}
 
-\item{num_genes}{The number of genes in each dataset}
+\item{num_features}{Number of features}
 
-\item{noise_nbinom_size}{The size parameter of the nbinom distribution}
+\item{sample_mean_count}{Function used to sample the mean expression}
+
+\item{sample_dispersion_count}{Function to sample the dispersion (size) of the negative biniomal given the expression. Higher dispersion values generate less noise}
+
+\item{dropout_probability_factor}{Factor used to calculate the probabilities of dropouts, relative to expression. Higher values (> 10000) have a lot of dropouts, lower values (< 10) have almost none}
 
 \item{allow_tented_progressions}{Whether or not to be able to generate cells as
 part of a divergence.}

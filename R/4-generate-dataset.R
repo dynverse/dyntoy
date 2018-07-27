@@ -10,19 +10,20 @@
 #'
 #' @param unique_id An id for the dataset
 #' @param num_cells The number of cells in each dataset
-#' @param num_genes The number of genes in each dataset
-#' @param noise_nbinom_size The size parameter of the nbinom distribution
 #' @param allow_tented_progressions Whether or not to be able to generate cells as
 #'   part of a divergence.
 #' @param normalise Whether or not to normalise the dataset
+#' @inheritParams generate_counts
 #'
 #' @export
 generate_dataset <- function(
   unique_id = "",
   model = "linear",
   num_cells = 99,
-  num_genes = 101,
-  noise_nbinom_size = 20,
+  num_features = 101,
+  sample_mean_count = function() runif(1, 100, 1000),
+  sample_dispersion_count = function(mean) map_dbl(mean, ~runif(1, ./10, ./4)),
+  dropout_probability_factor = 100,
   allow_tented_progressions = TRUE,
   normalise = dynutils::check_packages("dynnormaliser")
 ) {
@@ -78,54 +79,12 @@ generate_dataset <- function(
   # add timestamp
   timecp <- timecp %>% dynwrap::add_timing_checkpoint("divergences")
 
-
-  # get cell ids
+  # make a simple cell info
   cell_ids <- unique(progressions$cell_id)
-
-  # generate expression
-  expression <- generate_expression(
-    milestone_network = milestone_network,
-    progressions = progressions,
-    ngenes = num_genes
-  )
-
-  # add timestamp
-  timecp <- timecp %>% dynwrap::add_timing_checkpoint("expression")
-
-  # simulate counts
-  original_counts <- generate_counts(
-    expression = expression,
-    noise_nbinom_size = noise_nbinom_size
-  )
-
-  # add timestamp
-  timecp <- timecp %>% dynwrap::add_timing_checkpoint("counts")
-
-  # normalize
-  if (normalise) {
-    normalised <- dynnormaliser::normalise_filter_counts(
-      original_counts,
-      filter_hvg = FALSE,
-      nmads = 10
-    )
-    counts <- normalised$counts
-    expression <- normalised$expression
-    cell_ids <- intersect(rownames(counts), cell_ids)
-    progressions <- progressions %>% filter(cell_id %in% cell_ids)
-  } else {
-    counts <- original_counts
-    expression = expression
-  }
-
-  # add timestamp
-  timecp <- timecp %>% dynwrap::add_timing_checkpoint("normalisation")
-
-  # make a simple sample info
   cell_info <- tibble(cell_id = cell_ids)
-  feature_info <- tibble(feature_id = colnames(counts), housekeeping = FALSE)
 
-  # wrap dataset
-  wrap_data(
+  # create trajectory
+  trajectory <- wrap_data(
     id = unique_id,
     cell_ids = cell_ids,
     cell_info = cell_info,
@@ -136,7 +95,58 @@ generate_dataset <- function(
     milestone_network = milestone_network,
     divergence_regions = divergence_regions,
     progressions = progressions
-  ) %>% add_cell_waypoints(
+  )
+
+  # generate expression
+  counts <- generate_counts(
+    trajectory,
+    num_features = num_features,
+    sample_mean_count = sample_mean_count,
+    sample_dispersion_count = sample_dispersion_count,
+    dropout_probability_factor = dropout_probability_factor
+  )
+
+  # add timestamp
+  timecp <- timecp %>% dynwrap::add_timing_checkpoint("counts")
+
+  # normalize
+  if (normalise) {
+    normalised <- dynnormaliser::normalise_filter_counts(
+      counts,
+      filter_hvg = FALSE,
+      nmads = 999
+    )
+    counts <- normalised$counts
+    expression <- normalised$expression
+    cell_ids <- intersect(rownames(counts), cell_ids)
+    progressions <- progressions %>% filter(cell_id %in% cell_ids)
+    cell_info <- cell_info %>% filter(cell_id %in% cell_ids)
+  } else {
+    expression <- log2(counts + 1)
+  }
+
+  # create trajectory
+  trajectory <- wrap_data(
+    id = unique_id,
+    cell_ids = cell_ids,
+    cell_info = cell_info,
+    dataset_source = "toy",
+    model = model
+  ) %>% add_trajectory(
+    milestone_ids = milestone_ids,
+    milestone_network = milestone_network,
+    divergence_regions = divergence_regions,
+    progressions = progressions
+  )
+
+  # add timestamp
+  timecp <- timecp %>% dynwrap::add_timing_checkpoint("normalisation")
+
+  # make feature info
+  feature_info <- tibble(feature_id = colnames(counts), housekeeping = FALSE)
+
+  # wrap dataset
+  trajectory %>% add_cell_waypoints(
     num_cells_selected = 25
   ) %>% add_expression(
     counts = counts,

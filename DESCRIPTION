@@ -17,6 +17,7 @@ Imports:
   dynwrap,
   igraph,
   magrittr,
+  mvtnorm,
   purrr,
   stats,
   testthat,

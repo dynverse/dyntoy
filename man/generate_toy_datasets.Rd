@@ -7,8 +7,10 @@
 generate_toy_datasets(models = c("linear", "cyclic", "bifurcating",
   "multifurcating", "binary_tree", "tree", "converging", "diverging_converging",
   "diverging_with_loops", "looping", "connected", "disconnected"),
-  num_replicates = 3, num_cells = 200, num_genes = 100,
-  noise_nbinom_size = 20, allow_tented_progressions = TRUE,
+  num_replicates = 3, num_cells = 200, num_features = 100,
+  sample_mean_count = function() runif(1, 100, 1000),
+  sample_dispersion_count = function(mean) map_dbl(mean, ~runif(1, ./10,
+  ./4)), dropout_probability_factor = 100, allow_tented_progressions = TRUE,
   normalise = dynutils::check_packages("dynnormaliser"))
 }
 \arguments{
@@ -23,9 +25,13 @@ generate_toy_datasets(models = c("linear", "cyclic", "bifurcating",
 
 \item{num_cells}{The number of cells in each dataset}
 
-\item{num_genes}{The number of genes in each dataset}
+\item{num_features}{Number of features}
 
-\item{noise_nbinom_size}{The size parameter of the nbinom distribution}
+\item{sample_mean_count}{Function used to sample the mean expression}
+
+\item{sample_dispersion_count}{Function to sample the dispersion (size) of the negative biniomal given the expression. Higher dispersion values generate less noise}
+
+\item{dropout_probability_factor}{Factor used to calculate the probabilities of dropouts, relative to expression. Higher values (> 10000) have a lot of dropouts, lower values (< 10) have almost none}
 
 \item{allow_tented_progressions}{Whether or not to be able to generate cells as
 part of a divergence.}
