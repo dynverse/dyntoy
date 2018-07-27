@@ -13,8 +13,8 @@
 generate_toy_datasets <- function(
   models,
   num_replicates = 3,
-  num_cells = 200,
-  num_features = 100,
+  num_cells = 99,
+  num_features = 101,
   sample_mean_count = function() runif(1, 100, 1000),
   sample_dispersion_count = function(mean) map_dbl(mean, ~runif(1, ./10, ./4)),
   dropout_probability_factor = 100,

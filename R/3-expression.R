@@ -35,8 +35,6 @@ generate_counts <- function(
 
   # generate counts
   counts <- map(feature_ids, function(feature_id) {
-    # browser()
-
     # get density in multivariate normal distribution
     limits <- c(
       range(dimred_trajectory$space_milestones$comp_1),
