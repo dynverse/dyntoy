@@ -14,7 +14,7 @@
 \alias{model_multiple_looping}
 \alias{model_connected}
 \alias{model_disconnected}
-\alias{network_models}
+\alias{topology_models}
 \alias{generate_milestone_network}
 \title{Milestone network models for generating toy examples}
 \format{An object of class \code{list} of length 12.}
@@ -53,7 +53,7 @@ model_connected(num_modifications = function() rbinom(1, size = 10, 0.25) + 1,
 
 model_disconnected(num_trajectories = rbinom(1, size = 5, 0.25) + 2, ...)
 
-network_models
+topology_models
 
 generate_milestone_network(model = c("linear", "cyclic", "bifurcating",
   "multifurcating", "binary_tree", "tree", "converging", "diverging_converging",

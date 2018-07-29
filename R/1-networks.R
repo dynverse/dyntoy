@@ -87,7 +87,7 @@ general_graph_model_fun <- function(
 }
 
 #' @param num_milestones The number of milestones in the trajectory (linear, cyclic)
-#' @rdname network_models
+#' @rdname topology_models
 #' @export
 model_linear <- function(
   num_milestones = function() rbinom(1, size = 10, .25) + 2
@@ -103,7 +103,7 @@ model_linear <- function(
   )
 }
 
-#' @rdname network_models
+#' @rdname topology_models
 #' @export
 model_cyclic <- function(
   num_milestones = function() rbinom(1, size = 10, .25) + 3
@@ -112,12 +112,12 @@ model_cyclic <- function(
 
   testthat::expect_gte(num_milestones, 3)
 
-  network_models$linear(num_milestones) %>%
+  topology_models$linear(num_milestones) %>%
     add_row(from = paste0("M", num_milestones), to = "M1")
 }
 
 #' @param max_degree The maximum degree of a branch node, must be at least 3 (diverging, converging)
-#' @rdname network_models
+#' @rdname topology_models
 #' @export
 model_bifurcating <- function(
   max_degree = function() sample_discrete_uniform(1, 3, 6)
@@ -129,7 +129,7 @@ model_bifurcating <- function(
   )
 }
 
-#' @rdname network_models
+#' @rdname topology_models
 #' @export
 model_multifurcating <- function(
   num_branchpoints = function() rbinom(1, size = 10, .25) + 1,
@@ -143,7 +143,7 @@ model_multifurcating <- function(
 }
 
 #' @param num_branchpoints The number of branchpoints in the trajectory (bifurcating, diverging, converging)
-#' @rdname network_models
+#' @rdname topology_models
 #' @export
 model_binary_tree <- function(
   num_branchpoints = function() sample_discrete_uniform(1, 3, 6)
@@ -155,7 +155,7 @@ model_binary_tree <- function(
   )
 }
 
-#' @rdname network_models
+#' @rdname topology_models
 #' @export
 model_tree <- function(
   num_branchpoints = function() sample_discrete_uniform(1, 3, 6),
@@ -168,7 +168,7 @@ model_tree <- function(
   )
 }
 
-#' @rdname network_models
+#' @rdname topology_models
 #' @export
 model_converging <- function() {
   general_graph_model_fun(
@@ -180,7 +180,7 @@ model_converging <- function() {
 
 #' @param num_modifications Number of modifications made to the original trajectory (diverging_converging, diverging_with_loops, multiple_looping, connected)
 #' @param nodes_per_modification The number of nodes to use per modification (diverging_converging, diverging_with_loops, multiple_looping, connected)
-#' @rdname network_models
+#' @rdname topology_models
 #' @export
 model_diverging_converging <- function(
   num_modifications = function() rbinom(1, size = 10, .25) + 1,
@@ -194,7 +194,7 @@ model_diverging_converging <- function(
   )
 }
 
-#' @rdname network_models
+#' @rdname topology_models
 #' @export
 model_diverging_with_loops <- function(
   num_modifications = function() rbinom(1, size = 10, .25) + 1,
@@ -208,7 +208,7 @@ model_diverging_with_loops <- function(
   )
 }
 
-#' @rdname network_models
+#' @rdname topology_models
 #' @export
 model_multiple_looping <- function(
   num_modifications = function() rbinom(1, size = 10, .25) + 1,
@@ -221,7 +221,7 @@ model_multiple_looping <- function(
   )
 }
 
-#' @rdname network_models
+#' @rdname topology_models
 #' @export
 model_connected <- function(
   num_modifications = function() rbinom(1, size = 10, .25) + 1,
@@ -238,7 +238,7 @@ model_connected <- function(
 
 #' @param num_trajectories The number of disconnected trajectories to generate
 #' @param ... Parameters to pass to other models. Can be in the form of `linear = list(num_milestones = function() sample(2:8, 1)` or just `num_milestones = 10`.
-#' @rdname network_models
+#' @rdname topology_models
 #' @export
 model_disconnected <- function(
   num_trajectories = rbinom(1, size = 5, .25) + 2,
@@ -247,9 +247,9 @@ model_disconnected <- function(
   map_df(
     seq_len(num_trajectories),
     function(i) {
-      j <- sample(which(names(network_models) != "disconnected"), 1)
+      j <- sample(which(names(topology_models) != "disconnected"), 1)
 
-      generate_milestone_network(model = names(network_models), ...) %>%
+      generate_milestone_network(model = names(topology_models), ...) %>%
         mutate(
           from = paste0("T", i, "_", from),
           to = paste0("T", i, "_", to)
@@ -261,7 +261,7 @@ model_disconnected <- function(
 #' Milestone network models for generating toy examples
 #'
 #' @export
-network_models <- list(
+topology_models <- list(
   linear = model_linear,
   cyclic = model_cyclic,
   bifurcating = model_bifurcating,
@@ -281,11 +281,11 @@ network_models <- list(
 #'
 #' @param model Which model to use.
 #'
-#' @rdname network_models
+#' @rdname topology_models
 #'
 #' @export
 generate_milestone_network <- function(
-  model = names(network_models),
+  model = names(topology_models),
   ...
 ) {
   requireNamespace("igraph")
@@ -293,7 +293,7 @@ generate_milestone_network <- function(
 
   # check params
   params <- list(...)
-  network_model <- network_models[[model]]
+  network_model <- topology_models[[model]]
 
   relevant_params <- params
   specific_params <- params[[model]]
@@ -318,4 +318,4 @@ generate_milestone_network <- function(
   milnet
 }
 
-formals(generate_milestone_network)$model <- names(network_models)
+formals(generate_milestone_network)$model <- names(topology_models)
