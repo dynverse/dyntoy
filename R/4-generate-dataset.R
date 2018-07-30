@@ -114,7 +114,7 @@ generate_dataset <- function(
     normalised <- dynnormaliser::normalise_filter_counts(
       counts,
       filter_hvg = FALSE,
-      filter_genes = FALSE,
+      filter_features = FALSE,
       filter_cells = FALSE,
       nmads = 999
     )
