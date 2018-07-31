@@ -29,7 +29,7 @@ generate_trajectory <- function(
   milestone_ids <- sort(unique(c(milestone_network$from, milestone_network$to)))
 
   # generate (tented) progressions
-  progressions <- random_progressions(milestone_network, ncells = num_cells, allow_tented = allow_tented_progressions)
+  progressions <- random_progressions(milestone_network, ncells = num_cells, allow_tented_progressions = allow_tented_progressions)
 
   # were any divergences created?
   divreg <- progressions %>% group_by(cell_id) %>% filter(n() > 1) %>% ungroup()
