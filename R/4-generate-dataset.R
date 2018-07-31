@@ -122,30 +122,25 @@ generate_dataset <- function(
     counts <- normalised$counts
     expression <- normalised$expression
     cell_ids <- intersect(rownames(counts), trajectory$cell_ids)
-    progressions <- progressions %>% filter(cell_id %in% cell_ids)
-    cell_info <- cell_info %>% filter(cell_id %in% cell_ids)
+    progressions <- trajectory$progressions %>% filter(cell_id %in% cell_ids)
+    cell_info <- trajectory$cell_info %>% filter(cell_id %in% cell_ids)
+
+    # create trajectory
+    trajectory <- wrap_data(
+      id = unique_id,
+      cell_ids = cell_ids,
+      cell_info = cell_info,
+      dataset_source = "toy",
+      model = model
+    ) %>% add_trajectory(
+      milestone_ids = trajectory$milestone_ids,
+      milestone_network = trajectory$milestone_network,
+      divergence_regions = trajectory$divergence_regions,
+      progressions = progressions
+    )
   } else {
     expression <- log2(counts + 1)
-    cell_ids <- trajectory$cell_ids
-    progressions <- trajectory$progressions
-    milestone_ids <- trajectory$milestone_ids
-    divergence_regions <- trajectory$divergence_regions
-    cell_info <- trajectory$cell_info
   }
-
-  # create trajectory
-  trajectory <- wrap_data(
-    id = unique_id,
-    cell_ids = cell_ids,
-    cell_info = cell_info,
-    dataset_source = "toy",
-    model = model
-  ) %>% add_trajectory(
-    milestone_ids = milestone_ids,
-    milestone_network = milestone_network,
-    divergence_regions = divergence_regions,
-    progressions = progressions
-  )
 
   # make feature info
   feature_info <- tibble(feature_id = colnames(counts), housekeeping = FALSE)
