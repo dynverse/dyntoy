@@ -121,11 +121,12 @@ generate_dataset <- function(
     )
     counts <- normalised$counts
     expression <- normalised$expression
-    cell_ids <- intersect(rownames(counts), cell_ids)
+    cell_ids <- intersect(rownames(counts), trajectory$cell_ids)
     progressions <- progressions %>% filter(cell_id %in% cell_ids)
     cell_info <- cell_info %>% filter(cell_id %in% cell_ids)
   } else {
     expression <- log2(counts + 1)
+    cell_ids <- trajectory$cell_ids
   }
 
   # create trajectory
