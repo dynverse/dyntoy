@@ -8,7 +8,7 @@ sample_zinbinom_expression <- function(
   x,
   mu = runif(1, 1, 1000),
   size = runif(1, mu/10, mu / 4),
-  calculate_pi = 0.01
+  calculate_pi = function() 0.1
 ) {
   counts <- map_int(x, ~rzinbinom(1, mu * ., size=size, pi = calculate_pi(mu * .)))
 
@@ -27,7 +27,8 @@ generate_counts <- function(
   num_features,
   sample_mean_count = function() runif(1, 100, 1000),
   sample_dispersion_count = function(mean) map_dbl(mean, ~runif(1, ./10, ./4)),
-  dropout_probability_factor = 100
+  dropout_probability_factor = 100,
+  dropout_rate = 0.2
 ) {
   feature_ids <- paste0("G", seq_len(num_features))
 
@@ -47,7 +48,7 @@ generate_counts <- function(
     dimred_trajectory$space_samples$density <- mvtnorm::dmvnorm(dimred_trajectory$space_samples[, c("comp_1", "comp_2")], mean, sigma)
 
     # from density, get expression using a zero-inflated negative binomial
-    calculate_pi <- function(x) dexp(x / dropout_probability_factor)
+    calculate_pi <- function(x) dexp(x / dropout_probability_factor, rate = dropout_rate)
     mean_count <- sample_mean_count()
     dispersion_count <- sample_dispersion_count(mean_count)
 
