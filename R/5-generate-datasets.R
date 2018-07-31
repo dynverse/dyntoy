@@ -13,9 +13,11 @@
 generate_toy_datasets <- function(
   models,
   num_replicates = 3,
-  num_cells = 200,
-  num_genes = 100,
-  noise_nbinom_size = 20,
+  num_cells = 99,
+  num_features = 101,
+  sample_mean_count = function() runif(1, 100, 1000),
+  sample_dispersion_count = function(mean) map_dbl(mean, ~runif(1, ./10, ./4)),
+  dropout_probability_factor = 100,
   allow_tented_progressions = TRUE,
   normalise = dynutils::check_packages("dynnormaliser")
 ) {
@@ -26,8 +28,10 @@ generate_toy_datasets <- function(
         unique_id = paste0("toy/", model, "_", replicate),
         model = model,
         num_cells = num_cells,
-        num_genes = num_genes,
-        noise_nbinom_size = noise_nbinom_size,
+        num_features = num_features,
+        sample_mean_count = sample_mean_count,
+        sample_dispersion_count = sample_dispersion_count,
+        dropout_probability_factor = dropout_probability_factor,
         allow_tented_progressions = allow_tented_progressions,
         normalise = normalise
       ) %>%

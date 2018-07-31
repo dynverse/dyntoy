@@ -4,8 +4,8 @@ test_that("Creating toy datasets", {
   models <- c("linear", "cyclic")
   num_replicates <- 3
   num_cells <- 10
-  num_genes <- 1001
-  datasets <- generate_toy_datasets(models = models, num_replicates = num_replicates, num_cells = num_cells, num_genes = num_genes)
+  num_features <- 1001
+  datasets <- generate_toy_datasets(models = models, num_replicates = num_replicates, num_cells = num_cells, num_features = num_features)
 
   expect_true( is_tibble(datasets) )
 
@@ -28,10 +28,11 @@ test_that("Creating toy datasets", {
 
 test_that("Creating more toy datasets", {
   models <- eval(formals(generate_toy_datasets)$models)
-  num_replicates <- 2
+  num_replicates <- 1
   num_cells <- 99
-  num_genes <- 101
-  datasets <- suppressWarnings({generate_toy_datasets(models = models, num_replicates = num_replicates, num_cells = num_cells, num_genes = num_genes)})
+  num_features <- 101
+  datasets <- suppressWarnings({generate_toy_datasets(models = models, num_replicates = num_replicates, num_cells = num_cells, num_features = num_features)})
+
 
   expect_true( is_tibble(datasets) )
 
@@ -112,6 +113,7 @@ for (dataseti in seq_len(nrow(toy_datasets))) {
     expect_false( any(duplicated(colnames(counts))) )
 
     # TODO: add check for divergence regions and prior_information
+    # I don't think this is necessary, as this is already checked in dynwrap
   })
 }
 

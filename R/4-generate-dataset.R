@@ -1,34 +1,11 @@
-#' Generate a toy dataset
-#'
-#' @param model A model for generating the milestone network. Must be one of:
-#' \itemize{
-#'   \item{a character vector (e.g. \code{"linear"}),}
-#'   \item{a function (e.g. \code{model_linear}),}
-#'   \item{a data frame (e.g. \code{model_linear()})}
-#' }
-#' @importFrom dynwrap add_prior_information
-#'
-#' @param unique_id An id for the dataset
-#' @param num_cells The number of cells in each dataset
-#' @param num_genes The number of genes in each dataset
-#' @param noise_nbinom_size The size parameter of the nbinom distribution
-#' @param allow_tented_progressions Whether or not to be able to generate cells as
-#'   part of a divergence.
-#' @param normalise Whether or not to normalise the dataset
-#'
+#' @rdname generate_dataset
 #' @export
-generate_dataset <- function(
+generate_trajectory <- function(
   unique_id = "",
   model = "linear",
   num_cells = 99,
-  num_genes = 101,
-  noise_nbinom_size = 20,
-  allow_tented_progressions = TRUE,
-  normalise = dynutils::check_packages("dynnormaliser")
+  allow_tented_progressions = TRUE
 ) {
-  # add timestamp
-  timecp <- dynwrap::add_timing_checkpoint(NULL, "init")
-
   # generate milestone network
   if (is.character(model)) {
     milestone_network <- generate_milestone_network(model = model)
@@ -48,17 +25,11 @@ generate_dataset <- function(
     milestone_network$directed <- TRUE
   }
 
-  # add timestamp
-  timecp <- timecp %>% dynwrap::add_timing_checkpoint("milestone_network")
-
   # get milestone ids
   milestone_ids <- sort(unique(c(milestone_network$from, milestone_network$to)))
 
   # generate (tented) progressions
-  progressions <- random_progressions(milestone_network, ncells = num_cells, allow_tented = allow_tented_progressions)
-
-  # add timestamp
-  timecp <- timecp %>% dynwrap::add_timing_checkpoint("progressions")
+  progressions <- random_progressions(milestone_network, ncells = num_cells, allow_tented_progressions = allow_tented_progressions)
 
   # were any divergences created?
   divreg <- progressions %>% group_by(cell_id) %>% filter(n() > 1) %>% ungroup()
@@ -75,68 +46,107 @@ generate_dataset <- function(
     divergence_regions <- NULL
   }
 
-  # add timestamp
-  timecp <- timecp %>% dynwrap::add_timing_checkpoint("divergences")
-
-
-  # get cell ids
+  # make a simple cell info
   cell_ids <- unique(progressions$cell_id)
-
-  # generate expression
-  expression <- generate_expression(
-    milestone_network = milestone_network,
-    progressions = progressions,
-    ngenes = num_genes
-  )
-
-  # add timestamp
-  timecp <- timecp %>% dynwrap::add_timing_checkpoint("expression")
-
-  # simulate counts
-  original_counts <- generate_counts(
-    expression = expression,
-    noise_nbinom_size = noise_nbinom_size
-  )
-
-  # add timestamp
-  timecp <- timecp %>% dynwrap::add_timing_checkpoint("counts")
-
-  # normalize
-  if (normalise) {
-    normalised <- dynnormaliser::normalise_filter_counts(
-      original_counts,
-      filter_hvg = FALSE,
-      nmads = 10
-    )
-    counts <- normalised$counts
-    expression <- normalised$expression
-    cell_ids <- intersect(rownames(counts), cell_ids)
-    progressions <- progressions %>% filter(cell_id %in% cell_ids)
-  } else {
-    counts <- original_counts
-    expression = expression
-  }
-
-  # add timestamp
-  timecp <- timecp %>% dynwrap::add_timing_checkpoint("normalisation")
-
-  # make a simple sample info
   cell_info <- tibble(cell_id = cell_ids)
-  feature_info <- tibble(feature_id = colnames(counts), housekeeping = FALSE)
 
-  # wrap dataset
+  # create trajectory
   wrap_data(
     id = unique_id,
     cell_ids = cell_ids,
     cell_info = cell_info,
-    dataset_source = "toy",
+    dataset_source = "synthetic/dyntoy",
     model = model
   ) %>% add_trajectory(
     milestone_ids = milestone_ids,
     milestone_network = milestone_network,
     divergence_regions = divergence_regions,
     progressions = progressions
-  ) %>% add_cell_waypoints(
+  )
+}
+
+
+#' Generate a toy dataset
+#'
+#' @param model A model for generating the milestone network. Must be one of:
+#' \itemize{
+#'   \item{a character vector (e.g. \code{"linear"}),}
+#'   \item{a function (e.g. \code{model_linear}),}
+#'   \item{a data frame (e.g. \code{model_linear()})}
+#' }
+#' @importFrom dynwrap add_prior_information
+#'
+#' @param unique_id An id for the dataset
+#' @param num_cells The number of cells in each dataset
+#' @param allow_tented_progressions Whether or not to be able to generate cells as
+#'   part of a divergence.
+#' @param normalise Whether or not to normalise the dataset
+#' @inheritParams generate_counts
+#'
+#' @export
+generate_dataset <- function(
+  unique_id = "",
+  model = "linear",
+  num_cells = 99,
+  allow_tented_progressions = TRUE,
+  num_features = 101,
+  sample_mean_count = function() runif(1, 100, 1000),
+  sample_dispersion_count = function(mean) map_dbl(mean, ~runif(1, ./10, ./4)),
+  dropout_probability_factor = 100,
+  normalise = dynutils::check_packages("dynnormaliser")
+) {
+  trajectory <- generate_trajectory(
+    unique_id = unique_id,
+    model = model,
+    num_cells = num_cells,
+    allow_tented_progressions = allow_tented_progressions
+  )
+
+  # generate expression
+  counts <- generate_counts(
+    trajectory,
+    num_features = num_features,
+    sample_mean_count = sample_mean_count,
+    sample_dispersion_count = sample_dispersion_count,
+    dropout_probability_factor = dropout_probability_factor
+  )
+
+  # normalize
+  if (normalise) {
+    normalised <- dynnormaliser::normalise_filter_counts(
+      counts,
+      filter_hvg = FALSE,
+      filter_features = FALSE,
+      filter_cells = FALSE
+    )
+    counts <- normalised$counts
+    expression <- normalised$expression
+    cell_ids <- intersect(rownames(counts), trajectory$cell_ids)
+    progressions <- trajectory$progressions %>% filter(cell_id %in% cell_ids)
+    cell_info <- trajectory$cell_info %>% filter(cell_id %in% cell_ids)
+
+    # create trajectory
+    trajectory <- wrap_data(
+      id = unique_id,
+      cell_ids = cell_ids,
+      cell_info = cell_info,
+      dataset_source = "toy",
+      model = model
+    ) %>% add_trajectory(
+      milestone_ids = trajectory$milestone_ids,
+      milestone_network = trajectory$milestone_network,
+      divergence_regions = trajectory$divergence_regions,
+      progressions = progressions
+    )
+  } else {
+    expression <- log2(counts + 1)
+  }
+
+  # make feature info
+  feature_info <- tibble(feature_id = colnames(counts), housekeeping = FALSE)
+
+  # wrap dataset
+  trajectory %>% add_cell_waypoints(
     num_cells_selected = 25
   ) %>% add_expression(
     counts = counts,
@@ -144,7 +154,5 @@ generate_dataset <- function(
     feature_info = feature_info
   ) %>% dynwrap::add_prior_information(
     verbose = FALSE
-  ) %>% dynwrap::add_timings(
-    timecp %>% dynwrap::add_timing_checkpoint("wrapping")
   )
 }

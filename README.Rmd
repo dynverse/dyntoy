@@ -27,7 +27,6 @@ Install using devtools:
 devtools::install_github("dynverse/dyntoy")
 ```
 
-
 ## Example
 
 dyntoy contains some pre-generated toy data within the `toy_datasets` data object:

@@ -1,82 +1,71 @@
-#' @importFrom stats approxfun rnorm runif
-generate_expression <- function(
-  milestone_network,
-  progressions,
-  ngenes = 100
-) {
-
-  nedges <- nrow(milestone_network)
-  milestone_ids <- unique(c(milestone_network$from, milestone_network$to))
-  nnodes <- length(milestone_ids)
-
-  milestone_expressions <- list()
-  milestone_network <- milestone_network %>% mutate(splinefuns = map(seq_len(n()), ~NULL))
-
-  nmodules <- max(6, nrow(milestone_network) * 10)
-
-  for (edge_id in seq_len(nedges)) {
-    edge <- extract_row_to_list(milestone_network, edge_id)
-
-    # check whether the starting and ending milestones have already been visited, otherwise the start and end are random
-    if (edge$from %in% names(milestone_expressions)) {
-      start <- milestone_expressions[[edge$from]]
-    } else {
-      start <- sample(c(0, 1), nmodules, replace = TRUE)
-    }
-
-    if (edge$to %in% names(milestone_expressions)) {
-      end <- milestone_expressions[[edge$to]]
-    } else {
-      end <- start
-      n_changed_modules <- 6
-      chosen_modules <- sample(seq_along(end), n_changed_modules)
-      end[chosen_modules] <- 1 - end[chosen_modules]
-    }
-
-    milestone_expressions[[edge$from]] <- start
-    milestone_expressions[[edge$to]] <- end
-
-    start <- rep(start, each = ceiling(ngenes/nmodules))[seq_len(ngenes)]
-    end <- rep(end, each = ceiling(ngenes/nmodules))[seq_len(ngenes)]
-
-    xs <- map(seq_len(ngenes), ~c(0, 1))
-    ys <- pmap(list(x = xs, start = start, end = end), function(x, start, end) c(start, end))
-
-    milestone_network$splinefuns[edge_id] <- map2(xs, ys, function(x, y) {
-      stats::approxfun(x, y)
-    }) %>% list()
-  }
-
-  filtered_progression <- progressions %>% # a cell can only be in one edge (maximum in tents)
-    group_by(cell_id) %>%
-    arrange(-percentage) %>%
-    filter(row_number() == 1)
-
-  # extract expression for each edge
-  expression <- filtered_progression %>%
-    group_by(from, to) %>%
-    summarise(percentages = list(percentage), cell_ids = list(cell_id)) %>%
-    left_join(milestone_network, by = c("from", "to")) %>%
-    rowwise() %>%
-    do(
-      expression = map(.$splinefuns, function(f) f(.$percentage)) %>% invoke(rbind, .),
-      cell_id = .$cell_id
-    ) %>% {
-      set_colnames(invoke(cbind, .$expression), unlist(.$cell_id))
-    } %>% t
-
-  expression <- expression[unique(progressions$cell_id), ]
-
-  colnames(expression) <- paste0("G", seq_len(ncol(expression)))
-
-  expression
+rzinbinom <- function(n, mu, size, pi) {
+  rval <- rnbinom(n, mu = mu, size = size)
+  rval[runif(n) < pi] <- 0
+  as.integer(round(rval))
 }
 
-#' @importFrom stats rnbinom
-generate_counts <- function(expression, noise_nbinom_size = 20) {
-  count_mean <- 100
-  counts <- stats::rnbinom(length(expression), mu = expression * count_mean, size = noise_nbinom_size) %>%
-    matrix(nrow = nrow(expression), dimnames = dimnames(expression))
-  counts[counts < 0] <- 0
+sample_zinbinom_expression <- function(
+  x,
+  mu = runif(1, 1, 1000),
+  size = runif(1, mu/10, mu / 4),
+  calculate_pi = function() 0.1
+) {
+  counts <- map_int(x, ~rzinbinom(1, mu * ., size=size, pi = calculate_pi(mu * .)))
+
   counts
 }
+
+#' Simulate counts which are distributed using a zero-inflated negative biniomal distribution
+#'
+#' @param trajectory The dynwrap trajectory
+#' @param num_features Number of features
+#' @param sample_mean_count Function used to sample the mean expression
+#' @param sample_dispersion_count Function to sample the dispersion (size) of the negative biniomal given the expression. Higher dispersion values generate less noise
+#' @param dropout_probability_factor Factor used to calculate the probabilities of dropouts, relative to expression. Higher values (> 10000) have a lot of dropouts, lower values (< 10) have almost none
+#' @param dropout_rate Base rate of drop-outs
+generate_counts <- function(
+  trajectory,
+  num_features,
+  sample_mean_count = function() runif(1, 100, 1000),
+  sample_dispersion_count = function(mean) map_dbl(mean, ~runif(1, ./10, ./4)),
+  dropout_probability_factor = 100,
+  dropout_rate = 0.2
+) {
+  feature_ids <- paste0("G", seq_len(num_features))
+
+  dimred_trajectory <- dynwrap::dimred_trajectory(trajectory)
+
+  # generate counts
+  counts <- map(feature_ids, function(feature_id) {
+    # get density in multivariate normal distribution
+    limits <- c(
+      range(dimred_trajectory$space_milestones$comp_1),
+      range(dimred_trajectory$space_milestones$comp_2)
+    ) %>% matrix(nrow = 2)
+
+    mean <- runif(2, limits[1, ], limits[2, ])
+    sigma <- runif(2, apply(limits, 2, diff) / 10, apply(limits, 2, diff) / 8) %>% diag
+
+    dimred_trajectory$space_samples$density <- mvtnorm::dmvnorm(dimred_trajectory$space_samples[, c("comp_1", "comp_2")], mean, sigma)
+
+    # from density, get expression using a zero-inflated negative binomial
+    calculate_pi <- function(x) dexp(x / dropout_probability_factor, rate = dropout_rate)
+    mean_count <- sample_mean_count()
+    dispersion_count <- sample_dispersion_count(mean_count)
+
+    dimred_trajectory$space_samples$counts <- sample_zinbinom_expression(
+      dimred_trajectory$space_samples$density,
+      mu = mean_count,
+      size = dispersion_count,
+      calculate_pi = calculate_pi
+    )
+
+    dimred_trajectory$space_samples$counts
+  }) %>% do.call(cbind, .)
+  rownames(counts) <- trajectory$cell_ids
+  colnames(counts) <- feature_ids
+
+  counts
+}
+
+
