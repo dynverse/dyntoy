@@ -127,6 +127,10 @@ generate_dataset <- function(
   } else {
     expression <- log2(counts + 1)
     cell_ids <- trajectory$cell_ids
+    progressions <- trajectory$progressions
+    milestone_ids <- trajectory$milestone_ids
+    divergence_regions <- trajectory$divergence_regions
+    cell_info <- trajectory$cell_info
   }
 
   # create trajectory

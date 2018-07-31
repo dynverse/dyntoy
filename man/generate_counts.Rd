@@ -19,6 +19,8 @@ generate_counts(trajectory, num_features, sample_mean_count = function()
 \item{sample_dispersion_count}{Function to sample the dispersion (size) of the negative biniomal given the expression. Higher dispersion values generate less noise}
 
 \item{dropout_probability_factor}{Factor used to calculate the probabilities of dropouts, relative to expression. Higher values (> 10000) have a lot of dropouts, lower values (< 10) have almost none}
+
+\item{dropout_rate}{Base rate of drop-outs}
 }
 \description{
 Simulate counts which are distributed using a zero-inflated negative biniomal distribution
