@@ -3,6 +3,7 @@
 export(generate_dataset)
 export(generate_milestone_network)
 export(generate_toy_datasets)
+export(generate_trajectory)
 export(model_bifurcating)
 export(model_binary_tree)
 export(model_connected)
