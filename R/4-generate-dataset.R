@@ -113,7 +113,7 @@ generate_dataset <- function(
     dropout_probability_factor = dropout_probability_factor
   )
 
-  # normalize
+  # normalise
   if (normalise) {
     normalised <- dynnormaliser::normalise_filter_counts(
       counts,
