@@ -81,6 +81,7 @@ generate_trajectory <- function(
 #' @param allow_tented_progressions Whether or not to be able to generate cells as
 #'   part of a divergence.
 #' @param normalise Whether or not to normalise the dataset
+#' @param add_prior_information Whether to add prior information
 #' @inheritParams generate_counts
 #'
 #' @export
@@ -93,7 +94,8 @@ generate_dataset <- function(
   sample_mean_count = function() runif(1, 100, 1000),
   sample_dispersion_count = function(mean) map_dbl(mean, ~runif(1, ./10, ./4)),
   dropout_probability_factor = 100,
-  normalise = dynutils::check_packages("dynnormaliser")
+  normalise = dynutils::check_packages("dynnormaliser"),
+  add_prior_information = TRUE
 ) {
   trajectory <- generate_trajectory(
     unique_id = unique_id,
@@ -146,13 +148,19 @@ generate_dataset <- function(
   feature_info <- tibble(feature_id = colnames(counts), housekeeping = FALSE)
 
   # wrap dataset
-  trajectory %>% add_cell_waypoints(
+  dataset <- trajectory %>% add_cell_waypoints(
     num_cells_selected = 25
   ) %>% add_expression(
     counts = counts,
     expression = expression,
     feature_info = feature_info
-  ) %>% dynwrap::add_prior_information(
-    verbose = FALSE
   )
+
+  if (add_prior_information) {
+    dataset <- dataset %>% dynwrap::add_prior_information(
+      verbose = FALSE
+    )
+  }
+
+  dataset
 }

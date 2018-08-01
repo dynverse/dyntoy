@@ -13,7 +13,8 @@ generate_dataset(unique_id = "", model = "linear", num_cells = 99,
   sample_mean_count = function() runif(1, 100, 1000),
   sample_dispersion_count = function(mean) map_dbl(mean, ~runif(1, ./10,
   ./4)), dropout_probability_factor = 100,
-  normalise = dynutils::check_packages("dynnormaliser"))
+  normalise = dynutils::check_packages("dynnormaliser"),
+  add_prior_information = TRUE)
 }
 \arguments{
 \item{unique_id}{An id for the dataset}
@@ -39,6 +40,8 @@ part of a divergence.}
 \item{dropout_probability_factor}{Factor used to calculate the probabilities of dropouts, relative to expression. Higher values (> 10000) have a lot of dropouts, lower values (< 10) have almost none}
 
 \item{normalise}{Whether or not to normalise the dataset}
+
+\item{add_prior_information}{Whether to add prior information}
 }
 \description{
 Generate a toy dataset
