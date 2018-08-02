@@ -5,10 +5,10 @@
 \alias{generate_dataset}
 \title{Generate a toy dataset}
 \usage{
-generate_trajectory(unique_id = "", model = "linear", num_cells = 99,
+generate_trajectory(id = "", model = "linear", num_cells = 99,
   allow_tented_progressions = TRUE)
 
-generate_dataset(unique_id = "", model = "linear", num_cells = 99,
+generate_dataset(id = "", model = "linear", num_cells = 99,
   allow_tented_progressions = TRUE, num_features = 101,
   sample_mean_count = function() runif(1, 100, 1000),
   sample_dispersion_count = function(mean) map_dbl(mean, ~runif(1, ./10,
@@ -17,7 +17,7 @@ generate_dataset(unique_id = "", model = "linear", num_cells = 99,
   add_prior_information = TRUE)
 }
 \arguments{
-\item{unique_id}{An id for the dataset}
+\item{id}{An id for the dataset}
 
 \item{model}{A model for generating the milestone network. Must be one of:
 \itemize{

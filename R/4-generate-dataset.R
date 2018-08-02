@@ -1,7 +1,7 @@
 #' @rdname generate_dataset
 #' @export
 generate_trajectory <- function(
-  unique_id = "",
+  id = "",
   model = "linear",
   num_cells = 99,
   allow_tented_progressions = TRUE
@@ -52,7 +52,7 @@ generate_trajectory <- function(
 
   # create trajectory
   wrap_data(
-    id = unique_id,
+    id = id,
     cell_ids = cell_ids,
     cell_info = cell_info,
     dataset_source = "synthetic/dyntoy",
@@ -76,7 +76,7 @@ generate_trajectory <- function(
 #' }
 #' @importFrom dynwrap add_prior_information
 #'
-#' @param unique_id An id for the dataset
+#' @param id An id for the dataset
 #' @param num_cells The number of cells in each dataset
 #' @param allow_tented_progressions Whether or not to be able to generate cells as
 #'   part of a divergence.
@@ -86,7 +86,7 @@ generate_trajectory <- function(
 #'
 #' @export
 generate_dataset <- function(
-  unique_id = "",
+  id = "",
   model = "linear",
   num_cells = 99,
   allow_tented_progressions = TRUE,
@@ -98,7 +98,7 @@ generate_dataset <- function(
   add_prior_information = TRUE
 ) {
   trajectory <- generate_trajectory(
-    unique_id = unique_id,
+    id = id,
     model = model,
     num_cells = num_cells,
     allow_tented_progressions = allow_tented_progressions
@@ -129,7 +129,7 @@ generate_dataset <- function(
 
     # create trajectory
     trajectory <- wrap_data(
-      id = unique_id,
+      id = id,
       cell_ids = cell_ids,
       cell_info = cell_info,
       dataset_source = "toy",
