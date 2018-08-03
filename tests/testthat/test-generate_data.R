@@ -5,19 +5,19 @@ test_that("Creating toy datasets", {
   num_replicates <- 3
   num_cells <- 10
   num_features <- 1001
-  datasets <- generate_toy_datasets(models = models, num_replicates = num_replicates, num_cells = num_cells, num_features = num_features)
+  datasets <- generate_datasets(models = models, num_replicates = num_replicates, num_cells = num_cells, num_features = num_features)
 
   expect_true( is_tibble(datasets) )
 
   required_cols <- c(
-    "id", "cell_ids", "dataset_source", "model", "milestone_ids", "milestone_network", "divergence_regions", "milestone_percentages",
+    "id", "cell_ids", "source", "model", "milestone_ids", "milestone_network", "divergence_regions", "milestone_percentages",
     "progressions", "counts", "expression", "prior_information"
   )
   for (rc in required_cols) {
     expect_true(rc %in% colnames(datasets), label = paste0(rc, " %in% colnames(datasets)"))
   }
 
-  expect_equal( unique(datasets$dataset_source), "toy" )
+  expect_equal( unique(datasets$source), "synthetic/dyntoy" )
   expect_true( all(datasets$model %in% models) )
   expect_equal( nrow(datasets), length(models) * num_replicates )
 
@@ -27,24 +27,24 @@ test_that("Creating toy datasets", {
 })
 
 test_that("Creating more toy datasets", {
-  models <- eval(formals(generate_toy_datasets)$models)
+  models <- eval(formals(generate_datasets)$models)
   num_replicates <- 1
   num_cells <- 99
   num_features <- 101
-  datasets <- suppressWarnings({generate_toy_datasets(models = models, num_replicates = num_replicates, num_cells = num_cells, num_features = num_features)})
+  datasets <- suppressWarnings({generate_datasets(models = models, num_replicates = num_replicates, num_cells = num_cells, num_features = num_features)})
 
 
   expect_true( is_tibble(datasets) )
 
   required_cols <- c(
-    "id", "cell_ids", "dataset_source", "model", "milestone_ids", "milestone_network", "divergence_regions", "milestone_percentages",
+    "id", "cell_ids", "source", "model", "milestone_ids", "milestone_network", "divergence_regions", "milestone_percentages",
     "progressions", "counts", "expression", "prior_information"
   )
   for (rc in required_cols) {
     expect_true(rc %in% colnames(datasets), label = paste0(rc, " %in% colnames(datasets)"))
   }
 
-  expect_equal( unique(datasets$dataset_source), "toy" )
+  expect_equal( unique(datasets$source), "synthetic/dyntoy" )
   expect_true( all(datasets$model %in% models) )
   expect_equal( nrow(datasets), length(models) * num_replicates )
 
@@ -59,14 +59,14 @@ test_that("Data object toy_datasets", {
   expect_that( is_tibble(toy_datasets), is_true() )
 
   required_cols <- c(
-    "id", "cell_ids", "dataset_source", "model", "milestone_ids", "milestone_network", "divergence_regions", "milestone_percentages",
+    "id", "cell_ids", "source", "model", "milestone_ids", "milestone_network", "divergence_regions", "milestone_percentages",
     "progressions", "counts", "expression", "prior_information"
   )
   for (rc in required_cols) {
     expect_true(rc %in% colnames(toy_datasets), label = paste0(rc, " %in% colnames(toy_datasets)"))
   }
 
-  models <- eval(formals(generate_toy_datasets)$models)
+  models <- eval(formals(generate_datasets)$models)
   expect_true( all(toy_datasets$model %in% models) )
 })
 
@@ -121,5 +121,4 @@ test_that("Creating toy datasets with different models", {
   toy <- generate_dataset(model = "bifurcating")
   toy <- generate_dataset(model = model_bifurcating())
   toy <- generate_dataset(model = model_bifurcating)
-
 })
