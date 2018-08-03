@@ -20,9 +20,10 @@ generate_trajectory <- dynutils::inherit_default_params(
       id <- dynutils::random_time_string("toy")
     }
 
-    model <- match.arg(model)
-
-    # generate milestone network
+    # check model argument
+    if (is.character(model) && length(model) > 1) {
+      model <- model[[1]]
+    }
     if (is.character(model)) {
       milestone_network <- generate_milestone_network(model = model)
     } else if (is.function(model)) {

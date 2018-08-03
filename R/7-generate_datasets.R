@@ -49,3 +49,5 @@ generate_datasets <- dynutils::inherit_default_params(
       ungroup()
   }
 )
+
+formals(generate_datasets)$models <- names(topology_models)

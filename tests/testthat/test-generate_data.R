@@ -121,5 +121,4 @@ test_that("Creating toy datasets with different models", {
   toy <- generate_dataset(model = "bifurcating")
   toy <- generate_dataset(model = model_bifurcating())
   toy <- generate_dataset(model = model_bifurcating)
-
 })

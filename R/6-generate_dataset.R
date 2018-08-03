@@ -22,7 +22,9 @@ generate_dataset <- dynutils::inherit_default_params(
     normalise = dynutils::check_packages("dynnormaliser"),
     add_prior_information = TRUE
   ) {
-    model <- match.arg(model)
+    if (is.character(model) && length(model) > 1) {
+      model <- model[[1]]
+    }
 
     trajectory <- generate_trajectory(
       id = id,

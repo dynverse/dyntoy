@@ -14,7 +14,10 @@ generate_milestone_network <- function(
   ...
 ) {
   requireNamespace("igraph")
-  model <- match.arg(model)
+
+  if (is.character(model) && length(model) > 1) {
+    model <- model[[1]]
+  }
 
   # check params
   params <- list(...)
