@@ -45,7 +45,11 @@ generate_trajectory <- dynutils::inherit_default_params(
     milestone_ids <- sort(unique(c(milestone_network$from, milestone_network$to)))
 
     # generate (tented) progressions
-    progressions <- generate_progressions(milestone_network, ncells = num_cells, allow_tented_progressions = allow_tented_progressions)
+    progressions <- generate_progressions(
+      milestone_network = milestone_network,
+      num_cells = num_cells,
+      allow_tented_progressions = allow_tented_progressions
+    )
 
     # were any divergences created?
     divreg <- progressions %>% group_by(cell_id) %>% filter(n() > 1) %>% ungroup()

@@ -32,6 +32,7 @@ generate_datasets <- dynutils::inherit_default_params(
       do(with(., {
         generate_dataset(
           id = paste0("toy/", model, "_", replicate),
+          model = model,
           num_cells = num_cells,
           num_features = num_features,
           allow_tented_progressions = allow_tented_progressions,

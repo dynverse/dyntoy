@@ -16,16 +16,16 @@ generate_progressions <- function(
     group_by(from) %>%
     summarise(prob = sqrt(sum(length^2))) %>%
     mutate(use_tent = allow_tented_progressions & sample(c(TRUE, FALSE), n(), replace = TRUE))
-  cell_ids <- paste0("C", seq_len(ncells))
+  cell_ids <- paste0("C", seq_len(num_cells))
 
   from_ixs <- sample(
     seq_len(nrow(from_probabilities)),
-    ncells,
+    num_cells,
     prob = from_probabilities$prob,
     replace = TRUE
   )
 
-  seq_len(ncells) %>% map_df(function(i) {
+  seq_len(num_cells) %>% map_df(function(i) {
     cell_id <- cell_ids[[i]]
 
     from_mid <- from_probabilities$from[[from_ixs[[i]]]]
