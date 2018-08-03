@@ -5,10 +5,8 @@ library(tidyverse)
 
 set.seed(3)
 
-toy_datasets <- generate_toy_datasets(
+toy_datasets <- generate_datasets(
   num_replicates = 5
-  # dropout_probability_factor = 0,
-  # sample_dispersion_count = function(x) Inf
 )
 
 pdf(paste0("~/dyntoy.pdf"), 15, 10)
