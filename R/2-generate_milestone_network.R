@@ -6,7 +6,7 @@
 #'   \item{a function (e.g. \code{model_linear}),}
 #'   \item{a data frame (e.g. \code{model_linear()})}
 #' }
-#' @inheritDotParams topology_models
+#' @param ... Parameters to pass to other models. Can be in the form of `linear = list(num_milestones = function() sample(2:8, 1)` or just `num_milestones = 10`.
 #'
 #' @export
 generate_milestone_network <- function(

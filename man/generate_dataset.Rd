@@ -7,10 +7,10 @@
 generate_dataset(id = "", model = c("linear", "cyclic", "bifurcating",
   "multifurcating", "binary_tree", "tree", "converging",
   "diverging_converging", "diverging_with_loops", "looping", "connected",
-  "disconnected"), num_cells = 99, allow_tented_progressions = TRUE,
-  num_features = 101, sample_mean_count = function() runif(1, 100,
-  1000), sample_dispersion_count = function(mean) map_dbl(mean, ~runif(1,
-  ./10, ./4)), dropout_probability_factor = 100,
+  "disconnected"), num_cells = 99, num_features = 101,
+  allow_tented_progressions = TRUE, sample_mean_count = function()
+  runif(1, 100, 1000), sample_dispersion_count = function(mean)
+  map_dbl(mean, ~runif(1, ./10, ./4)), dropout_probability_factor = 100,
   normalise = dynutils::check_packages("dynnormaliser"),
   add_prior_information = TRUE)
 }
@@ -26,10 +26,10 @@ generate_dataset(id = "", model = c("linear", "cyclic", "bifurcating",
 
 \item{num_cells}{The number of cells in each dataset}
 
+\item{num_features}{Number of features}
+
 \item{allow_tented_progressions}{Whether or not to be able to generate cells as
 part of a divergence.}
-
-\item{num_features}{Number of features}
 
 \item{sample_mean_count}{Function used to sample the mean expression}
 
