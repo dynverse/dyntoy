@@ -10,14 +10,14 @@ test_that("Creating toy datasets", {
   expect_true( is_tibble(datasets) )
 
   required_cols <- c(
-    "id", "cell_ids", "dataset_source", "model", "milestone_ids", "milestone_network", "divergence_regions", "milestone_percentages",
+    "id", "cell_ids", "source", "model", "milestone_ids", "milestone_network", "divergence_regions", "milestone_percentages",
     "progressions", "counts", "expression", "prior_information"
   )
   for (rc in required_cols) {
     expect_true(rc %in% colnames(datasets), label = paste0(rc, " %in% colnames(datasets)"))
   }
 
-  expect_equal( unique(datasets$dataset_source), "toy" )
+  expect_equal( unique(datasets$source), "synthetic/toy" )
   expect_true( all(datasets$model %in% models) )
   expect_equal( nrow(datasets), length(models) * num_replicates )
 
@@ -37,14 +37,14 @@ test_that("Creating more toy datasets", {
   expect_true( is_tibble(datasets) )
 
   required_cols <- c(
-    "id", "cell_ids", "dataset_source", "model", "milestone_ids", "milestone_network", "divergence_regions", "milestone_percentages",
+    "id", "cell_ids", "source", "model", "milestone_ids", "milestone_network", "divergence_regions", "milestone_percentages",
     "progressions", "counts", "expression", "prior_information"
   )
   for (rc in required_cols) {
     expect_true(rc %in% colnames(datasets), label = paste0(rc, " %in% colnames(datasets)"))
   }
 
-  expect_equal( unique(datasets$dataset_source), "toy" )
+  expect_equal( unique(datasets$source), "synthetic/toy" )
   expect_true( all(datasets$model %in% models) )
   expect_equal( nrow(datasets), length(models) * num_replicates )
 
@@ -59,7 +59,7 @@ test_that("Data object toy_datasets", {
   expect_that( is_tibble(toy_datasets), is_true() )
 
   required_cols <- c(
-    "id", "cell_ids", "dataset_source", "model", "milestone_ids", "milestone_network", "divergence_regions", "milestone_percentages",
+    "id", "cell_ids", "source", "model", "milestone_ids", "milestone_network", "divergence_regions", "milestone_percentages",
     "progressions", "counts", "expression", "prior_information"
   )
   for (rc in required_cols) {

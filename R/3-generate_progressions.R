@@ -1,9 +1,21 @@
+
+#' Generate cells and their progressions along a milestone network
+#'
+#' @param milestone_network The milestone network along which to generate cells.
+#' @param num_cells The number of cells in each dataset
+#' @param allow_tented_progressions Whether or not to be able to generate cells as
+#'   part of a divergence.
+#'
 #' @importFrom stats runif
-random_progressions <- function(milestone_network, ncells = 100, allow_tented_progressions = TRUE) {
+generate_progressions <- function(
+  milestone_network,
+  num_cells = 99,
+  allow_tented_progressions = TRUE
+) {
   from_probabilities <- milestone_network %>%
     group_by(from) %>%
     summarise(prob = sqrt(sum(length^2))) %>%
-    mutate(use_tent = allow_tented_progressions & sample(c(T, F), n(), replace = TRUE))
+    mutate(use_tent = allow_tented_progressions & sample(c(TRUE, FALSE), n(), replace = TRUE))
   cell_ids <- paste0("C", seq_len(ncells))
 
   from_ixs <- sample(

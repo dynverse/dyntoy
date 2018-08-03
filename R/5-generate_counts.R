@@ -1,20 +1,3 @@
-rzinbinom <- function(n, mu, size, pi) {
-  rval <- rnbinom(n, mu = mu, size = size)
-  rval[runif(n) < pi] <- 0
-  as.integer(round(rval))
-}
-
-sample_zinbinom_expression <- function(
-  x,
-  mu = runif(1, 1, 1000),
-  size = runif(1, mu/10, mu / 4),
-  calculate_pi = function() 0.1
-) {
-  counts <- map_int(x, ~rzinbinom(1, mu * ., size=size, pi = calculate_pi(mu * .)))
-
-  counts
-}
-
 #' Simulate counts which are distributed using a zero-inflated negative biniomal distribution
 #'
 #' @param trajectory The dynwrap trajectory
@@ -25,7 +8,7 @@ sample_zinbinom_expression <- function(
 #' @param dropout_rate Base rate of drop-outs
 generate_counts <- function(
   trajectory,
-  num_features,
+  num_features = 101,
   sample_mean_count = function() runif(1, 100, 1000),
   sample_dispersion_count = function(mean) map_dbl(mean, ~runif(1, ./10, ./4)),
   dropout_probability_factor = 100,
@@ -68,4 +51,19 @@ generate_counts <- function(
   counts
 }
 
+rzinbinom <- function(n, mu, size, pi) {
+  rval <- rnbinom(n, mu = mu, size = size)
+  rval[runif(n) < pi] <- 0
+  as.integer(round(rval))
+}
 
+sample_zinbinom_expression <- function(
+  x,
+  mu = runif(1, 1, 1000),
+  size = runif(1, mu/10, mu / 4),
+  calculate_pi = function() 0.1
+) {
+  counts <- map_int(x, ~rzinbinom(1, mu * ., size=size, pi = calculate_pi(mu * .)))
+
+  counts
+}
