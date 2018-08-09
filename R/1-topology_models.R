@@ -247,9 +247,8 @@ model_disconnected <- function(
   map_df(
     seq_len(num_trajectories),
     function(i) {
-      j <- sample(which(names(topology_models) != "disconnected"), 1)
-
-      generate_milestone_network(model = names(topology_models), ...) %>%
+      models <- names(topology_models) %>% keep(~ . != "disconnected")
+      generate_milestone_network(model = sample(models, 1), ...) %>%
         mutate(
           from = paste0("T", i, "_", from),
           to = paste0("T", i, "_", to)
