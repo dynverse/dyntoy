@@ -16,7 +16,7 @@ generate_counts <- function(
 ) {
   feature_ids <- paste0("G", seq_len(num_features))
 
-  dimred_trajectory <- dynwrap::dimred_trajectory(trajectory)
+  dimred_trajectory <- dynwrap::calculate_trajectory_dimred(trajectory)
 
   # generate counts
   counts <- map(feature_ids, function(feature_id) {
