@@ -35,7 +35,7 @@ generate_milestone_network <- function(
 
   # check output, add columns if necessary
   if (!"length" %in% colnames(milnet)) {
-    milnet$length <- runif(nrow(milnet))
+    milnet$length <- stats::runif(nrow(milnet), min = .5, max = 1)
   }
 
   if (!"directed" %in% colnames(milnet)) {
