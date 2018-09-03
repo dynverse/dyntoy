@@ -16,34 +16,35 @@ generate_counts <- function(
 ) {
   feature_ids <- paste0("G", seq_len(num_features))
 
-  dimred_trajectory <- dynwrap::dimred_trajectory(trajectory)
+  dimred_trajectory <- dynwrap::calculate_trajectory_dimred(trajectory)
 
   # generate counts
   counts <- map(feature_ids, function(feature_id) {
     # get density in multivariate normal distribution
     limits <- c(
-      range(dimred_trajectory$space_milestones$comp_1),
-      range(dimred_trajectory$space_milestones$comp_2)
+      range(dimred_trajectory$dimred_milestones$comp_1),
+      range(dimred_trajectory$dimred_milestones$comp_2)
     ) %>% matrix(nrow = 2)
 
     mean <- runif(2, limits[1, ], limits[2, ])
     sigma <- runif(2, apply(limits, 2, diff) / 10, apply(limits, 2, diff) / 8) %>% diag
 
-    dimred_trajectory$space_samples$density <- mvtnorm::dmvnorm(dimred_trajectory$space_samples[, c("comp_1", "comp_2")], mean, sigma)
+    dimred_trajectory$dimred_cells$density <- mvtnorm::dmvnorm(dimred_trajectory$dimred_cells[, c("comp_1", "comp_2")], mean, sigma)
 
     # from density, get expression using a zero-inflated negative binomial
     calculate_pi <- function(x) dexp(x / dropout_probability_factor, rate = dropout_rate)
     mean_count <- sample_mean_count()
     dispersion_count <- sample_dispersion_count(mean_count)
 
-    dimred_trajectory$space_samples$counts <- sample_zinbinom_expression(
-      dimred_trajectory$space_samples$density,
-      mu = mean_count,
-      size = dispersion_count,
-      calculate_pi = calculate_pi
-    )
+    dimred_trajectory$dimred_cells$counts <-
+      sample_zinbinom_expression(
+        dimred_trajectory$dimred_cells$density,
+        mu = mean_count,
+        size = dispersion_count,
+        calculate_pi = calculate_pi
+      )
 
-    dimred_trajectory$space_samples$counts
+    dimred_trajectory$dimred_cells$counts
   }) %>% do.call(cbind, .)
   rownames(counts) <- trajectory$cell_ids
   colnames(counts) <- feature_ids
