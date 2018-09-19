@@ -119,9 +119,7 @@ model_cyclic <- function(
 #' @param max_degree The maximum degree of a branch node, must be at least 3 (diverging, converging)
 #' @rdname topology_models
 #' @export
-model_bifurcating <- function(
-  max_degree = function() sample_discrete_uniform(1, 3, 6)
-) {
+model_bifurcating <- function() {
   general_graph_model_fun(
     num_modifications = 1,
     max_degree = 3,
