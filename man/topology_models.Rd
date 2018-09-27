@@ -22,8 +22,7 @@ model_linear(num_milestones = function() rbinom(1, size = 10, 0.25) + 2)
 
 model_cyclic(num_milestones = function() rbinom(1, size = 10, 0.25) + 3)
 
-model_bifurcating(max_degree = function() sample_discrete_uniform(1, 3,
-  6))
+model_bifurcating()
 
 model_multifurcating(num_branchpoints = function() rbinom(1, size = 10,
   0.25) + 1, max_degree = function() sample_discrete_uniform(1, 3, 6))
@@ -59,9 +58,9 @@ topology_models
 \arguments{
 \item{num_milestones}{The number of milestones in the trajectory (linear, cyclic)}
 
-\item{max_degree}{The maximum degree of a branch node, must be at least 3 (diverging, converging)}
-
 \item{num_branchpoints}{The number of branchpoints in the trajectory (bifurcating, diverging, converging)}
+
+\item{max_degree}{The maximum degree of a branch node, must be at least 3 (diverging, converging)}
 
 \item{num_modifications}{Number of modifications made to the original trajectory (diverging_converging, diverging_with_loops, multiple_looping, connected)}
 

@@ -25,6 +25,7 @@ generate_progressions <- function(
     replace = TRUE
   )
 
+  # TODO: this can probably be done much faster if we first split the cells based on a from...
   seq_len(num_cells) %>% map_df(function(i) {
     cell_id <- cell_ids[[i]]
 
