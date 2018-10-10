@@ -22,6 +22,8 @@ generate_counts(trajectory, num_features = 101,
 \item{dropout_probability_factor}{Factor used to calculate the probabilities of dropouts, relative to expression. Higher values (> 10000) have a lot of dropouts, lower values (< 10) have almost none}
 
 \item{dropout_rate}{Base rate of drop-outs}
+
+\item{differentially_expressed_rate}{Percentage of differentially expressed genes}
 }
 \description{
 Simulate counts which are distributed using a zero-inflated negative biniomal distribution

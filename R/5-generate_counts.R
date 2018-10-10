@@ -6,6 +6,7 @@
 #' @param sample_dispersion_count Function to sample the dispersion (size) of the negative biniomal given the expression. Higher dispersion values generate less noise
 #' @param dropout_probability_factor Factor used to calculate the probabilities of dropouts, relative to expression. Higher values (> 10000) have a lot of dropouts, lower values (< 10) have almost none
 #' @param dropout_rate Base rate of drop-outs
+#' @param differentially_expressed_rate Percentage of differentially expressed genes
 generate_counts <- function(
   trajectory,
   num_features = 101,

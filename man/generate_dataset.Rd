@@ -38,6 +38,8 @@ part of a divergence.}
 
 \item{dropout_probability_factor}{Factor used to calculate the probabilities of dropouts, relative to expression. Higher values (> 10000) have a lot of dropouts, lower values (< 10) have almost none}
 
+\item{differentially_expressed_rate}{Percentage of differentially expressed genes}
+
 \item{normalise}{Whether or not to normalise the dataset}
 
 \item{add_prior_information}{Whether to add prior information}
