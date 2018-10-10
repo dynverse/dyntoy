@@ -12,14 +12,15 @@ generate_counts <- function(
   sample_mean_count = function() runif(1, 100, 1000),
   sample_dispersion_count = function(mean) map_dbl(mean, ~runif(1, ./10, ./4)),
   dropout_probability_factor = 100,
-  dropout_rate = 0.2
+  dropout_rate = 0.2,
+  differentially_expressed_rate = 1
 ) {
   feature_ids <- paste0("G", seq_len(num_features))
 
   dimred_trajectory <- dynwrap::calculate_trajectory_dimred(trajectory)
 
   # generate counts
-  counts <- map(feature_ids, function(feature_id) {
+  count_generation_results <- map(feature_ids, function(feature_id) {
     # get density in multivariate normal distribution
     limits <- c(
       range(dimred_trajectory$dimred_milestones$comp_1),
@@ -36,20 +37,35 @@ generate_counts <- function(
     mean_count <- sample_mean_count()
     dispersion_count <- sample_dispersion_count(mean_count)
 
+    # if gene is differentially expressed, use densities, otherwise shuffle the densities
+    x <- dimred_trajectory$dimred_cells$density
+    differentially_expressed <- runif(1) <= differentially_expressed_rate
+    if (!differentially_expressed) x <- sample(x)
+
     dimred_trajectory$dimred_cells$counts <-
       sample_zinbinom_expression(
-        dimred_trajectory$dimred_cells$density,
+        x,
         mu = mean_count,
         size = dispersion_count,
         calculate_pi = calculate_pi
       )
 
-    dimred_trajectory$dimred_cells$counts
-  }) %>% do.call(cbind, .)
+    lst(
+      counts = dimred_trajectory$dimred_cells$counts,
+      tde_overall = tibble(feature_id = feature_id, y = differentially_expressed)
+    )
+  })
+
+  counts <- map(count_generation_results, "counts") %>% do.call(cbind, .)
+  tde_overall <- map_df(count_generation_results, "tde_overall")
+
   rownames(counts) <- trajectory$cell_ids
   colnames(counts) <- feature_ids
 
-  counts
+  lst(
+    counts,
+    tde_overall
+  )
 }
 
 rzinbinom <- function(n, mu, size, pi) {
