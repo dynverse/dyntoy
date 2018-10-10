@@ -52,7 +52,7 @@ generate_counts <- function(
 
     lst(
       counts = dimred_trajectory$dimred_cells$counts,
-      tde_overall = tibble(feature_id = feature_id, y = differentially_expressed)
+      tde_overall = tibble(feature_id = feature_id, differentially_expressed = !!differentially_expressed)
     )
   })
 
