@@ -40,7 +40,8 @@ generate_dataset <- dynutils::inherit_default_params(
       num_features = num_features,
       sample_mean_count = sample_mean_count,
       sample_dispersion_count = sample_dispersion_count,
-      dropout_probability_factor = dropout_probability_factor
+      dropout_probability_factor = dropout_probability_factor,
+      differentially_expressed_rate = differentially_expressed_rate
     )
 
     counts <- count_generation_results$counts
