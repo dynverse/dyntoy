@@ -7,7 +7,8 @@
 generate_counts(trajectory, num_features = 101,
   sample_mean_count = function() runif(1, 100, 1000),
   sample_dispersion_count = function(mean) map_dbl(mean, ~runif(1, ./10,
-  ./4)), dropout_probability_factor = 100, dropout_rate = 0.2)
+  ./4)), dropout_probability_factor = 100, dropout_rate = 0.2,
+  differentially_expressed_rate = 1)
 }
 \arguments{
 \item{trajectory}{The dynwrap trajectory}

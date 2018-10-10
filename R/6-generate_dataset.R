@@ -19,6 +19,7 @@ generate_dataset <- dynutils::inherit_default_params(
     sample_mean_count,
     sample_dispersion_count,
     dropout_probability_factor,
+    differentially_expressed_rate,
     normalise = dynutils::check_packages("dynnormaliser"),
     add_prior_information = TRUE
   ) {
