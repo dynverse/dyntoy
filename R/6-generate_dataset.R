@@ -19,6 +19,7 @@ generate_dataset <- dynutils::inherit_default_params(
     sample_mean_count,
     sample_dispersion_count,
     dropout_probability_factor,
+    differentially_expressed_rate,
     normalise = dynutils::check_packages("dynnormaliser"),
     add_prior_information = TRUE
   ) {
@@ -34,13 +35,17 @@ generate_dataset <- dynutils::inherit_default_params(
     )
 
     # generate expression
-    counts <- generate_counts(
+    count_generation_results <- generate_counts(
       trajectory,
       num_features = num_features,
       sample_mean_count = sample_mean_count,
       sample_dispersion_count = sample_dispersion_count,
-      dropout_probability_factor = dropout_probability_factor
+      dropout_probability_factor = dropout_probability_factor,
+      differentially_expressed_rate = differentially_expressed_rate
     )
+
+    counts <- count_generation_results$counts
+    tde_overall <- count_generation_results$tde_overall
 
     # normalise
     if (normalise) {
@@ -55,6 +60,8 @@ generate_dataset <- dynutils::inherit_default_params(
       cell_ids <- intersect(rownames(counts), trajectory$cell_ids)
       progressions <- trajectory$progressions %>% filter(cell_id %in% cell_ids)
       cell_info <- trajectory$cell_info %>% filter(cell_id %in% cell_ids)
+
+      tde_overall <- tde_overall %>% filter(feature_id %in% colnames(counts))
 
       # create trajectory
       trajectory <- wrap_data(
@@ -83,7 +90,10 @@ generate_dataset <- dynutils::inherit_default_params(
       counts = counts,
       expression = expression,
       feature_info = feature_info
-    )
+    ) %>%
+      add_tde_overall(
+        tde_overall = tde_overall
+      )
 
     if (add_prior_information) {
       dataset <- dataset %>% dynwrap::add_prior_information(

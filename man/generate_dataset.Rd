@@ -11,6 +11,7 @@ generate_dataset(id = "", model = c("linear", "cyclic", "bifurcating",
   allow_tented_progressions = TRUE, sample_mean_count = function()
   runif(1, 100, 1000), sample_dispersion_count = function(mean)
   map_dbl(mean, ~runif(1, ./10, ./4)), dropout_probability_factor = 100,
+  differentially_expressed_rate = 1,
   normalise = dynutils::check_packages("dynnormaliser"),
   add_prior_information = TRUE)
 }
@@ -36,6 +37,8 @@ part of a divergence.}
 \item{sample_dispersion_count}{Function to sample the dispersion (size) of the negative biniomal given the expression. Higher dispersion values generate less noise}
 
 \item{dropout_probability_factor}{Factor used to calculate the probabilities of dropouts, relative to expression. Higher values (> 10000) have a lot of dropouts, lower values (< 10) have almost none}
+
+\item{differentially_expressed_rate}{Percentage of differentially expressed genes}
 
 \item{normalise}{Whether or not to normalise the dataset}
 
