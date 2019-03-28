@@ -70,7 +70,8 @@ velocitise <- function(toy, num_heuristic_tries = 100, wanted_geodesic_quantile 
     dynwrap::wrap_expression(
       id = toy$id,
       counts = toy$counts[velocity_links$cell_id, , drop = FALSE],
-      expression = toy$expression[velocity_links$cell_id, , drop = FALSE]
+      expression = toy$expression[velocity_links$cell_id, , drop = FALSE],
+      rna_velocity = toy$expression[velocity_links$future_id, , drop = FALSE]
     ) %>%
     dynwrap::add_trajectory(
       milestone_ids = toy$milestone_ids,
@@ -78,8 +79,6 @@ velocitise <- function(toy, num_heuristic_tries = 100, wanted_geodesic_quantile 
       divergence_regions = toy$divergence_regions,
       milestone_percentages = toy$milestone_percentages %>% filter(cell_id %in% velocity_links$cell_id)
     )
-
-  new_toy$rna_velocity <- toy$expression[velocity_links$future_id, , drop = FALSE]# - toy$expression[velocity_links$cell_id, , drop = FALSE]
 
   new_toy
 }
