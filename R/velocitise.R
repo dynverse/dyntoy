@@ -66,12 +66,15 @@ velocitise <- function(toy, num_heuristic_tries = 100, wanted_geodesic_quantile 
 
   assertthat::assert_that(length(unique(c(velocity_links$cell1, velocity_links$cell2))) == length(toy$cell_ids))
 
+  rna_velocity <- toy$expression[velocity_links$future_id, , drop = FALSE]
+  rownames(rna_velocity) <- velocity_links$cell_id
+
   new_toy <-
     dynwrap::wrap_expression(
       id = toy$id,
       counts = toy$counts[velocity_links$cell_id, , drop = FALSE],
       expression = toy$expression[velocity_links$cell_id, , drop = FALSE],
-      rna_velocity = toy$expression[velocity_links$future_id, , drop = FALSE]
+      rna_velocity = rna_velocity
     ) %>%
     dynwrap::add_trajectory(
       milestone_ids = toy$milestone_ids,
