@@ -11,8 +11,8 @@ generate_datasets(models = c("linear", "cyclic", "bifurcating",
   allow_tented_progressions = TRUE, sample_mean_count = function()
   runif(1, 100, 1000), sample_dispersion_count = function(mean)
   map_dbl(mean, ~runif(1, ./10, ./4)), dropout_probability_factor = 100,
-  normalise = dynutils::check_packages("dynnormaliser"),
-  add_prior_information = TRUE, num_replicates = 3)
+  normalise = FALSE, add_prior_information = TRUE,
+  num_replicates = 3)
 }
 \arguments{
 \item{models}{A list of network models to use to generate the milestone networks.

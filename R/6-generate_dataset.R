@@ -20,7 +20,7 @@ generate_dataset <- dynutils::inherit_default_params(
     sample_dispersion_count,
     dropout_probability_factor,
     differentially_expressed_rate,
-    normalise = dynutils::check_packages("dynnormaliser"),
+    normalise = FALSE,
     add_prior_information = TRUE
   ) {
     if (is.character(model) && length(model) > 1) {

@@ -3,17 +3,12 @@ sudo: required
 dist: trusty
 bioc_required: true
 cache: packages
-addons:
-  apt:
-    packages:
-      - libssh-dev  # PRISM > ssh > libssh-dev
-env:
-  - R_MAX_NUM_DLLS=250
+before_install:
+ - source <(curl -sSL https://raw.githubusercontent.com/dynverse/travis_scripts/master/helper.sh)
 install:
- - if [ `git branch | grep '* master' | wc -l` == 0 ]; then sed -i 's#\(dynverse/[^, ]*\)#\1@devel#' DESCRIPTION; fi
- - R -e 'if ("devtools" %in% rownames(installed.packages())) update.packages(oldPkgs = "devtools", ask = FALSE) else install.packages("devtools")'
- - R -e 'devtools::install_cran("covr")'
- - R -e 'setRepositories(ind = 1:2)'
- - R -e 'devtools::install(dependencies = T, upgrade = T)'
+ - use_dynverse_devel
+ - install_cran devtools covr
+ - install_cran covr
+ - install_withdeps
 after_success:
  - R -e 'covr::codecov()'

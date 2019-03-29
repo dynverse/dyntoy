@@ -11,8 +11,7 @@ generate_dataset(id = "", model = c("linear", "cyclic", "bifurcating",
   allow_tented_progressions = TRUE, sample_mean_count = function()
   runif(1, 100, 1000), sample_dispersion_count = function(mean)
   map_dbl(mean, ~runif(1, ./10, ./4)), dropout_probability_factor = 100,
-  differentially_expressed_rate = 1,
-  normalise = dynutils::check_packages("dynnormaliser"),
+  differentially_expressed_rate = 1, normalise = FALSE,
   add_prior_information = TRUE)
 }
 \arguments{
