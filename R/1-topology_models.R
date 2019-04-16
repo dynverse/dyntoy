@@ -39,7 +39,7 @@ general_graph_model_fun <- function(
 
     if (type == "divergence") {
       new_edges <- bind_rows(
-        data_frame(
+        tibble(
           from = new_nodes[[1]],
           to = new_nodes[-1]
         ),
@@ -51,7 +51,7 @@ general_graph_model_fun <- function(
       )
     } else if (type == "convergence") {
       new_edges <- bind_rows(
-        data_frame(
+        tibble(
           from = new_nodes[-1],
           to = new_nodes[[1]]
         ),
@@ -62,7 +62,7 @@ general_graph_model_fun <- function(
         )
       )
     } else if (type == "loop") {
-      new_edges <- data_frame(
+      new_edges <- tibble(
         from = c(fr, to, new_nodes),
         to = c(to, new_nodes, fr)
       )
@@ -70,7 +70,7 @@ general_graph_model_fun <- function(
       ix <- seq_len(length(new_nodes) / 2)
       nn1 <- new_nodes[ix]
       nn2 <- new_nodes[-ix]
-      new_edges <- data_frame(
+      new_edges <- tibble(
         from = c(fr, nn1, fr, nn2),
         to = c(nn1, to, nn2, to)
       )
@@ -97,7 +97,7 @@ model_linear <- function(
   testthat::expect_gte(num_milestones, 2)
 
   milestone_ids <- paste0("M", seq_len(num_milestones))
-  data_frame(
+  tibble(
     from = milestone_ids %>% head(-1),
     to = milestone_ids %>% tail(-1)
   )

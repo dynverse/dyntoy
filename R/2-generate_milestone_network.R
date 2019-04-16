@@ -31,7 +31,7 @@ generate_milestone_network <- function(
 
   # run model
   milnet <- do.call(network_model, relevant_params[relevant_paramnames]) %>%
-    as_data_frame()
+    as_tibble()
 
   # check output, add columns if necessary
   if (!"length" %in% colnames(milnet)) {
