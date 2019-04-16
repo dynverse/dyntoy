@@ -27,7 +27,7 @@ Imports:
 Suggests:
   dynnormaliser (>= 0.9.9)
 Remotes: 
-    dynverse/dynwrap@velocity,
+    dynverse/dynwrap@devel,
     dynverse/dynutils@devel,
     dynverse/dynnormaliser@devel
 RoxygenNote: 6.1.1
