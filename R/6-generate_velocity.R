@@ -29,11 +29,6 @@ add_velocity <- function(
     cell_expression <- trajectory$expression[cell_id, ]
     reference_expression <- trajectory$expression[reference_cell_id, ]
 
-    #' @examples
-    #' trajectory$milestone_percentages %>% filter(cell_id == !!cell_id)
-    #' trajectory$milestone_percentages %>% filter(cell_id == !!reference_cell_id)
-    #' geodesic_distances[cell_id, reference_cell_id]
-
     # reference_expression
     cell_expression + (reference_expression - cell_expression)
   }) %>% do.call(rbind, .)
