@@ -5,6 +5,7 @@ bioc_required: true
 cache: packages
 before_install:
  - source <(curl -sSL https://raw.githubusercontent.com/dynverse/travis_scripts/master/helper.sh)
+ - install_hdf5
 install:
  - use_dynverse_devel
  - install_cran devtools covr
