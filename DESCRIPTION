@@ -12,6 +12,7 @@ LazyData: true
 Depends:
   R (>= 3.1)
 Imports:
+  assertthat,
   dplyr,
   dynutils (>= 1.0.2),
   dynwrap (>= 1.0.0),

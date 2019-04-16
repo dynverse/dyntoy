@@ -45,9 +45,9 @@ dataset$milestone_network
 #> # A tibble: 3 x 4
 #>   from  to    length directed
 #>   <chr> <chr>  <dbl> <lgl>   
-#> 1 M3    M4     0.166 TRUE    
-#> 2 M1    M3     0.115 TRUE    
-#> 3 M3    M2     0.849 TRUE
+#> 1 M3    M4    0.191  TRUE    
+#> 2 M1    M3    0.417  TRUE    
+#> 3 M3    M2    0.0432 TRUE
 ```
 
 ## Related work
@@ -65,8 +65,11 @@ changes.
 
 ### Recent changes in dyntoy 1.0.0 (unreleased)
 
-  - Initial release of
-dyntoy
+  - Initial release of dyntoy
+
+  - Generates simple toy datasets containg trajectories, with
+    expression, RNA velocity, differentially expressed
+features
 
 ## Dynverse dependencies
 
