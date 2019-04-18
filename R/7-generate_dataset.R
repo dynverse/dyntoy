@@ -101,9 +101,12 @@ generate_dataset <- dynutils::inherit_default_params(
     )
 
     # add velocity
-    dataset <- add_velocity(
-      trajectory = dataset
-    )
+    if (add_velocity) {
+      dataset <- add_velocity(
+        trajectory = dataset
+      )
+    }
+
 
     if (add_prior_information) {
       dataset <- dataset %>% dynwrap::add_prior_information(

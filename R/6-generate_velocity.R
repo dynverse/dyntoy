@@ -14,7 +14,7 @@ add_velocity <- function(
 
   geodesic_distances <- dynwrap::calculate_geodesic_distances(
     trajectory,
-    trajectory$cell_ids,
+    waypoint_cells = trajectory$cell_ids,
     directed = TRUE
   )
 
@@ -22,7 +22,7 @@ add_velocity <- function(
   expression_projected <- map(rownames(trajectory$expression), function(cell_id) {
     geodesic_distance <- geodesic_distances[cell_id, ]
 
-    # find closest backwards or frontwards
+    # find closest forwards
     reference_cell_id <- names(which.min(abs(expected_geodesic_difference - geodesic_distance)))
 
     reference_geodesic_difference <- geodesic_distance[reference_cell_id]

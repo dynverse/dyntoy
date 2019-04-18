@@ -17,8 +17,3 @@ add_velocity(trajectory, expected_geodesic_difference = 0.2,
 \description{
 Add projected expression to a directed trajectory
 }
-\examples{
-trajectory$milestone_percentages \%>\% filter(cell_id == !!cell_id)
-trajectory$milestone_percentages \%>\% filter(cell_id == !!reference_cell_id)
-geodesic_distances[cell_id, reference_cell_id]
-}
