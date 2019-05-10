@@ -3,6 +3,7 @@
 #' @inheritParams generate_trajectory
 #' @inheritParams generate_counts
 #' @param add_prior_information Whether to add prior information
+#' @param add_velocity Whether to simulate RNA velocity
 #' @param normalise Whether or not to normalise the dataset
 #'
 #' @importFrom dynwrap add_prior_information
@@ -21,7 +22,8 @@ generate_dataset <- dynutils::inherit_default_params(
     dropout_probability_factor,
     differentially_expressed_rate,
     normalise = FALSE,
-    add_prior_information = TRUE
+    add_prior_information = TRUE,
+    add_velocity = TRUE
   ) {
     if (is.character(model) && length(model) > 1) {
       model <- model[[1]]
@@ -90,10 +92,21 @@ generate_dataset <- dynutils::inherit_default_params(
       counts = counts,
       expression = expression,
       feature_info = feature_info
-    ) %>%
-      add_tde_overall(
-        tde_overall = tde_overall
+    )
+
+    # add tde
+    dataset <- add_tde_overall(
+      trajectory = dataset,
+      tde_overall = tde_overall
+    )
+
+    # add velocity
+    if (add_velocity) {
+      dataset <- add_velocity(
+        trajectory = dataset
       )
+    }
+
 
     if (add_prior_information) {
       dataset <- dataset %>% dynwrap::add_prior_information(

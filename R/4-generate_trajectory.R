@@ -57,7 +57,7 @@ generate_trajectory <- dynutils::inherit_default_params(
     if (nrow(divreg) > 0) {
       froms <- unique(divreg$from)
       divergence_regions <- froms %>% map_df(function(fr) {
-        data_frame(
+        tibble(
           divergence_id = paste0("divergence_", fr),
           milestone_id = unique(c(fr, divreg %>% filter(from == fr) %>% .$to)),
           is_start = milestone_id == fr

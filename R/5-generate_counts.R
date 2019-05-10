@@ -24,14 +24,14 @@ generate_counts <- function(
   count_generation_results <- map(feature_ids, function(feature_id) {
     # get density in multivariate normal distribution
     limits <- c(
-      range(dimred_trajectory$dimred_milestones$comp_1),
-      range(dimred_trajectory$dimred_milestones$comp_2)
+      range(dimred_trajectory$milestone_positions$comp_1),
+      range(dimred_trajectory$milestone_positions$comp_2)
     ) %>% matrix(nrow = 2)
 
     mean <- runif(2, limits[1, ], limits[2, ])
     sigma <- runif(2, apply(limits, 2, diff) / 10, apply(limits, 2, diff) / 8) %>% diag
 
-    dimred_trajectory$dimred_cells$density <- mvtnorm::dmvnorm(dimred_trajectory$dimred_cells[, c("comp_1", "comp_2")], mean, sigma)
+    dimred_trajectory$cell_positions$density <- mvtnorm::dmvnorm(dimred_trajectory$cell_positions[, c("comp_1", "comp_2")], mean, sigma)
 
     # from density, get expression using a zero-inflated negative binomial
     calculate_pi <- function(x) dexp(x / dropout_probability_factor, rate = dropout_rate)
@@ -39,11 +39,11 @@ generate_counts <- function(
     dispersion_count <- sample_dispersion_count(mean_count)
 
     # if gene is differentially expressed, use densities, otherwise shuffle the densities
-    x <- dimred_trajectory$dimred_cells$density
+    x <- dimred_trajectory$cell_positions$density
     differentially_expressed <- runif(1) <= differentially_expressed_rate
     if (!differentially_expressed) x <- sample(x)
 
-    dimred_trajectory$dimred_cells$counts <-
+    dimred_trajectory$cell_positions$counts <-
       sample_zinbinom_expression(
         x,
         mu = mean_count,
@@ -52,7 +52,7 @@ generate_counts <- function(
       )
 
     lst(
-      counts = dimred_trajectory$dimred_cells$counts,
+      counts = dimred_trajectory$cell_positions$counts,
       tde_overall = tibble(feature_id = feature_id, differentially_expressed = !!differentially_expressed)
     )
   })
@@ -85,3 +85,8 @@ sample_zinbinom_expression <- function(
 
   counts
 }
+
+
+
+
+
