@@ -18,12 +18,14 @@ Imports:
   dynwrap (>= 1.0.0),
   igraph,
   magrittr,
+  methods,
   mvtnorm,
   purrr,
   stats,
   testthat,
   tibble,
-  tidyr
+  tidyr,
+  utils
 Suggests:
   dynnormaliser (>= 0.9.9)
 Remotes: 
