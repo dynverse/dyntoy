@@ -25,6 +25,7 @@ generate_progressions <- function(
     replace = TRUE
   )
 
+  # TODO: this can probably be done much faster if we first split the cells based on a from...
   seq_len(num_cells) %>% map_df(function(i) {
     cell_id <- cell_ids[[i]]
 
@@ -41,14 +42,14 @@ generate_progressions <- function(
 
     switch(
       type,
-      start = data_frame(cell_id, from = from_mid, to = sample(poss_tos, 1), percentage = 0),
-      end = data_frame(cell_id, from = from_mid, to = sample(poss_tos, 1), percentage = 1),
-      edge = data_frame(cell_id, from = from_mid, to = sample(poss_tos, 1), percentage = stats::runif(1, 0, 1)),
+      start = tibble(cell_id, from = from_mid, to = sample(poss_tos, 1), percentage = 0),
+      end = tibble(cell_id, from = from_mid, to = sample(poss_tos, 1), percentage = 1),
+      edge = tibble(cell_id, from = from_mid, to = sample(poss_tos, 1), percentage = stats::runif(1, 0, 1)),
       tent = {
         progression_pct <- stats::runif(1, 0, 1)
         to_percentage <- stats::runif(length(poss_tos))
         percentage <- to_percentage / sum(to_percentage) * (1 - progression_pct)
-        data_frame(cell_id, from = from_mid, to = poss_tos, percentage)
+        tibble(cell_id, from = from_mid, to = poss_tos, percentage)
       }
     )
   })

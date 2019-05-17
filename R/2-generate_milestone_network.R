@@ -9,6 +9,7 @@
 #' @param ... Parameters to pass to other models. Can be in the form of `linear = list(num_milestones = function() sample(2:8, 1)` or just `num_milestones = 10`.
 #'
 #' @export
+#' @importFrom methods formalArgs
 generate_milestone_network <- function(
   model = names(topology_models),
   ...
@@ -31,11 +32,11 @@ generate_milestone_network <- function(
 
   # run model
   milnet <- do.call(network_model, relevant_params[relevant_paramnames]) %>%
-    as_data_frame()
+    as_tibble()
 
   # check output, add columns if necessary
   if (!"length" %in% colnames(milnet)) {
-    milnet$length <- runif(nrow(milnet))
+    milnet$length <- stats::runif(nrow(milnet), min = .5, max = 1)
   }
 
   if (!"directed" %in% colnames(milnet)) {
