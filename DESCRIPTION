@@ -1,7 +1,7 @@
 Package: dyntoy
 Type: Package
 Title: Generating simple toy data of cellular differentiation
-Version: 0.9.9.9000
+Version: 0.9.9
 Authors@R: c(
   person("Robrecht", "Cannoodt", email = "rcannood@gmail.com", role = c("aut")),
   person("Wouter", "Saelens", email = "wouter.saelens@ugent.be", role = c("aut", "cre")))
@@ -28,8 +28,8 @@ Imports:
   utils
 Suggests:
   dynnormaliser (>= 0.9.9)
-Remotes: 
-    dynverse/dynwrap@devel,
-    dynverse/dynutils@devel,
-    dynverse/dynnormaliser@devel
+Remotes:  
+    dynverse/dynwrap@master,
+    dynverse/dynutils@master,
+    dynverse/dynnormaliser@master
 RoxygenNote: 6.1.1
