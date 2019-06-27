@@ -8,7 +8,10 @@ general_graph_model_fun <- function(
   if (is.function(num_modifications)) num_modifications <- num_modifications()
   if (is.function(max_degree)) max_degree <- max_degree()
 
-  testthat::expect_gte(num_modifications, 1)
+  assert_that(
+    num_modifications >= 1,
+    max_degree >= 3
+  )
   testthat::expect_gte(max_degree, 3)
 
   milnet <- tribble(
@@ -88,13 +91,14 @@ general_graph_model_fun <- function(
 
 #' @param num_milestones The number of milestones in the trajectory (linear, cyclic)
 #' @rdname topology_models
+#' @importFrom utils head tail
 #' @export
 model_linear <- function(
   num_milestones = function() rbinom(1, size = 10, .25) + 2
 ) {
   if (is.function(num_milestones)) num_milestones <- num_milestones()
 
-  testthat::expect_gte(num_milestones, 2)
+  assert_that(num_milestones >= 2)
 
   milestone_ids <- paste0("M", seq_len(num_milestones))
   tibble(
@@ -110,7 +114,7 @@ model_cyclic <- function(
 ) {
   if (is.function(num_milestones)) num_milestones <- num_milestones()
 
-  testthat::expect_gte(num_milestones, 3)
+  assert_that(num_milestones >= 3)
 
   topology_models$linear(num_milestones) %>%
     add_row(from = paste0("M", num_milestones), to = "M1")
