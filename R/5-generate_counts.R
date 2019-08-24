@@ -1,4 +1,4 @@
-#' Simulate counts which are distributed using a zero-inflated negative biniomal distribution
+#' Simulate counts which are distributed using a zero-inflated negative binomial distribution
 #'
 #' @param trajectory The dynwrap trajectory
 #' @param num_features Number of features
