@@ -5,3 +5,5 @@
 ^\.git$
 ^tmp
 ^README\.Rmd$
+^LICENSE\.md$
+^LICENSE\.md$
