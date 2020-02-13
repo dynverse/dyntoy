@@ -6,7 +6,7 @@ Authors@R: c(
   person("Robrecht", "Cannoodt", email = "rcannood@gmail.com", role = c("aut")),
   person("Wouter", "Saelens", email = "wouter.saelens@ugent.be", role = c("aut", "cre")))
 Description: Generating simple toy data of cellular differentiation
-License: MIT + LICENSE file
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Depends:
