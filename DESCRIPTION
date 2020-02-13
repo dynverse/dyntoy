@@ -11,6 +11,8 @@ Encoding: UTF-8
 LazyData: true
 Depends:
   R (>= 3.1)
+URL: https://github.com/dynverse/dyntoy
+BugReports: https://github.com/dynverse/dyntoy/issues
 Imports:
   assertthat,
   dplyr,
