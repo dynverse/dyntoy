@@ -3,8 +3,4 @@
 \docType{package}
 \name{dyntoy}
 \alias{dyntoy}
-\alias{dyntoy-package}
 \title{Generating simple toy data of cellular differentiation}
-\description{
-Generating simple toy data of cellular differentiation
-}

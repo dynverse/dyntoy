@@ -4,10 +4,14 @@
 \alias{generate_trajectory}
 \title{Generate a trajectory}
 \usage{
-generate_trajectory(id = "", model = c("linear", "cyclic",
-  "bifurcating", "multifurcating", "binary_tree", "tree", "converging",
-  "diverging_converging", "diverging_with_loops", "looping", "connected",
-  "disconnected"), num_cells = 99, allow_tented_progressions = TRUE)
+generate_trajectory(
+  id = "",
+  model = c("linear", "cyclic", "bifurcating", "multifurcating", "binary_tree", "tree",
+    "converging", "diverging_converging", "diverging_with_loops", "looping", "connected",
+    "disconnected"),
+  num_cells = 99,
+  allow_tented_progressions = TRUE
+)
 }
 \arguments{
 \item{id}{An id for the dataset}

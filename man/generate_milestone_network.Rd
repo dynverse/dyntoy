@@ -4,10 +4,12 @@
 \alias{generate_milestone_network}
 \title{Generate a toy milestone network}
 \usage{
-generate_milestone_network(model = c("linear", "cyclic", "bifurcating",
-  "multifurcating", "binary_tree", "tree", "converging",
-  "diverging_converging", "diverging_with_loops", "looping", "connected",
-  "disconnected"), ...)
+generate_milestone_network(
+  model = c("linear", "cyclic", "bifurcating", "multifurcating", "binary_tree", "tree",
+    "converging", "diverging_converging", "diverging_with_loops", "looping", "connected",
+    "disconnected"),
+  ...
+)
 }
 \arguments{
 \item{model}{A model for generating the milestone network. Must be one of:

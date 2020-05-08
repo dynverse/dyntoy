@@ -2,13 +2,17 @@
 % Please edit documentation in R/5-generate_counts.R
 \name{generate_counts}
 \alias{generate_counts}
-\title{Simulate counts which are distributed using a zero-inflated negative biniomal distribution}
+\title{Simulate counts which are distributed using a zero-inflated negative binomial distribution}
 \usage{
-generate_counts(trajectory, num_features = 101,
+generate_counts(
+  trajectory,
+  num_features = 101,
   sample_mean_count = function() runif(1, 100, 1000),
-  sample_dispersion_count = function(mean) map_dbl(mean, ~runif(1, ./10,
-  ./4)), dropout_probability_factor = 100, dropout_rate = 0.2,
-  differentially_expressed_rate = 1)
+  sample_dispersion_count = function(mean) map_dbl(mean, ~runif(1, ./10, ./4)),
+  dropout_probability_factor = 100,
+  dropout_rate = 0.2,
+  differentially_expressed_rate = 1
+)
 }
 \arguments{
 \item{trajectory}{The dynwrap trajectory}
@@ -26,5 +30,5 @@ generate_counts(trajectory, num_features = 101,
 \item{differentially_expressed_rate}{Percentage of differentially expressed genes}
 }
 \description{
-Simulate counts which are distributed using a zero-inflated negative biniomal distribution
+Simulate counts which are distributed using a zero-inflated negative binomial distribution
 }

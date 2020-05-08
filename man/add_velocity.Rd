@@ -4,8 +4,11 @@
 \alias{add_velocity}
 \title{Add projected expression to a directed trajectory}
 \usage{
-add_velocity(trajectory, expected_geodesic_difference = 0.2,
-  velocity_rescale = 0.5)
+add_velocity(
+  trajectory,
+  expected_geodesic_difference = 0.2,
+  velocity_rescale = 0.5
+)
 }
 \arguments{
 \item{trajectory}{The trajectory}

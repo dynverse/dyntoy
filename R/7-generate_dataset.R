@@ -50,37 +50,7 @@ generate_dataset <- dynutils::inherit_default_params(
     tde_overall <- count_generation_results$tde_overall
 
     # normalise
-    if (normalise) {
-      normalised <- dynnormaliser::normalise_filter_counts(
-        counts,
-        filter_hvg = FALSE,
-        filter_features = FALSE,
-        filter_cells = FALSE
-      )
-      counts <- normalised$counts
-      expression <- normalised$expression
-      cell_ids <- intersect(rownames(counts), trajectory$cell_ids)
-      progressions <- trajectory$progressions %>% filter(cell_id %in% cell_ids)
-      cell_info <- trajectory$cell_info %>% filter(cell_id %in% cell_ids)
-
-      tde_overall <- tde_overall %>% filter(feature_id %in% colnames(counts))
-
-      # create trajectory
-      trajectory <- wrap_data(
-        id = id,
-        cell_ids = cell_ids,
-        cell_info = cell_info,
-        source = trajectory$source,
-        model = model
-      ) %>% add_trajectory(
-        milestone_ids = trajectory$milestone_ids,
-        milestone_network = trajectory$milestone_network,
-        divergence_regions = trajectory$divergence_regions,
-        progressions = progressions
-      )
-    } else {
-      expression <- log2(counts + 1)
-    }
+    expression <- as(log2(counts + 1), "dgCMatrix")
 
     # make feature info
     feature_info <- tibble(feature_id = colnames(counts), housekeeping = FALSE)

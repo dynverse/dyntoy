@@ -4,8 +4,11 @@
 \alias{generate_progressions}
 \title{Generate cells and their progressions along a milestone network}
 \usage{
-generate_progressions(milestone_network, num_cells = 99,
-  allow_tented_progressions = TRUE)
+generate_progressions(
+  milestone_network,
+  num_cells = 99,
+  allow_tented_progressions = TRUE
+)
 }
 \arguments{
 \item{milestone_network}{The milestone network along which to generate cells.}

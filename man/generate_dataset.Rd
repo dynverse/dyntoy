@@ -4,15 +4,22 @@
 \alias{generate_dataset}
 \title{Generate a toy dataset}
 \usage{
-generate_dataset(id = "", model = c("linear", "cyclic", "bifurcating",
-  "multifurcating", "binary_tree", "tree", "converging",
-  "diverging_converging", "diverging_with_loops", "looping", "connected",
-  "disconnected"), num_cells = 99, num_features = 101,
-  allow_tented_progressions = TRUE, sample_mean_count = function()
-  runif(1, 100, 1000), sample_dispersion_count = function(mean)
-  map_dbl(mean, ~runif(1, ./10, ./4)), dropout_probability_factor = 100,
-  differentially_expressed_rate = 1, normalise = FALSE,
-  add_prior_information = TRUE, add_velocity = TRUE)
+generate_dataset(
+  id = "",
+  model = c("linear", "cyclic", "bifurcating", "multifurcating", "binary_tree", "tree",
+    "converging", "diverging_converging", "diverging_with_loops", "looping", "connected",
+    "disconnected"),
+  num_cells = 99,
+  num_features = 101,
+  allow_tented_progressions = TRUE,
+  sample_mean_count = function() runif(1, 100, 1000),
+  sample_dispersion_count = function(mean) map_dbl(mean, ~runif(1, ./10, ./4)),
+  dropout_probability_factor = 100,
+  differentially_expressed_rate = 1,
+  normalise = FALSE,
+  add_prior_information = TRUE,
+  add_velocity = TRUE
+)
 }
 \arguments{
 \item{id}{An id for the dataset}

@@ -4,15 +4,20 @@
 \alias{generate_datasets}
 \title{Generate toy datasets with dyntoy}
 \usage{
-generate_datasets(models = c("linear", "cyclic", "bifurcating",
-  "multifurcating", "binary_tree", "tree", "converging",
-  "diverging_converging", "diverging_with_loops", "looping", "connected",
-  "disconnected"), num_cells = 99, num_features = 101,
-  allow_tented_progressions = TRUE, sample_mean_count = function()
-  runif(1, 100, 1000), sample_dispersion_count = function(mean)
-  map_dbl(mean, ~runif(1, ./10, ./4)), dropout_probability_factor = 100,
-  normalise = FALSE, add_prior_information = TRUE,
-  num_replicates = 3)
+generate_datasets(
+  models = c("linear", "cyclic", "bifurcating", "multifurcating", "binary_tree",
+    "tree", "converging", "diverging_converging", "diverging_with_loops", "looping",
+    "connected", "disconnected"),
+  num_cells = 99,
+  num_features = 101,
+  allow_tented_progressions = TRUE,
+  sample_mean_count = function() runif(1, 100, 1000),
+  sample_dispersion_count = function(mean) map_dbl(mean, ~runif(1, ./10, ./4)),
+  dropout_probability_factor = 100,
+  normalise = FALSE,
+  add_prior_information = TRUE,
+  num_replicates = 3
+)
 }
 \arguments{
 \item{models}{A list of network models to use to generate the milestone networks.

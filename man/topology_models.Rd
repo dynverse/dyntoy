@@ -16,7 +16,9 @@
 \alias{model_disconnected}
 \alias{topology_models}
 \title{Milestone network models for generating toy examples}
-\format{An object of class \code{list} of length 12.}
+\format{
+An object of class \code{list} of length 12.
+}
 \usage{
 model_linear(num_milestones = function() rbinom(1, size = 10, 0.25) + 2)
 
@@ -24,32 +26,41 @@ model_cyclic(num_milestones = function() rbinom(1, size = 10, 0.25) + 3)
 
 model_bifurcating()
 
-model_multifurcating(num_branchpoints = function() rbinom(1, size = 10,
-  0.25) + 1, max_degree = function() sample_discrete_uniform(1, 3, 6))
+model_multifurcating(
+  num_branchpoints = function() rbinom(1, size = 10, 0.25) + 1,
+  max_degree = function() sample_discrete_uniform(1, 3, 6)
+)
 
-model_binary_tree(num_branchpoints = function()
-  sample_discrete_uniform(1, 3, 6))
+model_binary_tree(
+  num_branchpoints = function() sample_discrete_uniform(1, 3, 6)
+)
 
-model_tree(num_branchpoints = function() sample_discrete_uniform(1, 3,
-  6), max_degree = function() sample_discrete_uniform(1, 3, 6))
+model_tree(
+  num_branchpoints = function() sample_discrete_uniform(1, 3, 6),
+  max_degree = function() sample_discrete_uniform(1, 3, 6)
+)
 
 model_converging()
 
-model_diverging_converging(num_modifications = function() rbinom(1, size
-  = 10, 0.25) + 1, nodes_per_modification = function()
-  sample_discrete_uniform(1, 3, 6))
+model_diverging_converging(
+  num_modifications = function() rbinom(1, size = 10, 0.25) + 1,
+  nodes_per_modification = function() sample_discrete_uniform(1, 3, 6)
+)
 
-model_diverging_with_loops(num_modifications = function() rbinom(1, size
-  = 10, 0.25) + 1, nodes_per_modification = function()
-  sample_discrete_uniform(1, 3, 6))
+model_diverging_with_loops(
+  num_modifications = function() rbinom(1, size = 10, 0.25) + 1,
+  nodes_per_modification = function() sample_discrete_uniform(1, 3, 6)
+)
 
-model_multiple_looping(num_modifications = function() rbinom(1, size =
-  10, 0.25) + 1, nodes_per_modification = function()
-  sample_discrete_uniform(1, 3, 6))
+model_multiple_looping(
+  num_modifications = function() rbinom(1, size = 10, 0.25) + 1,
+  nodes_per_modification = function() sample_discrete_uniform(1, 3, 6)
+)
 
-model_connected(num_modifications = function() rbinom(1, size = 10, 0.25)
-  + 1, nodes_per_modification = function() sample_discrete_uniform(1, 3,
-  6))
+model_connected(
+  num_modifications = function() rbinom(1, size = 10, 0.25) + 1,
+  nodes_per_modification = function() sample_discrete_uniform(1, 3, 6)
+)
 
 model_disconnected(num_trajectories = rbinom(1, size = 5, 0.25) + 2, ...)
 
